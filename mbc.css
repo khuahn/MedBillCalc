@@ -17,9 +17,10 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.dark-mode {
-  background-color: #121212;
-  color: #e0f2f1;
+body.dark-mode tfoot td {
+  background-color: #e0f2f1;
+  color: #000;
+  font-weight: bold;
 }
 
 button#themeToggle {
