@@ -8,23 +8,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-  <!-- 🔐 Login Card -->
   <div class="login-container">
     <h2>Access MedBillCalc</h2>
     <form id="loginForm">
-      <!-- 🔒 Password Input with Icon -->
       <div class="input-group">
         <i class="fas fa-lock"></i>
         <input type="password" id="password" placeholder="Enter Password" required />
+        <!-- Show/Hide password -->
+        <button type="button" id="togglePwd" aria-label="Show password" style="background:transparent;border:none;color:#888;cursor:pointer;">
+          <i class="fas fa-eye"></i>
+        </button>
       </div>
-      <!-- 🚪 Login Button -->
       <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
-      <!-- ⚠️ Error Message -->
-      <p id="errorMsg" class="error"></p>
+      <p id="errorMsg" class="error" role="alert" aria-live="polite"></p>
     </form>
   </div>
 
-  <!-- 📦 JS Logic -->
-  <script src="mbc.js"></script>
+  <!-- Add a version to bust cache after updates -->
+  <script src="mbc.js?v=103"></script>
 </body>
 </html>
