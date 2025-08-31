@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Login | MedBillCalc</title>
   <link rel="stylesheet" href="mbc.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       font-family: sans-serif;
@@ -27,10 +28,19 @@
       margin-bottom: 10px;
       fill: #555;
     }
-    input {
-      width: 100%;
-      padding: 10px;
+    .input-group {
+      display: flex;
+      align-items: center;
       margin: 10px 0;
+    }
+    .input-group i {
+      margin-right: 10px;
+      font-size: 18px;
+      color: #555;
+    }
+    .input-group input {
+      flex: 1;
+      padding: 10px;
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -43,6 +53,7 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      margin-top: 10px;
     }
     #errorMsg {
       color: red;
@@ -58,4 +69,19 @@
     </svg>
     <h2>Access MedBillCalc</h2>
     <form id="loginForm">
-      <input type="text" id="username" placeholder="👤 Username" required>
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="username" placeholder="Username" required>
+      </div>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <p id="errorMsg"></p>
+  </div>
+
+  <script src="mbc.js"></script>
+</body>
+</html>
