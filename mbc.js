@@ -125,8 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
-      const validUser = "access";
-      const validPass = "匠2025";
+      const validUser = "nonlop";
+      const validPass = "M3d1c4l00!";
 
       if (user === validUser && pass === validPass) {
         sessionStorage.setItem("loggedIn", "true");
