@@ -115,3 +115,9 @@ button[type="submit"]:hover {
   75%  { transform: translateX(-5px); }
   100% { transform: translateX(0); }
 }
+.login-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 2rem;
+}
