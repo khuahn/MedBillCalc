@@ -119,3 +119,92 @@ button#themeToggle {
   transition: color 0.3s ease;
 }
 
+/* Layout */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Card */
+.login-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.login-container h2 {
+  margin: 0 0 1.5rem 0;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Input with icon */
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  background: #fafafa;
+}
+
+.input-group i {
+  margin-right: 0.5rem;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.input-group input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+  background: transparent;
+}
+
+/* Button */
+button[type="submit"] {
+  background: #0078d4;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+button[type="submit"]:hover {
+  background: #005fa3;
+}
+
+/* Error text */
+.error {
+  color: #c00;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Optional: shake on error */
+.error.shake { animation: shake 0.3s ease; }
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
