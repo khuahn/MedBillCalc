@@ -14,12 +14,12 @@ body {
   font-family: 'Segoe UI', Roboto, sans-serif;
   background-color: #f5f5f5;
   color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.dark-mode table tfoot td {
-  background-color: #e0f2f1;
-  color: #000;
-  font-weight: bold;
+body.dark-mode {
+  background-color: #121212;
+  color: #e0f2f1;
 }
 
 button#themeToggle {
@@ -59,7 +59,8 @@ td {
 }
 
 /* Inputs */
-input[type="number"] {
+input[type="number"],
+input[type="text"] {
   width: 100%;
   padding: 6px 8px;
   box-sizing: border-box;
@@ -74,6 +75,20 @@ tfoot td {
   font-weight: bold;
   background-color: #f0f0f0;
   font-size: 0.95rem;
+}
+
+.total-incurred {
+  font-weight: bold;
+  color: #00796b;
+  font-size: 1rem;
+  text-align: right;
+  padding-right: 8px;
+}
+
+.total-label {
+  text-align: left;
+  padding-left: 8px;
+  font-weight: bold;
 }
 
 /* Controls Bar */
@@ -93,7 +108,8 @@ tfoot td {
   gap: 8px;
 }
 
-.controls button {
+.controls button,
+#themeToggle {
   background-color: #00796b;
   color: white;
   border: none;
@@ -104,15 +120,24 @@ tfoot td {
   transition: background-color 0.3s ease;
 }
 
-.controls button:hover {
+.controls button:hover,
+#themeToggle:hover {
   background-color: #004d40;
 }
 
-/* Total Incurred */
-.total-incurred {
+/* Dark Mode Overrides */
+body.dark-mode th {
+  background-color: #004d40;
+  color: #fff;
+}
+
+body.dark-mode td {
+  background-color: #263238;
+  color: #e0f2f1;
+}
+
+body.dark-mode tfoot td {
+  background-color: #263238;
+  color: #e0f2f1;
   font-weight: bold;
-  color: #00796b;
-  font-size: 1rem;
-  padding-right: 8px;
-  text-align: right;
 }
