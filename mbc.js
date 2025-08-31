@@ -118,32 +118,19 @@ window.onload = function () {
 };
 
 // 🔐 Login validation for MedBillCalc
-document.addEventListener("DOMContentLoaded", () => {
-  // Login logic
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const pass = document.getElementById("password").value.trim();
-      const validPass = "匠2025";
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const password = document.getElementById("password").value;
+  const errorMsg = document.getElementById("errorMsg");
 
-      if (pass === validPass) {
-        sessionStorage.setItem("loggedIn", "true");
-        window.location.href = "index.html";
-      } else {
-        const errorMsg = document.getElementById("errorMsg");
-        if (errorMsg) {
-          errorMsg.textContent = "Invalid password.";
-          errorMsg.classList.add("shake");
-          setTimeout(() => errorMsg.classList.remove("shake"), 300);
-        }
-      }
-    });
-    return; // Skip any other page logic when on login
+  if (password === "yourPasswordHere") {
+    sessionStorage.setItem("loggedIn", "true");
+    window.location.href = "index.html";
+  } else {
+    errorMsg.textContent = "Incorrect password.";
+    errorMsg.classList.add("shake");
+    setTimeout(() => errorMsg.classList.remove("shake"), 300);
   }
-
-  // Other page logic (e.g., calculator) can live below...
-  // calculateTotals();
 });
 
 
