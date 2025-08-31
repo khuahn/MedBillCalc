@@ -15,7 +15,7 @@ body.dark-mode {
 .container {
   max-width: 720px;
   margin: 40px auto;
-  padding: 30px;
+  padding: 40px 30px 30px; /* Increased top padding for breathing room */
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
@@ -25,7 +25,7 @@ body.dark-mode {
 h1 {
   font-size: 1.8rem;
   color: #00796b;
-  margin-bottom: 20px;
+  margin: 0 0 24px 0; /* Remove top margin, increase bottom spacing */
   text-align: center;
 }
 
