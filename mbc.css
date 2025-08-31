@@ -1,145 +1,24 @@
 /* =========================
-   Base Layout & Typography
+   Login Page Layout
    ========================= */
-body {
+body.login {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0;
   background-color: #f4f6f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
 
-/* Center only the login page */
-body.login {
+.login-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-}
-
-/* =========================
-   Container & Card Layout
-   ========================= */
-.container {
-  max-width: 900px;
-  margin: 40px auto; /* Adds top/bottom spacing and centers horizontally */
   padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* =========================
-   Header
-   ========================= */
-h1 {
-  font-size: 1.8rem;
-  color: #00796b;
-  margin: 0 0 20px 0; /* Flush top */
-  text-align: center;
-}
-
-/* =========================
-   Table Styling
-   ========================= */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-th, td {
-  padding: 10px;
-  text-align: center;
-  vertical-align: middle;
-}
-
-th {
-  background-color: #0097a7;
-  color: white;
-  font-weight: 600;
-}
-
-td {
-  background-color: #e0f2f1;
-}
-
-/* =========================
-   Inputs
-   ========================= */
-input[type="number"] {
-  width: 100%;
-  padding: 8px 10px;
-  box-sizing: border-box;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-/* =========================
-   Controls & Buttons
-   ========================= */
-.controls-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.controls button {
-  background-color: #00796b;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.controls button:hover {
-  background-color: #004d40;
-}
-
-.total-incurred {
-  font-weight: bold;
-  color: #00796b;
-  font-size: 1.1rem;
-}
-
-/* =========================
-   Footer
-   ========================= */
-footer {
-  text-align: center;
-  margin-top: 40px;
-  font-size: 0.9rem;
-  color: #888;
-}
-
-/* =========================
-   Dark Mode
-   ========================= */
-body.dark-mode {
-  background-color: #121212;
-  color: #f0f0f0;
-}
-
-button#themeToggle {
-  color: inherit;
-  transition: color 0.3s ease;
-}
-
-/* =========================
-   Login Page Styles
+   Login Card
    ========================= */
 .login-container {
   background: #fff;
@@ -157,7 +36,9 @@ button#themeToggle {
   font-weight: 500;
 }
 
-/* Input with icon */
+/* =========================
+   Input Group
+   ========================= */
 .input-group {
   display: flex;
   align-items: center;
@@ -191,7 +72,9 @@ button#themeToggle {
   font-size: 1rem;
 }
 
-/* Submit button */
+/* =========================
+   Submit Button
+   ========================= */
 button[type="submit"] {
   background: #0078d4;
   color: #fff;
@@ -210,14 +93,15 @@ button[type="submit"]:hover {
   background: #005fa3;
 }
 
-/* Error message */
+/* =========================
+   Error Message
+   ========================= */
 .error {
   color: #c00;
   font-size: 0.9rem;
   margin-top: 0.5rem;
 }
 
-/* Shake animation */
 .error.shake {
   animation: shake 0.3s ease;
 }
