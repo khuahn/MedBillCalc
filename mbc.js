@@ -123,18 +123,17 @@ document.addEventListener("DOMContentLoaded", () => {
   if (loginForm) {
     loginForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
-      const validUser = "nonlop";
       const validPass = "M3d1c4l00!";
 
-      if (user === validUser && pass === validPass) {
+      if (pass === validPass) {
         sessionStorage.setItem("loggedIn", "true");
         window.location.href = "index.html";
       } else {
-        document.getElementById("errorMsg").textContent = "Invalid credentials.";
+        document.getElementById("errorMsg").textContent = "Invalid password.";
       }
     });
   }
 });
+
 
