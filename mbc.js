@@ -1,4 +1,4 @@
-// mbc.js — Final version for MedBillCalc
+// mbc.js — Final version for MedBillCalc with row limit fix
 (() => {
   "use strict";
 
@@ -59,6 +59,9 @@
   function addRow() {
     const tbody = document.querySelector("#billTable tbody");
     if (!tbody) return;
+    const currentRows = tbody.querySelectorAll("tr").length;
+    if (currentRows >= 10) return;
+
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td><input type="number" step="any" class="total" oninput="calculateTotals()"></td>
@@ -116,7 +119,6 @@
     const toggleBtn = document.getElementById("togglePwd");
     const eyeIcon = toggleBtn?.querySelector("i");
 
-    // Handle login submit
     loginForm.addEventListener("submit", e => {
       e.preventDefault();
       const input = pwd ? pwd.value : "";
@@ -132,7 +134,6 @@
       }
     });
 
-    // Handle password visibility toggle
     if (toggleBtn && pwd && eyeIcon) {
       toggleBtn.addEventListener("click", () => {
         const isHidden = pwd.type === "password";
@@ -143,7 +144,6 @@
     }
   }
 
-  // Init everything
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
     initLogin();
@@ -158,7 +158,6 @@
     }
   });
 
-  // Expose functions globally
   window.calculateTotals = calculateTotals;
   window.addRow = addRow;
   window.clearTable = clearTable;
