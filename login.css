@@ -123,8 +123,9 @@ button[type="submit"]:hover {
    Footer Styling
    ========================= */
 .login-footer {
-  text-align: center;
+  margin-top: 1.5rem;
   font-size: 0.85rem;
   color: #888;
-  padding: 1rem 0;
+  text-align: center;
+  line-height: 1.4;
 }
