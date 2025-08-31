@@ -1,170 +1,59 @@
-// mbc.js — MedBillCalc Final Version (Unlimited Rows, Starts with 10)
-(() => {
-  "use strict";
+const setText = (id, val) => {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val.toFixed(2);
+};
 
-  const ALLOWED_PASSWORDS = ["M3d1c4l00!"];
+const calculate = () => {
+  const rows = document.querySelectorAll("#tableBody tr");
+  let totalTotal = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
 
-  function normalizeInput(s) {
-    return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
-  }
+  rows.forEach(row => {
+    const total = parseFloat(row.querySelector(".total").value) || 0;
+    const payments = parseFloat(row.querySelector(".payments").value) || 0;
+    const adjustments = parseFloat(row.querySelector(".adjustments").value) || 0;
+    const balance = total - payments - adjustments;
 
-  function isPasswordValid(input) {
-    return ALLOWED_PASSWORDS.includes(normalizeInput(input));
-  }
+    row.querySelector(".balance").textContent = balance.toFixed(2);
 
-  function calculateTotals() {
-    const rows = document.querySelectorAll("#tableBody tr");
-    let totalTotal = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
+    totalTotal += total;
+    totalPayments += payments;
+    totalAdjustments += adjustments;
+    totalBalance += balance;
+  });
 
-    rows.forEach(row => {
-      const total = parseFloat(normalizeInput(row.querySelector(".total")?.value)) || 0;
-      const payments = parseFloat(normalizeInput(row.querySelector(".payments")?.value)) || 0;
-      const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments")?.value)) || 0;
-      const balanceInput = row.querySelector(".balance-input");
-      const computed = total - payments - adjustments;
+  setText("totalTotal", totalTotal);
+  setText("totalPayments", totalPayments);
+  setText("totalAdjustments", totalAdjustments);
+  setText("totalBalance", totalBalance);
+};
 
-      if (balanceInput) {
-        const manualVal = parseFloat(normalizeInput(balanceInput.value));
-        if (balanceInput.dataset.manual === "true" && !isNaN(manualVal)) {
-          totalBalance += manualVal;
-        } else {
-          balanceInput.value = computed.toFixed(2);
-          balanceInput.dataset.manual = "";
-          totalBalance += computed;
-        }
-      }
+const addRow = () => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td><input type="number" class="total" value="0" /></td>
+    <td><input type="number" class="payments" value="0" /></td>
+    <td><input type="number" class="adjustments" value="0" /></td>
+    <td><span class="balance">0.00</span></td>
+  `;
+  document.getElementById("tableBody").appendChild(row);
+  bindInputs(row);
+  calculate();
+};
 
-      totalTotal += total;
-      totalPayments += payments;
-      totalAdjustments += adjustments;
-    });
+const clearTable = () => {
+  document.getElementById("tableBody").innerHTML = "";
+  addRow();
+};
 
-    const setText = (id, val) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = val.toFixed(2);
-    };
+const bindInputs = (row) => {
+  row.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", calculate);
+  });
+};
 
-    setText("totalTotal", totalTotal);
-    setText("totalPayments", totalPayments);
-    setText("totalAdjustments", totalAdjustments);
-    setText("totalBalance", totalBalance);
+document.querySelectorAll("#tableBody tr").forEach(bindInputs);
+calculate();
 
-    const incurredEl = document.getElementById("incurredTotal");
-    if (incurredEl) incurredEl.textContent = totalTotal.toFixed(2);
-  }
-
-  function addRow() {
-    const tbody = document.getElementById("tableBody");
-    if (!tbody) return;
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td><input type="number" step="any" class="total" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" class="payments" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" class="adjustments" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" class="balance-input" value="0"></td>
-    `;
-    tbody.appendChild(tr);
-  }
-
-  function clearTable() {
-    document.querySelectorAll("#tableBody tr").forEach(row => {
-      row.querySelectorAll("input").forEach(input => {
-        input.value = "";
-        if (input.classList.contains("balance-input")) {
-          input.dataset.manual = "";
-        }
-      });
-    });
-    calculateTotals();
-  }
-
-  function printPDF() {
-    window.print();
-  }
-
-  function toggleDarkMode() {
-    const button = document.getElementById("themeToggle");
-    const icon = button?.querySelector("i");
-    document.body.classList.toggle("dark-mode");
-    const isDark = document.body.classList.contains("dark-mode");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-    if (button) {
-      button.innerHTML = `<i class="${isDark ? "fas fa-sun" : "fas fa-moon"}"></i> ${isDark ? "Light Mode" : "Dark Mode"}`;
-    }
-  }
-
-  function initTheme() {
-    const saved = localStorage.getItem("theme");
-    const button = document.getElementById("themeToggle");
-    if (saved === "dark") {
-      document.body.classList.add("dark-mode");
-      if (button) button.innerHTML = `<i class="fas fa-sun"></i> Light Mode`;
-    } else {
-      if (button) button.innerHTML = `<i class="fas fa-moon"></i> Dark Mode`;
-    }
-  }
-
-  function initLogin() {
-    const loginForm = document.getElementById("loginForm");
-    if (!loginForm) return;
-
-    const pwd = document.getElementById("password");
-    const errorMsg = document.getElementById("errorMsg");
-    const toggleBtn = document.getElementById("togglePwd");
-    const eyeIcon = toggleBtn?.querySelector("i");
-
-    loginForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const input = pwd ? pwd.value : "";
-      if (isPasswordValid(input)) {
-        sessionStorage.setItem("loggedIn", "true");
-        window.location.href = "index.html";
-      } else {
-        if (errorMsg) {
-          errorMsg.textContent = "Incorrect password.";
-          errorMsg.classList.add("shake");
-          setTimeout(() => errorMsg.classList.remove("shake"), 300);
-        }
-      }
-    });
-
-    if (toggleBtn && pwd && eyeIcon) {
-      toggleBtn.addEventListener("click", () => {
-        const isHidden = pwd.type === "password";
-        pwd.type = isHidden ? "text" : "password";
-        eyeIcon.classList.toggle("fa-eye");
-        eyeIcon.classList.toggle("fa-eye-slash");
-      });
-    }
-  }
-
-  function initApp() {
-    initTheme();
-    initLogin();
-
-    const tbody = document.getElementById("tableBody");
-    if (tbody) {
-      for (let i = 0; i < 10; i++) {
-        addRow();
-      }
-
-      tbody.addEventListener("input", e => {
-        if (e.target.classList.contains("balance-input")) {
-          e.target.dataset.manual = "true";
-        }
-        calculateTotals();
-      });
-
-      calculateTotals();
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", initApp);
-
-  window.calculateTotals = calculateTotals;
-  window.addRow = addRow;
-  window.clearTable = clearTable;
-  window.printPDF = printPDF;
-  window.toggleDarkMode = toggleDarkMode;
-})();
+const toggleMode = () => {
+  document.body.classList.toggle("light");
+};
