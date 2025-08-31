@@ -1,7 +1,9 @@
+// mbc.js — MedBillCalc Logic
 (() => {
   "use strict";
 
   const ALLOWED_PASSWORDS = ["M3d1c4l00!"];
+  const MAX_ROWS = 10;
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
@@ -12,7 +14,7 @@
   }
 
   function calculateTotals() {
-    const rows = document.querySelectorAll("#billTable tbody tr");
+    const rows = document.querySelectorAll("#tableBody tr");
     let totalTotal = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
 
     rows.forEach(row => {
@@ -53,10 +55,10 @@
   }
 
   function addRow() {
-    const tbody = document.querySelector("#billTable tbody");
+    const tbody = document.getElementById("tableBody");
     if (!tbody) return;
     const currentRows = tbody.querySelectorAll("tr").length;
-    if (currentRows >= 10) return;
+    if (currentRows >= MAX_ROWS) return;
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -69,7 +71,7 @@
   }
 
   function clearTable() {
-    document.querySelectorAll("#billTable tbody tr").forEach(row => {
+    document.querySelectorAll("#tableBody tr").forEach(row => {
       row.querySelectorAll("input").forEach(input => {
         input.value = "";
         if (input.classList.contains("balance-input")) {
@@ -140,19 +142,28 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function initApp() {
     initTheme();
     initLogin();
-    const tbody = document.querySelector("#billTable tbody");
+
+    const tbody = document.getElementById("tableBody");
     if (tbody) {
+      for (let i = 0; i < MAX_ROWS; i++) {
+        addRow();
+      }
+
       tbody.addEventListener("input", e => {
         if (e.target.classList.contains("balance-input")) {
           e.target.dataset.manual = "true";
         }
         calculateTotals();
       });
+
+      calculateTotals();
     }
-  });
+  }
+
+  document.addEventListener("DOMContentLoaded", initApp);
 
   window.calculateTotals = calculateTotals;
   window.addRow = addRow;
