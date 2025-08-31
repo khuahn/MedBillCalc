@@ -1,6 +1,7 @@
+/* Container */
 .container {
   max-width: 720px;
-  margin: 40px auto; /* Keeps your centered layout */
+  margin: 40px auto;
   padding: 30px;
   background: #fff;
   border-radius: 12px;
@@ -8,106 +9,11 @@
   transition: box-shadow 0.3s ease;
 }
 
-
+/* Body */
 body {
   font-family: 'Segoe UI', Roboto, sans-serif;
   background-color: #f5f5f5;
   color: #333;
-}
-
-h1 {
-  font-size: 1.8rem;
-  color: #00796b;
-  margin-top: 0%;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-th, td {
-  padding: 10px;
-  text-align: left;
-}
-
-th {
-  background-color: #0097a7;
-  color: white;
-  font-weight: 600;
-}
-
-td {
-  background-color: #e0f2f1;
-}
-
-input[type="number"] {
-  width: 100%;
-  padding: 8px 10px;
-  box-sizing: border-box;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-
-
-.controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.controls button {
-  background-color: #00796b;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.controls button:hover {
-  background-color: #004d40;
-}
-
-th, td {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.controls-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-}
-
-.total-incurred {
-  font-weight: bold;
-  color: #00796b;
-  font-size: 1.1rem;
-}
-
-.container {
-  max-width: 720px;
-  margin: 40px auto;
-}
-.controls-bar {
-  max-width: 720px;
-  margin: 0 auto;
 }
 
 body.dark-mode {
@@ -120,3 +26,92 @@ button#themeToggle {
   transition: color 0.3s ease;
 }
 
+/* Header */
+h1 {
+  font-size: 1.8rem;
+  color: #00796b;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+th {
+  background-color: #0097a7;
+  color: white;
+  font-weight: 600;
+}
+
+td {
+  background-color: #e0f2f1;
+}
+
+/* Inputs */
+input[type="number"] {
+  width: 100%;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Totals Row */
+tfoot td {
+  padding: 6px 8px;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  font-size: 0.95rem;
+}
+
+/* Controls Bar */
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Buttons */
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.controls button {
+  background-color: #00796b;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+  background-color: #004d40;
+}
+
+/* Total Incurred */
+.total-incurred {
+  font-weight: bold;
+  color: #00796b;
+  font-size: 1rem;
+  padding-right: 8px;
+  text-align: right;
+}
