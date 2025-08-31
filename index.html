@@ -8,6 +8,12 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+  script>
+    // Redirect to login if not authenticated
+    if (!sessionStorage.getItem("loggedIn")) {
+      window.location.replace("login.html");
+    }
+</script>
   <div class="container">
     <h1>Medical Bill Calculator</h1>
 <table id="billTable">
@@ -66,6 +72,12 @@
   Med Bill Calc v1.0.2 — For Internal Use Only<br/>
     All Rights Reserved | ©2025 匠Jac
 </footer>
-
+ <script src="mbc.js?v=104"></script>
+  <script>
+    for (let i = 0; i < 10; i++) {
+      addRow();
+    }
+    calculateTotals();
+  </script>
 </body>
 </html>
