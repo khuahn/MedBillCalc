@@ -17,12 +17,12 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.dark-mode tfoot td {
-  background-color: #e0f2f1;
-  color: #000;
-  font-weight: bold;
+body.dark-mode {
+  background-color: #121212;
+  color: #e0f2f1;
 }
 
+/* Theme Toggle Button */
 button#themeToggle {
   color: inherit;
   transition: color 0.3s ease;
@@ -78,6 +78,7 @@ tfoot td {
   font-size: 0.95rem;
 }
 
+/* Total Incurred */
 .total-incurred {
   font-weight: bold;
   color: #00796b;
@@ -133,12 +134,8 @@ body.dark-mode th {
 }
 
 body.dark-mode td {
-  background-color: #263238;
-  color: #e0f2f1;
+  background-color: #e0f2f1;
+  color: #000;
 }
 
-body.dark-mode tfoot td {
-  background-color: #263238;
-  color: #e0f2f1;
-  font-weight: bold;
-}
+body.dark
