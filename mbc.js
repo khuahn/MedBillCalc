@@ -130,7 +130,11 @@ document.addEventListener("DOMContentLoaded", () => {
         sessionStorage.setItem("loggedIn", "true");
         window.location.href = "index.html";
       } else {
-        document.getElementById("errorMsg").textContent = "Invalid password.";
+        const errorMsg = document.getElementById("errorMsg");
+        if (errorMsg) {
+          errorMsg.textContent = "Invalid password.";
+          errorMsg.style.color = "#c00";
+        }
       }
     });
   }
