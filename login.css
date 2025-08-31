@@ -122,3 +122,10 @@ button[type="submit"]:hover {
 /* =========================
    Footer Styling
    ========================= */
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+}
