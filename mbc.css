@@ -20,13 +20,12 @@ body.login {
    Container & Card Layout
    ========================= */
 .container {
-  max-width: 720px;
-  margin: 0 auto; /* No top margin */
-  padding: 30px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: box-shadow 0.3s ease;
+  max-width: 900px;
+  margin: 40px auto; /* Adds top/bottom spacing and centers horizontally */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* =========================
