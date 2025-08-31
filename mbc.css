@@ -19,7 +19,6 @@ body.dark-mode {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: box-shadow 0.3s ease;
 }
 
 /* Header */
@@ -37,30 +36,24 @@ table {
   margin-bottom: 16px;
 }
 
-th, td {
+th, td, tfoot td {
   padding: 8px;
   text-align: center;
   vertical-align: middle;
+  font-size: 0.95rem;
 }
 
 th {
   background-color: #0097a7;
-  color: white;
+  color: #fff;
   font-weight: 600;
 }
 
-td {
-  background-color: #e0f2f1;
-  color: #000;
-}
-
-/* Totals Row */
+td,
 tfoot td {
-  padding: 6px 8px;
-  font-weight: bold;
   background-color: #e0f2f1;
   color: #000;
-  font-size: 0.95rem;
+  font-weight: bold;
 }
 
 /* Total Incurred */
@@ -94,20 +87,16 @@ input[type="text"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
+  margin: 12px auto 0;
   max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Buttons */
-.controls {
-  display: flex;
-  gap: 8px;
-}
-
+.controls,
 .controls button,
 #themeToggle {
+  display: flex;
+  gap: 8px;
   background-color: #00796b;
   color: white;
   border: none;
@@ -115,49 +104,30 @@ input[type="text"] {
   border-radius: 6px;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
+/* Lock button appearance */
 .controls button:hover,
-#themeToggle:hover {
-  background-color: #004d40;
+#themeToggle:hover,
+.controls button:active,
+#themeToggle:active {
+  background-color: #00796b;
+  color: white;
 }
 
-/* Theme Toggle Button */
-button#themeToggle {
-  color: inherit;
-  transition: color 0.3s ease;
+/* Theme Toggle Icon Fix */
+body:not(.dark-mode) #themeToggle,
+body:not(.dark-mode) #themeToggle i {
+  color: white;
 }
 
 /* Dark Mode Overrides */
 body.dark-mode th {
   background-color: #004d40;
-  color: #fff;
 }
 
-body.dark-mode td {
-  background-color: #e0f2f1;
-  color: #000;
-}
-
-body.dark-mode tfoot td {
-  background-color: #e0f2f1;
-  color: #000;
-  font-weight: bold;
-}
-/* Dark mode: unify all buttons */
 body.dark-mode .controls button,
 body.dark-mode #themeToggle {
   background-color: #00796b;
   color: #fff;
-}
-
-body.dark-mode .controls button:hover,
-body.dark-mode #themeToggle:hover {
-  background-color: #004d40;
-}
-
-/* Ensure Dark Mode button text is white in light mode */
-body:not(.dark-mode) #themeToggle {
-  color: white;
 }
