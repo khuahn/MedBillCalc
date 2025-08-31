@@ -3,60 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MedBillCalc</title>
-  <link rel="stylesheet" href="mbc.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <title>Med Bill Calc v1.0.2</title>
+  <link rel="stylesheet" href="login.css" />
 </head>
 <body>
-  <script>
-    // Redirect to login if not authenticated
-    if (!sessionStorage.getItem("loggedIn")) {
-      window.location.replace("login.html");
-    }
-  </script>
+  <h1>Medical Billing Calculator</h1>
+  <table id="billingTable">
+    <thead>
+      <tr>
+        <th>Total</th>
+        <th>Payments</th>
+        <th>Adjustments</th>
+        <th>Balance</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <tr>
+        <td><input type="number" class="total" value="32166" /></td>
+        <td><input type="number" class="payments" value="236" /></td>
+        <td><input type="number" class="adjustments" value="1456" /></td>
+        <td><span class="balance">0.00</span></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td><span id="totalTotal">0.00</span></td>
+        <td><span id="totalPayments">0.00</span></td>
+        <td><span id="totalAdjustments">0.00</span></td>
+        <td><span id="totalBalance" style="color:red">0.00</span></td>
+      </tr>
+    </tfoot>
+  </table>
 
-  <div class="container">
-    <h1>Medical Billing Calculator</h1>
-    <table id="billTable">
-      <thead>
-        <tr>
-          <th>Total</th>
-          <th>Payments</th>
-          <th>Adjustments</th>
-          <th>Balance</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        <!-- Rows will be added dynamically -->
-      </tbody>
-      <tfoot>
-        <tr>
-          <td><span id="totalTotal"><b>0</b></span></td>
-          <td><span id="totalPayments"><b>0</b></span></td>
-          <td><span id="totalAdjustments"><b>0</b></span></td>
-          <td><span id="totalBalance"><b>0</b></span></td>
-        </tr>
-      </tfoot>
-    </table>
-
-    <div class="controls-bar">
-      <div class="controls">
-        <button onclick="addRow()"><i class="fas fa-plus-circle"></i> Add Row</button>
-        <button onclick="clearTable()"><i class="fas fa-trash-alt"></i> Clear</button>
-        <button onclick="printPDF()"><i class="fas fa-print"></i> Print</button>
-        <button id="themeToggle" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</button>
-      </div>
-      <div class="total-incurred">
-        Total Inc : <span id="incurredTotal" style="color: red;">0</span>
-      </div>
-    </div>
+  <div class="controls">
+    <button onclick="addRow()">Add Row</button>
+    <button onclick="clearTable()">Clear</button>
+    <button onclick="window.print()">Print</button>
+    <button onclick="toggleMode()">Light Mode</button>
   </div>
 
-  <footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888;">
-    Med Bill Calc v1.0.2 — For Internal Use Only<br/>
-    All Rights Reserved | ©2025 匠Jac
+  <footer>
+    Med Bill Calc v1.0.2 — For Internal Use Only<br />
+    All Rights Reserved | ©2023 EE.Jac
   </footer>
 
-  <script src="mbc.js?v=104"></script>
+  <script src="mbc.js"></script>
 </body>
 </html>
