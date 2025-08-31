@@ -156,3 +156,8 @@ body.dark-mode .controls button:hover,
 body.dark-mode #themeToggle:hover {
   background-color: #004d40;
 }
+
+/* Ensure Dark Mode button text is white in light mode */
+body:not(.dark-mode) #themeToggle {
+  color: white;
+}
