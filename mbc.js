@@ -119,6 +119,7 @@ window.onload = function () {
 
 // 🔐 Login validation for MedBillCalc
 document.addEventListener("DOMContentLoaded", () => {
+  // Login logic
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
     loginForm.addEventListener("submit", function (e) {
@@ -133,11 +134,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const errorMsg = document.getElementById("errorMsg");
         if (errorMsg) {
           errorMsg.textContent = "Invalid password.";
-          errorMsg.style.color = "#c00";
+          errorMsg.classList.add("shake");
+          setTimeout(() => errorMsg.classList.remove("shake"), 300);
         }
       }
     });
+    return; // Skip any other page logic when on login
   }
+
+  // Other page logic (e.g., calculator) can live below...
+  // calculateTotals();
 });
 
 
