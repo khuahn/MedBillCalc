@@ -1,6 +1,27 @@
+/* =========================
+   Base Layout & Typography
+   ========================= */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+/* Center only the login page */
+body.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* =========================
+   Container & Card Layout
+   ========================= */
 .container {
   max-width: 720px;
-  margin: 0 auto; /* Removes top margin */
+  margin: 0 auto; /* No top margin */
   padding: 30px;
   background: #fff;
   border-radius: 12px;
@@ -8,21 +29,19 @@
   transition: box-shadow 0.3s ease;
 }
 
-
-body {
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
-}
-
+/* =========================
+   Header
+   ========================= */
 h1 {
   font-size: 1.8rem;
   color: #00796b;
-  margin-bottom: 20px;
+  margin: 0 0 20px 0; /* Flush top */
   text-align: center;
 }
 
-
+/* =========================
+   Table Styling
+   ========================= */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -31,7 +50,8 @@ table {
 
 th, td {
   padding: 10px;
-  text-align: left;
+  text-align: center;
+  vertical-align: middle;
 }
 
 th {
@@ -44,6 +64,9 @@ td {
   background-color: #e0f2f1;
 }
 
+/* =========================
+   Inputs
+   ========================= */
 input[type="number"] {
   width: 100%;
   padding: 8px 10px;
@@ -53,13 +76,23 @@ input[type="number"] {
   border-radius: 6px;
 }
 
-
+/* =========================
+   Controls & Buttons
+   ========================= */
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .controls {
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-top: 20px;
 }
 
 .controls button {
@@ -77,38 +110,25 @@ input[type="number"] {
   background-color: #004d40;
 }
 
-th, td {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.controls-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-}
-
 .total-incurred {
   font-weight: bold;
   color: #00796b;
   font-size: 1.1rem;
 }
 
-.container {
-  max-width: 720px;
-  margin: 40px auto;
-}
-.controls-bar {
-  max-width: 720px;
-  margin: 0 auto;
+/* =========================
+   Footer
+   ========================= */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #888;
 }
 
+/* =========================
+   Dark Mode
+   ========================= */
 body.dark-mode {
   background-color: #121212;
   color: #f0f0f0;
@@ -119,18 +139,9 @@ button#themeToggle {
   transition: color 0.3s ease;
 }
 
-/* Layout */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f6f8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-/* Card */
+/* =========================
+   Login Page Styles
+   ========================= */
 .login-container {
   background: #fff;
   padding: 2rem;
@@ -172,7 +183,16 @@ body {
   background: transparent;
 }
 
-/* Button */
+/* Show/Hide password button */
+.input-group button {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* Submit button */
 button[type="submit"] {
   background: #0078d4;
   color: #fff;
@@ -191,20 +211,22 @@ button[type="submit"]:hover {
   background: #005fa3;
 }
 
-/* Error text */
+/* Error message */
 .error {
   color: #c00;
   font-size: 0.9rem;
   margin-top: 0.5rem;
 }
 
-/* Optional: shake on error */
-.error.shake { animation: shake 0.3s ease; }
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
-  100% { transform: translateX(0); }
+/* Shake animation */
+.error.shake {
+  animation: shake 0.3s ease;
 }
 
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-5px); }
+  50%  { transform: translateX(5px); }
+  75%  { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
