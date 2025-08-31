@@ -4,30 +4,66 @@
   <meta charset="UTF-8">
   <title>Login | MedBillCalc</title>
   <link rel="stylesheet" href="mbc.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-box {
+      background: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      text-align: center;
+      width: 300px;
+    }
+    .icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 10px;
+      fill: #555;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #errorMsg {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🔐 Access MedBillCalc</h2>
+  <div class="login-box">
+    <!-- Kanji-themed lock icon -->
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M12 2C9.79 2 8 3.79 8 6v4H6v12h12V10h-2V6c0-2.21-1.79-4-4-4zm0 2c1.1 0 2 .9 2 2v4h-4V6c0-1.1.9-2 2-2zm-4 8h8v10H8V12z"/>
+    </svg>
+    <h2>Access MedBillCalc</h2>
     <form id="loginForm">
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="username" placeholder="👤 Username" required>
+      <input type="password" id="password" placeholder="🔑 Password" required>
       <button type="submit">Login</button>
     </form>
-    <p id="errorMsg" style="color:red;"></p>
+    <p id="errorMsg"></p>
   </div>
 
   <script>
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-
-      if (user === "access" && pass === "匠2025") {
-        window.location.href = "/calc/index.html";
-      } else {
-        document.getElementById("errorMsg").textContent = "Invalid credentials.";
-      }
-    });
-  </script>
-</body>
-</html>
+    document.getElementById("loginForm").addEvent
