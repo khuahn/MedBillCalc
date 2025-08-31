@@ -1,8 +1,7 @@
-// mbc.js — MedBillCalc Final Version with Row Limit Alert
+// mbc.js — MedBillCalc Final Version (Unlimited Rows, Starts with 10)
 (() => {
   "use strict";
 
-  const MAX_ROWS = 10;
   const ALLOWED_PASSWORDS = ["M3d1c4l00!"];
 
   function normalizeInput(s) {
@@ -57,11 +56,6 @@
   function addRow() {
     const tbody = document.getElementById("tableBody");
     if (!tbody) return;
-    const currentRows = tbody.querySelectorAll("tr").length;
-    if (currentRows >= MAX_ROWS) {
-      alert("Maximum of 10 rows reached.");
-      return;
-    }
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -151,7 +145,7 @@
 
     const tbody = document.getElementById("tableBody");
     if (tbody) {
-      for (let i = 0; i < MAX_ROWS; i++) {
+      for (let i = 0; i < 10; i++) {
         addRow();
       }
 
