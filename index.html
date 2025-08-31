@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Medical Bill Calculator</title>
-  <link rel="stylesheet" href="mbc.css" />
+  <link rel="stylesheet" href="mbc.css?v=2" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
-<div class="container">
-  <!-- ... your calculator content ... -->
 <body>
   <script>
     // Redirect to login if not authenticated
@@ -50,20 +48,16 @@
         Total Inc : <span id="incurredTotal" style="color: red;">0</span>
       </div>
     </div>
+
+    <footer>
+      Med Bill Calc v1.0.2 — For Internal Use Only<br/>
+      All Rights Reserved | ©2025 匠Jac
+    </footer>
   </div>
-
-
-  <footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888;">
-    Med Bill Calc v1.0.2 — For Internal Use Only<br/>
-    All Rights Reserved | ©2025 匠Jac
-  </footer>
-</div>
-
 
   <!-- Load JS with cache-busting -->
   <script src="mbc.js?v=104"></script>
   <script>
-    // Render initial 10 rows safely
     for (let i = 0; i < 10; i++) {
       addRow();
     }
