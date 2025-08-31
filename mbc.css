@@ -1,6 +1,6 @@
 .container {
   max-width: 720px;
-  margin: 40px auto; /* Keeps your centered layout */
+  margin: 0 auto; /* Removes top margin */
   padding: 30px;
   background: #fff;
   border-radius: 12px;
