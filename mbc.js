@@ -8,7 +8,7 @@
   }
 
   // Passwords allowed
-  const ALLOWED_PASSWORDS = ["M3d1c4l00!", "medcalc2025"];
+  const ALLOWED_PASSWORDS = ["M3d1c4l00!"];
 
   function isPasswordValid(input) {
     return ALLOWED_PASSWORDS.includes(normalizeInput(input));
