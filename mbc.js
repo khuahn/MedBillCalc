@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loginForm.addEventListener("submit", function (e) {
       e.preventDefault();
       const pass = document.getElementById("password").value.trim();
-      const validPass = "M3d1c4l00!";
+      const validPass = "匠2025";
 
       if (pass === validPass) {
         sessionStorage.setItem("loggedIn", "true");
