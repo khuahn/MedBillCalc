@@ -6,16 +6,16 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark mode: unify all button backgrounds */
+/* Dark mode: enforce button styling */
 body.dark-mode .controls button,
 body.dark-mode #themeToggle {
-  background-color: #00796b;
-  color: #fff;
+  background-color: #00796b !important;
+  color: #fff !important;
 }
 
 body.dark-mode .controls button:hover,
 body.dark-mode #themeToggle:hover {
-  background-color: #004d40;
+  background-color: #004d40 !important;
 }
 
 /* Container */
