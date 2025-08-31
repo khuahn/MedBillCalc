@@ -1,36 +1,22 @@
-// mbc.js — MedBillCalc core
-// - Robust login with normalization and cache-safe behavior
-// - Calculator logic with manual balance override
-// - Theme handling safe across pages
-
+// mbc.js — Final version for MedBillCalc
 (() => {
   "use strict";
 
-  // ========= Utilities =========
-  // Normalize strings: trim, NFKC, and strip invisible chars
+  // Normalize input safely
   function normalizeInput(s) {
-    return (s || "")
-      .normalize("NFKC")
-      .replace(/[\u200B-\u200D\uFEFF]/g, "")
-      .trim();
+    return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
-  // Accept these passwords (current + fallback)
-  const ALLOWED_PASSWORDS = [
-    "M3d1c4l00!",
-    "medcalc2025"
-  ];
+  // Passwords allowed
+  const ALLOWED_PASSWORDS = ["M3d1c4l00!", "medcalc2025"];
 
   function isPasswordValid(input) {
-    const v = normalizeInput(input);
-    return ALLOWED_PASSWORDS.includes(v);
+    return ALLOWED_PASSWORDS.includes(normalizeInput(input));
   }
 
-  // ========= Calculator =========
+  // Calculator logic
   function calculateTotals() {
     const rows = document.querySelectorAll("#billTable tbody tr");
-    if (!rows.length) return; // Not on index page
-
     let totalTotal = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
 
     rows.forEach(row => {
@@ -40,7 +26,6 @@
       const balanceInput = row.querySelector(".balance-input");
       const computed = total - payments - adjustments;
 
-      // Manual override: if user edited balance, use it; otherwise, auto-compute
       if (balanceInput) {
         const manualVal = parseFloat(normalizeInput(balanceInput.value));
         if (balanceInput.dataset.manual === "true" && !isNaN(manualVal)) {
@@ -76,19 +61,16 @@
     if (!tbody) return;
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><input type="number" step="any" inputmode="decimal" class="total" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" inputmode="decimal" class="payments" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" inputmode="decimal" class="adjustments" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" inputmode="decimal" class="balance-input" value="0"></td>
+      <td><input type="number" step="any" class="total" oninput="calculateTotals()"></td>
+      <td><input type="number" step="any" class="payments" oninput="calculateTotals()"></td>
+      <td><input type="number" step="any" class="adjustments" oninput="calculateTotals()"></td>
+      <td><input type="number" step="any" class="balance-input" value="0"></td>
     `;
     tbody.appendChild(tr);
-    calculateTotals();
   }
 
   function clearTable() {
-    const rows = document.querySelectorAll("#billTable tbody tr");
-    if (!rows.length) return;
-    rows.forEach(row => {
+    document.querySelectorAll("#billTable tbody tr").forEach(row => {
       row.querySelectorAll("input").forEach(input => {
         input.value = "";
         if (input.classList.contains("balance-input")) {
@@ -105,13 +87,13 @@
 
   function toggleDarkMode() {
     const button = document.getElementById("themeToggle");
-    if (!button) return; // Not on index page
-    const icon = button.querySelector("i");
+    const icon = button?.querySelector("i");
     document.body.classList.toggle("dark-mode");
     const isDark = document.body.classList.contains("dark-mode");
     localStorage.setItem("theme", isDark ? "dark" : "light");
-    if (icon) icon.className = isDark ? "fas fa-sun" : "fas fa-moon";
-    button.innerHTML = `<i class="${isDark ? "fas fa-sun" : "fas fa-moon"}"></i> ${isDark ? "Light Mode" : "Dark Mode"}`;
+    if (button) {
+      button.innerHTML = `<i class="${isDark ? "fas fa-sun" : "fas fa-moon"}"></i> ${isDark ? "Light Mode" : "Dark Mode"}`;
+    }
   }
 
   function initTheme() {
@@ -125,41 +107,12 @@
     }
   }
 
-  function initBillTable() {
-    const tbody = document.querySelector("#billTable tbody");
-    if (!tbody) return; // Not on index page
-
-    // Mark balance as manually edited
-    tbody.addEventListener("input", e => {
-      if (e.target.classList.contains("balance-input")) {
-        e.target.dataset.manual = "true";
-        calculateTotals();
-      }
-    });
-
-    // Initial compute
-    calculateTotals();
-  }
-
-  // ========= Login =========
   function initLogin() {
     const loginForm = document.getElementById("loginForm");
-    if (!loginForm) return; // Not on login page
+    if (!loginForm) return;
 
     const pwd = document.getElementById("password");
     const errorMsg = document.getElementById("errorMsg");
-    const togglePwd = document.getElementById("togglePwd");
-
-    // Show/Hide password toggle if present
-    if (togglePwd && pwd) {
-      togglePwd.addEventListener("click", () => {
-        const isPwd = pwd.type === "password";
-        pwd.type = isPwd ? "text" : "password";
-        togglePwd.innerHTML = `<i class="fas ${isPwd ? "fa-eye-slash" : "fa-eye"}"></i>`;
-        togglePwd.setAttribute("aria-label", isPwd ? "Hide password" : "Show password");
-        pwd.focus();
-      });
-    }
 
     loginForm.addEventListener("submit", e => {
       e.preventDefault();
@@ -177,14 +130,22 @@
     });
   }
 
-  // ========= Init (safe on both pages) =========
+  // Init everything
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
-    initBillTable();
     initLogin();
+    const tbody = document.querySelector("#billTable tbody");
+    if (tbody) {
+      tbody.addEventListener("input", e => {
+        if (e.target.classList.contains("balance-input")) {
+          e.target.dataset.manual = "true";
+        }
+        calculateTotals();
+      });
+    }
   });
 
-  // Expose functions used by inline HTML attributes
+  // Expose functions globally
   window.calculateTotals = calculateTotals;
   window.addRow = addRow;
   window.clearTable = clearTable;
