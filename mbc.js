@@ -116,3 +116,25 @@ window.onload = function () {
     button.innerHTML = `<i class="fas fa-moon"></i> Dark Mode`;
   }
 };
+
+// 🔐 Login validation for MedBillCalc
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const validUser = "access";
+      const validPass = "匠2025";
+
+      if (user === validUser && pass === validPass) {
+        sessionStorage.setItem("loggedIn", "true");
+        window.location.href = "index.html";
+      } else {
+        document.getElementById("errorMsg").textContent = "Invalid credentials.";
+      }
+    });
+  }
+});
+
