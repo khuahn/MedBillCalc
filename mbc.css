@@ -16,8 +16,10 @@ body {
   color: #333;
 }
 
-body.dark-mode tfoot td {
+body.dark-mode table tfoot td {
   background-color: #e0f2f1;
+  color: #000;
+  font-weight: bold;
 }
 
 button#themeToggle {
