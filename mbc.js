@@ -1,20 +1,16 @@
-// mbc.js — Final version for MedBillCalc with row limit fix
 (() => {
   "use strict";
 
-  // Normalize input safely
+  const ALLOWED_PASSWORDS = ["M3d1c4l00!"];
+
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
-
-  // Passwords allowed
-  const ALLOWED_PASSWORDS = ["M3d1c4l00!"];
 
   function isPasswordValid(input) {
     return ALLOWED_PASSWORDS.includes(normalizeInput(input));
   }
 
-  // Calculator logic
   function calculateTotals() {
     const rows = document.querySelectorAll("#billTable tbody tr");
     let totalTotal = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
