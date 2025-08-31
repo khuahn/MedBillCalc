@@ -9,22 +9,29 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="login">
-  <div class="login-wrapper">
-    <div class="login-container">
-      <h2>Access MedBillCalc</h2>
-      <form id="loginForm">
-        <div class="input-group">
-          <i class="fas fa-lock"></i>
-          <input type="password" id="password" placeholder="Enter Password" required />
-          <button type="button" id="togglePwd" aria-label="Show password">
-            <i class="fas fa-eye"></i>
-          </button>
-        </div>
-        <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
-        <p id="errorMsg" class="error" role="alert" aria-live="polite"></p>
-      </form>
+<div class="login-wrapper">
+  <div class="login-container">
+    <h2>Access MedBillCalc</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="Enter Password" required />
+        <button type="button" id="togglePwd" aria-label="Show password">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+      <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <p id="errorMsg" class="error" role="alert" aria-live="polite"></p>
+    </form>
+
+    <!-- 👇 Footer now inside the card -->
+    <div class="login-footer">
+      Med Bill Calc v1.0.2 — For Internal Use Only<br/>
+      All Rights Reserved | ©2025 匠Jac
     </div>
   </div>
+</div>
+
 
   <script src="mbc.js?v=104"></script>
 </body>
