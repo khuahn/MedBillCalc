@@ -1,67 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Medical Bill Calculator</title>
-  <link rel="stylesheet" href="mbc.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="calc.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <script>
-    // Redirect to login if not authenticated
-    if (!sessionStorage.getItem("loggedIn")) {
-      window.location.replace("login.html");
-    }
-  </script>
-
   <div class="container">
     <h1>Medical Bill Calculator</h1>
-    <table id="billTable">
-      <thead>
-        <tr>
-          <th>Total</th>
-          <th>Payments</th>
-          <th>Adjustments</th>
-          <th>Balance</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-      <tfoot>
-        <tr>
-          <td><span id="totalTotal"><b>0</b></span></td>
-          <td><span id="totalPayments"><b>0</b></span></td>
-          <td><span id="totalAdjustments"><b>0</b></span></td>
-          <td><span id="totalBalance"><b>0</b></span></td>
-        </tr>
-      </tfoot>
-    </table>
+<table id="billTable">
+  <thead>
+    <tr>
+      <th>Total</th>
+      <th>Payments</th>
+      <th>Adjustments</th>
+      <th>Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <script>
+      for (let i = 0; i < 10; i++) {
+        document.write(`
+          <tr>
+            <td><input type="number" class="total" oninput="calculateTotals()"></td>
+            <td><input type="number" class="payments" oninput="calculateTotals()"></td>
+            <td><input type="number" class="adjustments" oninput="calculateTotals()"></td>
+            <td><input type="number" class="balance-input" value="0"></td>
+          </tr>
+        `);
+      }
+    </script>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td><span id="totalTotal">0</span></td>
+      <td><span id="totalPayments">0</span></td>
+      <td><span id="totalAdjustments">0</span></td>
+      <td><span id="totalBalance">0</span></td>
+    </tr>
+  </tfoot>
+</table>
 
-    <div class="controls-bar">
-      <div class="controls">
-        <button onclick="addRow()"><i class="fas fa-plus-circle"></i> Add Row</button>
-        <button onclick="clearTable()"><i class="fas fa-trash-alt"></i> Clear</button>
-        <button onclick="printPDF()"><i class="fas fa-print"></i> Print</button>
-        <button id="themeToggle" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</button>
-      </div>
-      <div class="total-incurred">
-        Total Inc : <span id="incurredTotal" style="color: red;">0</span>
-      </div>
-    </div>
+<div class="controls-bar">
+  <div class="controls">
+    <button onclick="addRow()"><i class="fas fa-plus-circle"></i> Add Row</button>
+    <button onclick="clearTable()"><i class="fas fa-trash-alt"></i> Clear</button>
+    <button onclick="printPDF()"><i class="fas fa-print"></i> Print</button>
+<button id="themeToggle" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode
+</button>
 
-    <footer>
-      Med Bill Calc v1.0.2 — For Internal Use Only<br/>
-      All Rights Reserved | ©2025 匠Jac
-    </footer>
+
   </div>
+  <div class="total-incurred">
+    Total Inc : <span id="incurredTotal" style="color: red;">0</span>
+  </div>
+</div>
 
-  <!-- Load JS with cache-busting -->
-  <script src="mbc.js?v=104"></script>
-  <script>
-    for (let i = 0; i < 10; i++) {
-      addRow();
-    }
-    calculateTotals();
-  </script>
+
+    </div>
+  </div>
+  <script src="calc.js"></script>
+<footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888;">
+  Med Bill Calc v1.0.2 — For Internal Use Only<br/>
+    All Rights Reserved | ©2025 匠Jac
+</footer>
+
 </body>
 </html>
