@@ -131,3 +131,15 @@ body.dark-mode #themeToggle {
   background-color: #00796b;
   color: #fff;
 }
+
+
+body.dark-mode button {
+  background-color: #004d40;
+  color: #ffffff;
+  border: none;
+}
+
+body.dark-mode td {
+  background-color: #b2dfdb;
+  color: #000000;
+}
