@@ -1,28 +1,32 @@
 /* =========================
-   Base Layout for Login Page
+   Root Variables
+   ========================= */
+:root {
+  --primary-color: #00796b;
+  --background-color: #f4f6f8;
+  --input-bg: #e0f2f1;
+  --text-color: #333;
+  --error-color: #c00;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* =========================
+   Base Layout
    ========================= */
 body.login {
   margin: 0;
   padding: 0;
-  background-color: #f4f6f8;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* Center the login card */
-.login-wrapper {
-  flex: 1;
+  background-color: var(--background-color);
+  font-family: var(--font-family);
+  color: var(--text-color);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  min-height: 100vh;
 }
 
 /* =========================
-   Login Card Styling
+   Login Card
    ========================= */
 .login-container {
   background-color: #fff;
@@ -37,95 +41,21 @@ body.login {
 .login-container h2 {
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  color: #00796b;
+  color: var(--primary-color);
   font-weight: 600;
 }
 
 /* =========================
-   Input Group with Icon
+   Input Group
    ========================= */
 .input-group {
   display: flex;
   align-items: center;
+  background: var(--input-bg);
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 0.5rem 0.75rem;
   margin-bottom: 1rem;
-  background: #e0f2f1;
 }
 
-.input-group i {
-  margin-right: 0.5rem;
-  color: #00796b;
-  font-size: 1.1rem;
-}
-
-.input-group input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 1rem;
-  background: transparent;
-}
-
-/* Show/Hide password button */
-.input-group button {
-  background: transparent;
-  border: none;
-  color: #00796b;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-/* =========================
-   Submit Button
-   ========================= */
-button[type="submit"] {
-  background-color: #00796b;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-button[type="submit"]:hover {
-  background-color: #004d40;
-}
-
-/* =========================
-   Error Message
-   ========================= */
-.error {
-  color: #c00;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-}
-
-.error.shake {
-  animation: shake 0.3s ease;
-}
-
-@keyframes shake {
-  0%   { transform: translateX(0); }
-  25%  { transform: translateX(-5px); }
-  50%  { transform: translateX(5px); }
-  75%  { transform: translateX(-5px); }
-  100% { transform: translateX(0); }
-}
-
-/* =========================
-   Footer Styling
-   ========================= */
-footer {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #888;
-  margin-top: 2rem;
-  padding-bottom: 1rem;
-}
+.input
