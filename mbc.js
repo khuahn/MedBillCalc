@@ -1,9 +1,9 @@
-// mbc.js — MedBillCalc Logic
+// mbc.js — MedBillCalc Final Version with Row Limit Alert
 (() => {
   "use strict";
 
-  const ALLOWED_PASSWORDS = ["M3d1c4l00!"];
   const MAX_ROWS = 10;
+  const ALLOWED_PASSWORDS = ["M3d1c4l00!"];
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
@@ -58,7 +58,10 @@
     const tbody = document.getElementById("tableBody");
     if (!tbody) return;
     const currentRows = tbody.querySelectorAll("tr").length;
-    if (currentRows >= MAX_ROWS) return;
+    if (currentRows >= MAX_ROWS) {
+      alert("Maximum of 10 rows reached.");
+      return;
+    }
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
