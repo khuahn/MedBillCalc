@@ -6,16 +6,9 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark mode: enforce button styling */
-body.dark-mode .controls button,
-body.dark-mode #themeToggle {
-  background-color: #00796b !important;
-  color: #fff !important;
-}
-
-body.dark-mode .controls button:hover,
-body.dark-mode #themeToggle:hover {
-  background-color: #004d40 !important;
+body.dark-mode {
+  background-color: #121212;
+  color: #e0f2f1;
 }
 
 /* Container */
@@ -98,10 +91,57 @@ input[type="text"] {
 
 /* Controls Bar */
 .controls-bar {
-  display
-/* Light mode: set all buttons to #0097a7 */
-body:not(.dark-mode) .controls button,
-body:not(.dark-mode) #themeToggle {
-  background-color: #0097a7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Buttons */
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.controls button,
+#themeToggle {
+  background-color: #00796b;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.controls button:hover,
+#themeToggle:hover {
+  background-color: #004d40;
+}
+
+/* Theme Toggle Button */
+button#themeToggle {
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+/* Dark Mode Overrides */
+body.dark-mode th {
+  background-color: #004d40;
   color: #fff;
+}
+
+body.dark-mode td {
+  background-color: #e0f2f1;
+  color: #000;
+}
+
+body.dark-mode tfoot td {
+  background-color: #e0f2f1;
+  color: #000;
+  font-weight: bold;
 }
