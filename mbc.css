@@ -99,3 +99,9 @@ input[type="text"] {
 /* Controls Bar */
 .controls-bar {
   display
+/* Light mode: set all buttons to #0097a7 */
+body:not(.dark-mode) .controls button,
+body:not(.dark-mode) #themeToggle {
+  background-color: #0097a7;
+  color: #fff;
+}
