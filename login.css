@@ -132,10 +132,12 @@ button[type="submit"]:hover {
 /* =========================
    Footer
    ========================= */
+  
 footer {
+  margin-top: 40px;
+  padding-bottom: 16px;
   text-align: center;
-  font-size: 0.9rem;
-  color: #888;
-  margin-top: 2rem;
-  padding-bottom: 1rem;
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.4;
 }
