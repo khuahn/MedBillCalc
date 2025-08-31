@@ -4,23 +4,19 @@ function calculateTotals() {
   let totalTotal = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
 
   rows.forEach(row => {
-    const total = parseFloat(row.querySelector(".total")?.value) || 0;
-    const payments = parseFloat(row.querySelector(".payments")?.value) || 0;
-    const adjustments = parseFloat(row.querySelector(".adjustments")?.value) || 0;
+    const total = parseFloat(row.querySelector(".total")?.value.trim()) || 0;
+    const payments = parseFloat(row.querySelector(".payments")?.value.trim()) || 0;
+    const adjustments = parseFloat(row.querySelector(".adjustments")?.value.trim()) || 0;
     const balanceInput = row.querySelector(".balance-input");
     const computed = total - payments - adjustments;
 
     if (balanceInput) {
-      if (balanceInput.dataset.manual === "true") {
-        const manualVal = parseFloat(balanceInput.value);
-        const used = isNaN(manualVal) ? computed : manualVal;
-        if (isNaN(manualVal)) {
-          balanceInput.value = computed.toFixed(2);
-          balanceInput.dataset.manual = "";
-        }
-        totalBalance += used;
+      const manualVal = parseFloat(balanceInput.value.trim());
+      if (balanceInput.dataset.manual === "true" && !isNaN(manualVal)) {
+        totalBalance += manualVal;
       } else {
         balanceInput.value = computed.toFixed(2);
+        balanceInput.dataset.manual = "";
         totalBalance += computed;
       }
     }
@@ -86,16 +82,20 @@ function toggleDarkMode() {
 }
 
 // 🌓 Apply saved theme on page load
-window.onload = function () {
+window.addEventListener("load", () => {
   const savedTheme = localStorage.getItem("theme");
   const button = document.getElementById("themeToggle");
   if (savedTheme === "dark") {
     document.body.classList.add("dark-mode");
-    button.innerHTML = `<i class="fas fa-sun"></i> Light Mode`;
+    if (button) {
+      button.innerHTML = `<i class="fas fa-sun"></i> Light Mode`;
+    }
   } else {
-    button.innerHTML = `<i class="fas fa-moon"></i> Dark Mode`;
+    if (button) {
+      button.innerHTML = `<i class="fas fa-moon"></i> Dark Mode`;
+    }
   }
-};
+});
 
 // 🧠 Mark balance as manually edited
 document.addEventListener("DOMContentLoaded", () => {
@@ -117,11 +117,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (loginForm) {
     loginForm.addEventListener("submit", function(e) {
       e.preventDefault();
-      const password = document.getElementById("password").value;
+      const password = document.getElementById("password").value.trim();
       const errorMsg = document.getElementById("errorMsg");
 
-      // Replace with your actual password
-      if (password === "medcalc2025") {
+      // ✅ Replace with your actual password
+      const correctPassword = "M3d1c4l00!";
+
+      if (password === correctPassword) {
         sessionStorage.setItem("loggedIn", "true");
         window.location.href = "index.html";
       } else {
