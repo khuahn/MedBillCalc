@@ -1,42 +1,35 @@
+/* JS v1.7 */
 (() => {
   "use strict";
-
-
-  const ALLOWED_PASSWORD = "M3d1c4l00!";
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
-  function checkCredentials(input) {
-    return ALLOWED_PASSWORD === normalizeInput(input);
-  }
-
   function calculateTotals() {
     const rows = document.querySelectorAll("#tableBody tr");
-    let totalTotal = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
+    let totalTotal = 0,
+      totalPayments = 0,
+      totalAdjustments = 0,
+      totalBalance = 0;
 
-    rows.forEach(row => {
-      const total = parseFloat(normalizeInput(row.querySelector(".total")?.value)) || 0;
+    rows.forEach((row) => {
+      const totalInput = row.querySelector(".total");
       const payments = parseFloat(normalizeInput(row.querySelector(".payments")?.value)) || 0;
       const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments")?.value)) || 0;
-      const balanceInput = row.querySelector(".balance-input");
-      const computed = total - payments - adjustments;
+      const balance = parseFloat(normalizeInput(row.querySelector(".balance-input")?.value)) || 0;
 
-      if (balanceInput) {
-        const manualVal = parseFloat(normalizeInput(balanceInput.value));
-        if (balanceInput.dataset.manual === "true" && !isNaN(manualVal)) {
-          totalBalance += manualVal;
-        } else {
-          balanceInput.value = computed.toFixed(2);
-          balanceInput.dataset.manual = "";
-          totalBalance += computed;
-        }
+      // New logic: Total Incurred = Payments + Adjustments + Balance
+      const totalIncurred = payments + adjustments + balance;
+      if (totalInput) {
+        totalInput.value = totalIncurred.toFixed(2);
       }
 
-      totalTotal += total;
+      // Sum up all the new totals for the summary fields
+      totalTotal += totalIncurred;
       totalPayments += payments;
       totalAdjustments += adjustments;
+      totalBalance += balance;
     });
 
     const update = (id, val) => {
@@ -57,10 +50,10 @@
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><input type="number" step="any" class="total" oninput="calculateTotals()"></td>
+      <td><input type="number" step="any" class="total" readonly></td>
       <td><input type="number" step="any" class="payments" oninput="calculateTotals()"></td>
       <td><input type="number" step="any" class="adjustments" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" class="balance-input" value="0"></td>
+      <td><input type="number" step="any" class="balance-input" oninput="calculateTotals()" value="0"></td>
     `;
     tbody.appendChild(tr);
   }
@@ -100,52 +93,24 @@
     }
   }
 
-  function initLogin() {
-    const loginForm = document.getElementById("loginForm");
-    if (!loginForm) return;
-
-    const pwd = document.getElementById("password");
-    const errorMsg = document.getElementById("errorMsg");
-    const toggleBtn = document.getElementById("togglePwd");
-    const eyeIcon = toggleBtn?.querySelector("i");
-
-    loginForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const input = pwd ? pwd.value : "";
-      if (checkCredentials(input)) {
-        sessionStorage.setItem("loggedIn", "true");
-        window.location.href = "index.html";
-      } else {
-        if (errorMsg) {
-          errorMsg.textContent = "Incorrect password.";
-          errorMsg.classList.add("shake");
-          setTimeout(() => errorMsg.classList.remove("shake"), 300);
-        }
-      }
-    });
-
-    if (toggleBtn && pwd && eyeIcon) {
-      toggleBtn.addEventListener("click", () => {
-        const isHidden = pwd.type === "password";
-        pwd.type = isHidden ? "text" : "password";
-        eyeIcon.classList.toggle("fa-eye");
-        eyeIcon.classList.toggle("fa-eye-slash");
-      });
-    }
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
-    initLogin();
+
+    const addRowBtn = document.getElementById("addRowBtn");
+    const clearTableBtn = document.getElementById("clearTableBtn");
+    const printPDFBtn = document.getElementById("printPDFBtn");
+    const themeToggle = document.getElementById("themeToggle");
+
+    if (addRowBtn) addRowBtn.addEventListener("click", addRow);
+    if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
+    if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
+    if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
 
     const tbody = document.getElementById("tableBody");
     if (tbody) {
       for (let i = 0; i < 10; i++) addRow();
 
-      tbody.addEventListener("input", e => {
-        if (e.target.classList.contains("balance-input")) {
-          e.target.dataset.manual = "true";
-        }
+      tbody.addEventListener("input", (e) => {
         calculateTotals();
       });
 
