@@ -1,3 +1,4 @@
+/* This code is for educational purposes ONLY. It is NOT secure. */
 (() => {
   "use strict";
 
