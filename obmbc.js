@@ -1,18 +1,13 @@
-/* This code is for educational purposes ONLY. It is NOT secure. */
+/* This code uses "security through obscurity" for educational purposes ONLY. It is NOT secure. */
 (() => {
   "use strict";
 
-  // The password, encoded in Base64
-  const ENCODED_PASSWORD = "TTNkMWM0bDByIS==";
+  // The password is here, but it is reversed.
+  const REVERSED_PASSWORD = "!00l4c1d3M";
 
-  // The function to decode the Base64 password
-  function decodeBase64(encodedStr) {
-    try {
-      return atob(encodedStr);
-    } catch (e) {
-      console.error("Decoding failed:", e);
-      return null;
-    }
+  // Function to reverse the password
+  function reverseString(str) {
+    return str.split("").reverse().join("");
   }
 
   function normalizeInput(s) {
@@ -20,10 +15,7 @@
   }
 
   function checkCredentials(input) {
-    const secretPassword = decodeBase64(ENCODED_PASSWORD);
-    if (!secretPassword) {
-      return false;
-    }
+    const secretPassword = reverseString(REVERSED_PASSWORD);
     return secretPassword === normalizeInput(input);
   }
 
