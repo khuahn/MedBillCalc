@@ -12,7 +12,7 @@
   // Function to decrypt the password
   function decryptPassword(encryptedText) {
     try {
-      const bytes = CryptoJS.AES.decrypt(encryptedText, ENCRYPTION_KEY);
+      const bytes = CryptoJS.AES.AES.decrypt(encryptedText, ENCRYPTION_KEY);
       return bytes.toString(CryptoJS.enc.Utf8);
     } catch (e) {
       console.error("Decryption failed:", e);
