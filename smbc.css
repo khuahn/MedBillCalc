@@ -2,14 +2,11 @@
  * Med Bill Calc (MBC) - Sleek Modern Design
  *
  * This version includes the following changes:
- * - Redesigned to match the sleek, modern look of the login page.
- * - Corrected the dark mode text color for the totals row (now white).
- * - Fixed the light mode background color for the totals row to match the table's background.
- * - Improved print preview to remove all input box styling for a professional, static look.
- * - The "Total Inc" is now visible and centered in the printout.
- * - **NEW:** The printout now has a consistent, sleek design with a container shadow, regardless of the theme.
+ * - The "Total Inc" is now styled to be visible in the printout, even though it is inside a hidden container.
+ * - Ensures a consistent, sleek container with a shadow in the printout, regardless of the user's color theme.
  *
- * Current Version: v1.4
+ * Current Version: v1.6
+ * Previous Version (v1.5): The Total Inc was not displayed correctly, and print styles were inconsistent between themes.
  */
 
 :root {
@@ -207,9 +204,18 @@ body.dark-mode input[type="number"] {
   /* Hides elements not needed for printing */
   .controls-bar,
   footer,
-  h1,
+  h1 {
+    display: none !important;
+  }
+
+  /* Displays Total Inc and styles it correctly */
   .total-incurred {
-    display: none;
+    display: block !important;
+    text-align: center;
+    font-size: 1.1rem;
+    padding-top: 15px;
+    color: #000 !important;
+    font-weight: bold;
   }
 
   /* Removes input field styles to make them look like plain text */
