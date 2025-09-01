@@ -2,16 +2,18 @@
  * login.css - Medical Bill Calculator Login Styles
  * 
  * Version History:
- * v1.0.0 (2024-03-15) - Current
- *   - Initial release
+ * v1.0.1 (2024-03-15) - Current
+ *   - Fixed footer margin to match index.html spacing
+ *   - Removed conflicting margin and padding properties
+ *   - Added consistent 40px top margin
+ * 
+ * v1.0.0 (2024-03-15) - Initial release
  *   - Complete login page styling matching main application design
  *   - Dark mode support synchronized with main app theme preference
  *   - Responsive design for mobile devices
  *   - Password visibility toggle styling
  *   - Error message styling with shake animation
  *   - Professional footer styling
- *
- * Previous Versions: None (Initial release)
  */
 
 :root {
@@ -195,6 +197,33 @@ body.login footer {
   text-align: center;
   font-size: 0.9rem;
   color: #888;
+}
+
+body.login footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+body.login footer a:hover {
+  text-decoration: underline;
+}
+
+body.dark-mode.login footer {
+  color: #aaa;
+}
+
+body.dark-mode.login footer a {
+  color: #4db6ac;
+}
+
+
+/* Footer styling specific to login page */
+body.login footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
+  /* Match index.html exactly */
+  margin-top: 40px; /* This is the key line from index.html */
 }
 
 body.login footer a {
