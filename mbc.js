@@ -126,4 +126,105 @@
     const btn = document.getElementById('themeToggle');
     const icon = document.getElementById('themeIcon');
     const label = document.getElementById('themeLabel');
-    if (label) label
+    if (label) label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    if (icon) {
+      icon.classList.toggle('fa-moon', !isDark);
+      icon.classList.toggle('fa-sun', isDark);
+    }
+    if (btn) btn.setAttribute('aria-pressed', String(isDark));
+  }
+
+  function initTheme() {
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark") {
+      document.body.classList.add("dark-mode");
+      updateThemeToggleUI(true);
+    } else {
+      updateThemeToggleUI(false);
+    }
+  }
+
+  function initLogin() {
+    const loginForm = document.getElementById("loginForm");
+    if (!loginForm) return;
+
+    const pwd = document.getElementById("password");
+    const errorMsg = document.getElementById("errorMsg");
+    const toggleBtn = document.getElementById("togglePwd");
+
+    loginForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const input = pwd ? pwd.value : "";
+      if (ALLOWED_PASSWORD === normalizeInput(input)) {
+        sessionStorage.setItem("loggedIn", "true");
+        window.location.href = "index.html";
+      } else {
+        if (errorMsg) {
+          errorMsg.textContent = "Incorrect password.";
+          errorMsg.classList.add("shake");
+          setTimeout(() => errorMsg.classList.remove("shake"), 300);
+        }
+      }
+    });
+
+    if (toggleBtn && pwd) {
+      toggleBtn.addEventListener("click", () => {
+        const isHidden = pwd.type === "password";
+        pwd.type = isHidden ? "text" : "password";
+        const eyeIcon = toggleBtn.querySelector("i");
+        if (eyeIcon) {
+          eyeIcon.classList.toggle("fa-eye");
+          eyeIcon.classList.toggle("fa-eye-slash");
+        }
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initTheme();
+    initLogin();
+
+    const addRowBtn = document.getElementById("addRowBtn");
+    const clearTableBtn = document.getElementById("clearTableBtn");
+    const printPDFBtn = document.getElementById("printPDFBtn");
+    const themeToggle = document.getElementById("themeToggle");
+    const tbody = document.getElementById("tableBody");
+
+    if (addRowBtn) addRowBtn.addEventListener("click", addRow);
+    if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
+    if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
+    if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
+    
+    if (tbody) {
+      // Load saved data, or add default rows
+      loadTableData();
+      if (tbody.children.length === 0) {
+        for (let i = 0; i < 10; i++) addRow();
+      }
+
+      tbody.addEventListener("input", (e) => {
+        const row = e.target.closest('tr');
+        const charges = parseFloat(normalizeInput(row.querySelector(".charges-input").value)) || 0;
+        const payments = parseFloat(normalizeInput(row.querySelector(".payments-input").value)) || 0;
+        const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments-input").value)) || 0;
+        const balanceInput = row.querySelector(".balance-input");
+        
+        // Mark as manual if the balance input is changed by the user
+        if (e.target.classList.contains("balance-input")) {
+          balanceInput.dataset.manual = "true";
+        }
+        
+        // Autocalculate based on requested conditions
+        if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
+          const calculatedBalance = charges - payments - adjustments;
+          balanceInput.value = calculatedBalance.toFixed(2);
+        }
+
+        calculateTotals();
+        saveTableData();
+      });
+      calculateTotals();
+    }
+  });
+
+})();
