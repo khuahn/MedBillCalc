@@ -1,4 +1,4 @@
-/* v1.8-jac */
+/* v1.9-jac */
 (() => {
   "use strict";
 
@@ -92,9 +92,45 @@
       if (button) button.innerHTML = `<i class="fas fa-moon"></i> Dark Mode`;
     }
   }
+  
+  function initLogin() {
+    const loginForm = document.getElementById("loginForm");
+    if (!loginForm) return;
+
+    const pwd = document.getElementById("password");
+    const errorMsg = document.getElementById("errorMsg");
+    const toggleBtn = document.getElementById("togglePwd");
+    const eyeIcon = toggleBtn?.querySelector("i");
+    const ALLOWED_PASSWORD = "M3d1c4l00!";
+
+    loginForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const input = pwd ? pwd.value : "";
+      if (ALLOWED_PASSWORD === normalizeInput(input)) {
+        sessionStorage.setItem("loggedIn", "true");
+        window.location.href = "index.html";
+      } else {
+        if (errorMsg) {
+          errorMsg.textContent = "Incorrect password.";
+          errorMsg.classList.add("shake");
+          setTimeout(() => errorMsg.classList.remove("shake"), 300);
+        }
+      }
+    });
+
+    if (toggleBtn && pwd && eyeIcon) {
+      toggleBtn.addEventListener("click", () => {
+        const isHidden = pwd.type === "password";
+        pwd.type = isHidden ? "text" : "password";
+        eyeIcon.classList.toggle("fa-eye");
+        eyeIcon.classList.toggle("fa-eye-slash");
+      });
+    }
+  }
 
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
+    initLogin();
 
     const addRowBtn = document.getElementById("addRowBtn");
     const clearTableBtn = document.getElementById("clearTableBtn");
