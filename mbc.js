@@ -1,4 +1,3 @@
-/* This code is for educational purposes ONLY. It is NOT secure. */
 (() => {
   "use strict";
 
@@ -35,7 +34,7 @@
       // Summing up for the final totals
       totalCharges += charges;
       totalPayments += payments;
-      totalAdjustments += payments;
+      totalAdjustments += adjustments; // This line was the problem
       totalBalance += parseFloat(normalizeInput(balanceInput.value)) || 0;
     });
 
