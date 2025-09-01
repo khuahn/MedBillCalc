@@ -1,88 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MedBillCalc</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<link rel="stylesheet" href="mbc.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medical Bill Calculator</title>
+  <link rel="stylesheet" href="mbc.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-  <script>
-    if (!sessionStorage.getItem("loggedIn")) {
-      window.location.replace("login.html");
-    }
-  </script>
-  <div class="header">
-    <div class="header-content">
-      <h1>MedBillCalc</h1>
-      <p class="tagline">v1.0.6</p>
-    </div>
-    <div class="actions">
-      <button id="addRowBtn" aria-label="Add Row">
-        <i class="fas fa-plus-circle"></i> Add Row
-      </button>
-      <button id="clearTableBtn" aria-label="Clear Table">
-        <i class="fas fa-trash-alt"></i> Clear Table
-      </button>
-      <button id="printPDFBtn" aria-label="Print to PDF">
-        <i class="fas fa-print"></i> Print
-      </button>
-      <button id="themeToggle" aria-label="Toggle dark mode">
-        <i class="fas fa-moon"></i> Dark Mode
-      </button>
-    </div>
-  </div>
+  <script>
+    if (!sessionStorage.getItem("loggedIn")) {
+      window.location.replace("login.html");
+    }
+  </script>
 
-  <main>
-    <div class="calculator-container">
-      <table id="medbillTable">
-        <thead>
-          <tr>
-            <th>Total Incurred</th>
-            <th>Payments</th>
-            <th>Adjustments</th>
-            <th>Balance</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          </tbody>
-      </table>
-    </div>
+  <div class="container">
+    <h1>Medical Bill Calculator</h1>
+    <table id="billTable">
+      <thead>
+        <tr>
+          <th>Total</th>
+          <th>Payments</th>
+          <th>Adjustments</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+              </tbody>
+      <tfoot>
+        <tr>
+          <td><span id="totalTotal">0.00</span></td>
+          <td><span id="totalPayments">0.00</span></td>
+          <td><span id="totalAdjustments">0.00</span></td>
+          <td><span id="totalBalance">0.00</span></td>
+        </tr>
+      </tfoot>
+    </table>
 
-    <div class="totals-section">
-      <h3>Summary</h3>
-      <div class="total-incurred">
-        <p>Total Incurred:</p>
-        <span id="incurredTotal" class="total-amount">0.00</span>
-      </div>
-      <div class="summary-totals">
-        <p>Total Payments:</p>
-        <span id="totalPayments" class="total-amount">0.00</span>
-      </div>
-      <div class="summary-totals">
-        <p>Total Adjustments:</p>
-        <span id="totalAdjustments" class="total-amount">0.00</span>
-      </div>
-      <div class="summary-totals final-balance">
-        <p>Total Balance:</p>
-        <span id="totalBalance" class="total-amount">0.00</span>
-      </div>
-    </div>
-  </main>
+    <div class="controls-bar">
+      <div class="controls">
+        <button id="addRowBtn" aria-label="Add a new row">
+          <i class="fas fa-plus-circle" aria-hidden="true"></i> Add Row
+        </button>
+        <button id="clearTableBtn" aria-label="Clear all rows">
+          <i class="fas fa-trash-alt" aria-hidden="true"></i> Clear
+        </button>
+        <button id="printPDFBtn" aria-label="Print the current table">
+          <i class="fas fa-print" aria-hidden="true"></i> Print
+        </button>
+        <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
+          <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
+          <span id="themeLabel">Dark Mode</span>
+        </button>
+      </div>
+      <div class="total-incurred">
+        Total Inc : <span id="incurredTotal" style="color: red;">0.00</span>
+      </div>
+    </div>
+  </div>
 
-  <footer class="print-footer">
-    <p>Med Bill Calc v1.0.6 — For Internal Use Only</p>
-    <p>All Rights Reserved | ©2025 <b><a href="https://github.com/khuahn/" target="_blank">鍛匠Jac</a></b></p>
-    <p>
-      <small>
-        Powered by
-        <a href="https://github.com/" target="_blank">GitHub</a> &amp;
-        <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
-      </small>
-    </p>
-  </footer>
-
-  <script src="obmbc.js"></script>
+  <footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888;">
+<small>
+  Med Bill Calc v1.0.6 — For Internal Use Only<br/>
+  All Rights Reserved | ©2025 
+  <b><a href="https://github.com/khuahn/" target="_blank" style="color:teal;">鍛匠Jac</a></b><br/>
+  <span style="opacity:0.8;">
+    Powered by 
+    <a href="https://github.com/" target="_blank" style="color:teal;">GitHub</a> &amp; 
+    <a href="https://www.cloudflare.com/" target="_blank" style="color:teal;">Cloudflare</a>
+  </span>
+</small>
+  </footer>
+<script src="obmbc.js"></script>
 </body>
 </html>
