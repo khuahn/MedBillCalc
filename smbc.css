@@ -5,8 +5,9 @@
  * - Redesigned to match the sleek, modern look of the login page.
  * - Corrected the dark mode text color for the totals row (now white).
  * - Fixed the light mode background color for the totals row to match the table's background.
+ * - Improved print preview to remove all input box styling for a professional, static look.
  *
- * Current Stable Version: v1.1 Sleek Modern Design
+ * Current Stable Version: v1.2 Sleek Modern Design
  */
 
 :root {
@@ -185,10 +186,47 @@ body.dark-mode input[type="number"] {
    Print Preview
    ========================= */
 @media print {
+  body {
+    background-color: #fff;
+    color: #000;
+  }
+
+  .container {
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
   /* Hides elements not needed for printing */
   .controls-bar,
   footer,
   h1 {
     display: none;
+  }
+
+  /* Removes input field styles to make them look like plain text */
+  input[type="number"] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    font-weight: normal;
+  }
+
+  /* Ensures all table elements are visible and styled correctly */
+  table, th, td {
+    background-color: #fff !important;
+    border: 1px solid #ccc;
+    font-weight: normal;
+    color: #000;
+  }
+
+  tfoot td {
+    border: none;
+    font-weight: bold;
+    color: #000;
   }
 }
