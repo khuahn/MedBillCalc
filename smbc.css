@@ -50,6 +50,10 @@ body.dark-mode #themeToggle {
   color: var(--text-color-dark);
 }
 
+/* New: Dark Mode styles for totals row text */
+body.dark-mode tfoot td {
+  color: #fff;
+}
 
 /* =========================
    Container & Header
@@ -100,8 +104,9 @@ td {
   font-weight: 500;
 }
 
+/* New: Light Mode styles for totals row background */
 tfoot td {
-  background-color: transparent;
+  background-color: var(--table-bg);
   color: var(--text-color);
   font-weight: bold;
 }
@@ -126,7 +131,6 @@ body.dark-mode input[type="number"] {
     color: var(--text-color-dark);
     border-color: #444;
 }
-
 
 /* =========================
    Controls & Totals
