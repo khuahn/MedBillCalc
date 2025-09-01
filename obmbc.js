@@ -1,35 +1,15 @@
-/* This code is for educational purposes ONLY. It is NOT secure. */
+/* This code uses "security through obscurity" for educational purposes ONLY. It is NOT secure. */
 (() => {
   "use strict";
-
-  // The encryption key must be hardcoded here, which is the main vulnerability.
-  const ENCRYPTION_KEY = "YourSuperSecretKey123";
-
-  // The password is now encrypted.
-  // This encrypted value was generated from "M3d1c4l00!" using the key above.
-  const ENCRYPTED_PASSWORD = "U2FsdGVkX1+vG0h+Y6rL2j9Q+5x8P1j/t3r/iF8kQoM=";
-
-  // Function to decrypt the password
-  function decryptPassword(encryptedText) {
-    try {
-      const bytes = CryptoJS.AES.decrypt(encryptedText, ENCRYPTION_KEY);
-      return bytes.toString(CryptoJS.enc.Utf8);
-    } catch (e) {
-      console.error("Decryption failed:", e);
-      return null;
-    }
-  }
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
   function isPasswordValid(input) {
-    const decryptedPassword = decryptPassword(ENCRYPTED_PASSWORD);
-    if (!decryptedPassword) {
-      return false;
-    }
-    return decryptedPassword === normalizeInput(input);
+    const passwordHolder = document.getElementById('passwordHolder');
+    const secretPassword = passwordHolder ? passwordHolder.dataset.password : "";
+    return secretPassword === normalizeInput(input);
   }
 
   function calculateTotals() {
