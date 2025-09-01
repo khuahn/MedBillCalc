@@ -10,41 +10,47 @@
 
   function calculateTotals() {
     const rows = document.querySelectorAll("#tableBody tr");
-    let totalTotal = 0,
+    let totalCharges = 0,
       totalPayments = 0,
       totalAdjustments = 0,
       totalBalance = 0;
 
     rows.forEach((row) => {
-      const totalInput = row.querySelector(".total");
-      const payments = parseFloat(normalizeInput(row.querySelector(".payments")?.value)) || 0;
-      const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments")?.value)) || 0;
+      const chargesInput = row.querySelector(".charges-input");
+      const paymentsInput = row.querySelector(".payments-input");
+      const adjustmentsInput = row.querySelector(".adjustments-input");
       const balanceInput = row.querySelector(".balance-input");
 
-      // New logic: Total Incurred = Payments + Balance
-      const totalIncurred = payments + (parseFloat(normalizeInput(balanceInput.value)) || 0);
+      const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
+      const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+      const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
 
-      if (totalInput) {
-        totalInput.value = totalIncurred.toFixed(2);
+      // Autocalculate balance if conditions are met
+      if (charges > 0 && (payments > 0 || adjustments > 0)) {
+        const calculatedBalance = charges - payments - adjustments;
+        balanceInput.value = calculatedBalance.toFixed(2);
+        balanceInput.dataset.manual = "false";
       }
 
-      // Sum up all the new totals for the summary fields
-      totalTotal += totalIncurred;
+      // Summing up for the final totals
+      totalCharges += charges;
       totalPayments += payments;
-      totalAdjustments += adjustments;
+      totalAdjustments += payments;
       totalBalance += parseFloat(normalizeInput(balanceInput.value)) || 0;
     });
 
+    // Update summary section
     const update = (id, val) => {
       const el = document.getElementById(id);
       if (el) el.textContent = val.toFixed(2);
     };
 
-    update("totalTotal", totalTotal);
+    update("totalCharges", totalCharges);
     update("totalPayments", totalPayments);
     update("totalAdjustments", totalAdjustments);
     update("totalBalance", totalBalance);
-    update("incurredTotal", totalTotal);
+    // "Total Incurred" is the sum of all payments and balances
+    update("incurredTotal", totalPayments + totalBalance);
   }
 
   function addRow() {
@@ -53,10 +59,10 @@
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><input type="number" step="any" class="total" readonly></td>
-      <td><input type="number" step="any" class="payments" ></td>
-      <td><input type="number" step="any" class="adjustments" ></td>
-      <td><input type="number" step="any" class="balance-input" value="0"></td>
+      <td><input type="number" step="any" class="charges-input"></td>
+      <td><input type="number" step="any" class="payments-input"></td>
+      <td><input type="number" step="any" class="adjustments-input"></td>
+      <td><input type="number" step="any" class="balance-input"></td>
     `;
     tbody.appendChild(tr);
   }
@@ -75,27 +81,33 @@
   }
 
   function toggleDarkMode() {
-    const button = document.getElementById("themeToggle");
-    const icon = button?.querySelector("i");
-    document.body.classList.toggle("dark-mode");
-    const isDark = document.body.classList.contains("dark-mode");
+    const isDark = document.body.classList.toggle("dark-mode");
     localStorage.setItem("theme", isDark ? "dark" : "light");
-    if (button) {
-      button.innerHTML = `<i class="${isDark ? "fas fa-sun" : "fas fa-moon"}"></i> ${isDark ? "Light Mode" : "Dark Mode"}`;
+    updateThemeToggleUI(isDark);
+  }
+
+  function updateThemeToggleUI(isDark) {
+    const btn = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (label) label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    if (icon) {
+      icon.classList.toggle('fa-moon', !isDark);
+      icon.classList.toggle('fa-sun', isDark);
     }
+    if (btn) btn.setAttribute('aria-pressed', String(isDark));
   }
 
   function initTheme() {
     const saved = localStorage.getItem("theme");
-    const button = document.getElementById("themeToggle");
     if (saved === "dark") {
       document.body.classList.add("dark-mode");
-      if (button) button.innerHTML = `<i class="fas fa-sun"></i> Light Mode`;
+      updateThemeToggleUI(true);
     } else {
-      if (button) button.innerHTML = `<i class="fas fa-moon"></i> Dark Mode`;
+      updateThemeToggleUI(false);
     }
   }
-  
+
   function initLogin() {
     const loginForm = document.getElementById("loginForm");
     if (!loginForm) return;
@@ -103,8 +115,6 @@
     const pwd = document.getElementById("password");
     const errorMsg = document.getElementById("errorMsg");
     const toggleBtn = document.getElementById("togglePwd");
-    const eyeIcon = toggleBtn?.querySelector("i");
-    const ALLOWED_PASSWORD = "M3d1c4l00!";
 
     loginForm.addEventListener("submit", e => {
       e.preventDefault();
@@ -121,12 +131,15 @@
       }
     });
 
-    if (toggleBtn && pwd && eyeIcon) {
+    if (toggleBtn && pwd) {
       toggleBtn.addEventListener("click", () => {
         const isHidden = pwd.type === "password";
         pwd.type = isHidden ? "text" : "password";
-        eyeIcon.classList.toggle("fa-eye");
-        eyeIcon.classList.toggle("fa-eye-slash");
+        const eyeIcon = toggleBtn.querySelector("i");
+        if (eyeIcon) {
+          eyeIcon.classList.toggle("fa-eye");
+          eyeIcon.classList.toggle("fa-eye-slash");
+        }
       });
     }
   }
@@ -139,27 +152,38 @@
     const clearTableBtn = document.getElementById("clearTableBtn");
     const printPDFBtn = document.getElementById("printPDFBtn");
     const themeToggle = document.getElementById("themeToggle");
+    const tbody = document.getElementById("tableBody");
 
     if (addRowBtn) addRowBtn.addEventListener("click", addRow);
     if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
     if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
     if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
-
-    const tbody = document.getElementById("tableBody");
+    
     if (tbody) {
       for (let i = 0; i < 10; i++) addRow();
 
       tbody.addEventListener("input", (e) => {
+        // Only run calculations on input from specific fields
+        if (e.target.classList.contains("charges-input") || 
+            e.target.classList.contains("payments-input") || 
+            e.target.classList.contains("adjustments-input")) {
+          const row = e.target.closest('tr');
+          const charges = parseFloat(normalizeInput(row.querySelector(".charges-input").value)) || 0;
+          const payments = parseFloat(normalizeInput(row.querySelector(".payments-input").value)) || 0;
+          const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments-input").value)) || 0;
+          const balanceInput = row.querySelector(".balance-input");
+
+          // Autocalculate based on requested conditions
+          if (charges > 0 && (payments > 0 || adjustments > 0)) {
+            const calculatedBalance = charges - payments - adjustments;
+            balanceInput.value = calculatedBalance.toFixed(2);
+            balanceInput.dataset.manual = "false";
+          }
+        }
         calculateTotals();
       });
-
       calculateTotals();
     }
   });
 
-  window.calculateTotals = calculateTotals;
-  window.addRow = addRow;
-  window.clearTable = clearTable;
-  window.printPDF = printPDF;
-  window.toggleDarkMode = toggleDarkMode;
 })();
