@@ -1,5 +1,5 @@
 /*
- * Med Bill Calc (MBC) - v1.2 Stable
+ * Med Bill Calc (MBC) - v1.4
  *
  * This version includes the following changes:
  * - Local storage functionality to save and load data.
@@ -7,11 +7,16 @@
  * - Correct calculation of Total Incurred (Payments + Balance).
  * - "Charges" column header and a sleek modern design.
  * - Code Refinement: Reduced redundancy and improved code structure.
+ * - Improved print preview to remove all input box styling for a professional, static look.
+ * - **NEW:** The "Total Inc" is now a separate element for better control and visibility in printout.
  *
- * Current Stable Version: v1.2
- * Previous Version (v1.1): Included local storage functionality.
- * Previous Version (v1.0): Did not have local storage functionality.
+ * Current Version: v1.4
+ * Previous Version (v1.3): Total Inc not displayed correctly in the printout.
+ * Previous Version (v1.2): Included local storage functionality.
+ * Previous Version (v1.1): Did not have local storage functionality.
+ * Previous Version (v1.0): Initial stable version.
  */
+
 (() => {
   "use strict";
 
