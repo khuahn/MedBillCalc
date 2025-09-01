@@ -1,4 +1,5 @@
-/* v1.9-jac */
+/* v1.8-jac */
+/* This code is for educational purposes ONLY. It is NOT secure. */
 (() => {
   "use strict";
 
