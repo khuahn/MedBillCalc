@@ -1,3 +1,14 @@
+/*
+ * Med Bill Calc (MBC) - Sleek Modern Design
+ *
+ * This version includes the following changes:
+ * - Redesigned to match the sleek, modern look of the login page.
+ * - Corrected the dark mode text color for the totals row (now white).
+ * - Fixed the light mode background color for the totals row to match the table's background.
+ *
+ * Current Stable Version: v1.1 Sleek Modern Design
+ */
+
 :root {
   --primary-color: #00796b;
   --primary-dark: #004d40;
@@ -50,7 +61,6 @@ body.dark-mode #themeToggle {
   color: var(--text-color-dark);
 }
 
-/* New: Dark Mode styles for totals row text */
 body.dark-mode tfoot td {
   color: #fff;
 }
@@ -104,7 +114,6 @@ td {
   font-weight: 500;
 }
 
-/* New: Light Mode styles for totals row background */
 tfoot td {
   background-color: var(--table-bg);
   color: var(--text-color);
@@ -170,4 +179,16 @@ body.dark-mode input[type="number"] {
   font-size: 1rem;
   text-align: right;
   padding-right: 8px;
+}
+
+/* =========================
+   Print Preview
+   ========================= */
+@media print {
+  /* Hides elements not needed for printing */
+  .controls-bar,
+  footer,
+  h1 {
+    display: none;
+  }
 }
