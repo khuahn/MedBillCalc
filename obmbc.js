@@ -1,4 +1,4 @@
-/* JS v1.7 */
+/* v1.8-jac */
 (() => {
   "use strict";
 
@@ -19,8 +19,8 @@
       const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments")?.value)) || 0;
       const balance = parseFloat(normalizeInput(row.querySelector(".balance-input")?.value)) || 0;
 
-      // New logic: Total Incurred = Payments + Adjustments + Balance
-      const totalIncurred = payments + adjustments + balance;
+      // New logic: Total Incurred = Payments + Balance
+      const totalIncurred = payments + balance;
       if (totalInput) {
         totalInput.value = totalIncurred.toFixed(2);
       }
