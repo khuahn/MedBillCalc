@@ -26,8 +26,7 @@
         </tr>
       </thead>
       <tbody id="tableBody">
-        <!-- Rows will be added via JS -->
-      </tbody>
+        </tbody>
       <tfoot>
         <tr>
           <td><span id="totalTotal">0.00</span></td>
@@ -40,16 +39,16 @@
 
     <div class="controls-bar">
       <div class="controls">
-        <button onclick="addRow()" aria-label="Add a new row">
+        <button id="addRowBtn" aria-label="Add a new row">
           <i class="fas fa-plus-circle" aria-hidden="true"></i> Add Row
         </button>
-        <button onclick="clearTable()" aria-label="Clear all rows">
+        <button id="clearTableBtn" aria-label="Clear all rows">
           <i class="fas fa-trash-alt" aria-hidden="true"></i> Clear
         </button>
-        <button onclick="printPDF()" aria-label="Print the current table">
+        <button id="printPDFBtn" aria-label="Print the current table">
           <i class="fas fa-print" aria-hidden="true"></i> Print
         </button>
-        <button id="themeToggle" onclick="toggleDarkMode(); updateThemeToggleUI();" aria-label="Toggle color theme" aria-pressed="false">
+        <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
           <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
           <span id="themeLabel">Dark Mode</span>
         </button>
@@ -61,36 +60,17 @@
   </div>
 
   <footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888;">
-<small>
-  Med Bill Calc v1.0.6 — For Internal Use Only<br/>
-  All Rights Reserved | ©2025 
-  <a href="https://github.com/khuahn/MedBillCalc/" target="_blank" style="color:teal;">鍛匠Jac</a><br/>
-  <span style="opacity:0.8;">
-    Powered by 
-    <a href="https://github.com/" target="_blank" style="color:teal;">GitHub</a> &amp; 
-    <a href="https://www.cloudflare.com/" target="_blank" style="color:teal;">Cloudflare</a>
-  </span>
-</small>
+    <small>
+      Med Bill Calc v1.0.6 — For Internal Use Only<br/>
+      All Rights Reserved | ©2025 
+      <a href="https://github.com/khuahn/MedBillCalc/" target="_blank" style="color:teal;">鍛匠Jac</a><br/>
+      <span style="opacity:0.8;">
+        Powered by 
+        <a href="https://github.com/" target="_blank" style="color:teal;">GitHub</a> &amp; 
+        <a href="https://www.cloudflare.com/" target="_blank" style="color:teal;">Cloudflare</a>
+      </span>
+    </small>
   </footer>
-
-  <script src="mbc.js?v=104"></script>
-  <script>
-    // Keep the theme toggle label, icon, and ARIA state in sync with the current theme
-    function updateThemeToggleUI() {
-      var isDark = document.body.classList.contains('dark-mode');
-      var label = document.getElementById('themeLabel');
-      var icon = document.getElementById('themeIcon');
-      var btn = document.getElementById('themeToggle');
-
-      if (label) label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
-      if (icon) {
-        icon.classList.toggle('fa-moon', !isDark);
-        icon.classList.toggle('fa-sun', isDark);
-      }
-      if (btn) btn.setAttribute('aria-pressed', String(isDark));
-    }
-
-    document.addEventListener('DOMContentLoaded', updateThemeToggleUI);
-  </script>
+  <script src="mbc.js"></script>
 </body>
 </html>
