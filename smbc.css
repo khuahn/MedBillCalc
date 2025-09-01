@@ -2,11 +2,12 @@
  * Med Bill Calc (MBC) - Sleek Modern Design
  *
  * This version includes the following changes:
- * - The "Total Inc" is now styled to be visible in the printout, even though it is inside a hidden container.
+ * - Fixed the print output by moving the "Total Inc" element out of the main controls container.
+ * - Adds a specific style rule to center the "Total Inc" in the printed output.
  * - Ensures a consistent, sleek container with a shadow in the printout, regardless of the user's color theme.
  *
- * Current Version: v1.6
- * Previous Version (v1.5): The Total Inc was not displayed correctly, and print styles were inconsistent between themes.
+ * Current Version: v1.7
+ * Previous Version (v1.6): Total Inc was still not visible in the printout due to a conflicting HTML structure.
  */
 
 :root {
