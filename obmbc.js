@@ -1,14 +1,20 @@
-/* This code uses "security through obscurity" for educational purposes ONLY. It is NOT secure. */
+/* This code is for educational purposes ONLY. It is NOT secure. */
 (() => {
   "use strict";
+
+  // Function to get elements from the iframe
+  function getDocumentFromFrame() {
+    return window.frames[0]?.document;
+  }
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
-  function isPasswordValid(input) {
-    const passwordHolder = document.getElementById('passwordHolder');
-    const secretPassword = passwordHolder ? passwordHolder.dataset.password : "";
+  function checkCredentials(input) {
+    const iframeDoc = getDocumentFromFrame();
+    const passwordHolder = iframeDoc?.getElementById('passwordHolder');
+    const secretPassword = passwordHolder?.dataset.password;
     return secretPassword === normalizeInput(input);
   }
 
@@ -100,19 +106,22 @@
     }
   }
 
-  function initLogin() {
-    const loginForm = document.getElementById("loginForm");
+  function setupLogin() {
+    const iframeDoc = getDocumentFromFrame();
+    if (!iframeDoc) return;
+
+    const loginForm = iframeDoc.getElementById("loginForm");
     if (!loginForm) return;
 
-    const pwd = document.getElementById("password");
-    const errorMsg = document.getElementById("errorMsg");
-    const toggleBtn = document.getElementById("togglePwd");
+    const pwd = iframeDoc.getElementById("password");
+    const errorMsg = iframeDoc.getElementById("errorMsg");
+    const toggleBtn = iframeDoc.getElementById("togglePwd");
     const eyeIcon = toggleBtn?.querySelector("i");
 
     loginForm.addEventListener("submit", e => {
       e.preventDefault();
       const input = pwd ? pwd.value : "";
-      if (isPasswordValid(input)) {
+      if (checkCredentials(input)) {
         sessionStorage.setItem("loggedIn", "true");
         window.location.href = "index.html";
       } else {
@@ -136,7 +145,12 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
-    initLogin();
+    
+    // We need to wait for the iframe content to load
+    const iframe = document.querySelector('iframe');
+    iframe.addEventListener('load', () => {
+      setupLogin();
+    });
 
     const tbody = document.getElementById("tableBody");
     if (tbody) {
