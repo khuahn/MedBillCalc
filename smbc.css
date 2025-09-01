@@ -6,8 +6,9 @@
  * - Corrected the dark mode text color for the totals row (now white).
  * - Fixed the light mode background color for the totals row to match the table's background.
  * - Improved print preview to remove all input box styling for a professional, static look.
+ * - **NEW:** The "Total Inc" is now visible and centered in the printout.
  *
- * Current Stable Version: v1.2 Sleek Modern Design
+ * Current Version: v1.3
  */
 
 :root {
@@ -228,5 +229,15 @@ body.dark-mode input[type="number"] {
     border: none;
     font-weight: bold;
     color: #000;
+  }
+  
+  /* Positions the Total Incurred value for the printout */
+  .total-incurred {
+    display: block;
+    text-align: center;
+    font-size: 1.1rem;
+    padding-top: 15px;
+    color: #000; /* Ensures it is black in the printout */
+    font-weight: bold;
   }
 }
