@@ -1,4 +1,17 @@
-/* v1.1b-jac */
+/*
+ * Med Bill Calc (MBC) - v1.2 Stable
+ *
+ * This version includes the following changes:
+ * - Local storage functionality to save and load data.
+ * - Auto-calculation of Balance based on Charges, Payments, and Adjustments.
+ * - Correct calculation of Total Incurred (Payments + Balance).
+ * - "Charges" column header and a sleek modern design.
+ * - Code Refinement: Reduced redundancy and improved code structure.
+ *
+ * Current Stable Version: v1.2
+ * Previous Version (v1.1): Included local storage functionality.
+ * Previous Version (v1.0): Did not have local storage functionality.
+ */
 (() => {
   "use strict";
 
@@ -69,7 +82,7 @@
   function loadTableData() {
     const savedData = localStorage.getItem(STORAGE_KEY);
     if (!savedData) return;
-    
+
     const data = JSON.parse(savedData);
     const tbody = document.getElementById("tableBody");
     if (!tbody) return;
@@ -196,7 +209,6 @@
     if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
     
     if (tbody) {
-      // Load saved data, or add default rows
       loadTableData();
       if (tbody.children.length === 0) {
         for (let i = 0; i < 10; i++) addRow();
