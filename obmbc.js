@@ -1,22 +1,15 @@
-/* This code uses "security through obscurity" for educational purposes ONLY. It is NOT secure. */
 (() => {
   "use strict";
 
-  // The password is here, but it is reversed.
-  const REVERSED_PASSWORD = "!00l4c1d3M";
 
-  // Function to reverse the password
-  function reverseString(str) {
-    return str.split("").reverse().join("");
-  }
+  const ALLOWED_PASSWORD = "M3d1c4l00!";
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
   function checkCredentials(input) {
-    const secretPassword = reverseString(REVERSED_PASSWORD);
-    return secretPassword === normalizeInput(input);
+    return ALLOWED_PASSWORD === normalizeInput(input);
   }
 
   function calculateTotals() {
