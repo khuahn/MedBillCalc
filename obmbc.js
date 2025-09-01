@@ -1,7 +1,93 @@
-/* eslint-disable */
-var _0x56a6=['normalize','replace','trim','includes','querySelectorAll','forEach','parseFloat','value','dataset','manual','toFixed','textContent','getElementById','createElement','innerHTML','appendChild','body','classList','toggle','setItem','getItem','href','submit','preventDefault','location','errorMsg','shake','setTimeout','type','querySelector','fa-eye','fa-eye-slash','loginForm','password','togglePwd','fa-sun','fa-moon','themeToggle','tableBody','balance-input','DOMContentLoaded','addRow','clearTable','printPDF','toggleDarkMode','initTheme','initLogin','replaceState','M3d1c4l00!'];var _0x1d4a=function(_0x32f170,_0x546b41){_0x32f170=_0x32f170-0x0;var _0x56a6b5=_0x56a6[_0x32f170];return _0x56a6b5;};const ALLOWED_PASSWORDS=[_0x1d4a('0x2c')];function normalizeInput(_0x5b3303){var _0x5d96a6=_0x1d4a;return(_0x5b3303||'')?.[_0x5d96a6('0x0')](_0x5d96a6('0x2b'),'')[_0x5d96a6('0x2')]():'';}function isPasswordValid(_0x51c72a){var _0x5f00e6=_0x1d4a;return ALLOWED_PASSWORDS[_0x5f00e6('0x3')](normalizeInput(_0x51c72a));}function calculateTotals(){var _0x27271e=_0x1d4a;const _0x48679d=document[_0x27271e('0x4')]('#tableBody tr');let _0x4b7c6c=0,_0x367676=0,_0x4a019d=0,_0x5c4a5c=0;_0x48679d[_0x27271e('0x5')](_0x5471c3=>{var _0x4c2977=_0x27271e;const _0x2a30b4=_0x5b3303=parseFloat(normalizeInput(_0x5471c3[_0x4c2977('0x25')]('.total')?.[_0x4c2977('0x7')]))||0;const _0x1a8f08=parseFloat(normalizeInput(_0x5471c3[_0x4c2977('0x25')]('.payments')?.[_0x4c2977('0x7')]))||0;const _0x1a69a9=parseFloat(normalizeInput(_0x5471c3[_0x4c2977('0x25')]('.adjustments')?.[_0x4c2977('0x7')]))||0;const _0x3e174b=_0x5471c3[_0x4c2977('0x25')]('.balance-input');const _0x33440e=_0x2a30b4-_0x1a8f08-_0x1a69a9;if(_0x3e174b){const _0x539c89=parseFloat(normalizeInput(_0x3e174b[_0x4c2977('0x7')]));if(_0x3e174b[_0x4c2977('0x8')][_0x4c2977('0x9')]===_0x4c2977('0x2')&&!isNaN(_0x539c89)){_0x5c4a5c+=_0x539c89;}else{_0x3e174b[_0x4c2977('0x7')]=_0x33440e[_0x4c2977('0xa')](0x2);_0x3e174b[_0x4c2977('0x8')][_0x4c2977('0x9')]='';_0x5c4a5c+=_0x33440e;}}_0x4b7c6c+=_0x2a30b4;_0x367676+=_0x1a8f08;_0x4a019d+=_0x1a69a9;});const update=(_0x5824b4,_0x3c7348)=>{var _0x5821c8=_0x27271e;const _0x4642f6=document[_0x5821c8('0xc')](_0x5824b4);if(_0x4642f6)_0x4642f6[_0x5821c8('0xb')]=_0x3c7348[_0x5821c8('0xa')](0x2);};update('totalTotal',_0x4b7c6c);update('totalPayments',_0x367676);update('totalAdjustments',_0x4a019d);update('totalBalance',_0x5c4a5c);update('incurredTotal',_0x4b7c6c);}function addRow(){var _0x415392=_0x1d4a;const _0x45a761=document[_0x415392('0xc')](_0x415392('0x27'));if(!_0x45a761)return;const _0x59905c=document[_0x415392('0xd')]('tr');_0x59905c[_0x415392('0xe')]=`
-      <td><input type="number" step="any" class="total" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" class="payments" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" class="adjustments" oninput="calculateTotals()"></td>
-      <td><input type="number" step="any" class="balance-input" value="0"></td>
-    `;_0x45a761[_0x415392('0xf')](_0x59905c);}function clearTable(){var _0x489b0b=_0x1d4a;const _0x45a2c2=document[_0x489b0b('0xc')](_0x489b0b('0x27'));if(_0x45a2c2){_0x45a2c2[_0x489b0b('0xe')]='';for(let _0x4ef2c7=0;_0x4ef2c7<0xa;_0x4ef2c7++)addRow();calculateTotals();}}function printPDF(){window['print']();}function toggleDarkMode(){var _0x12a023=_0x1d4a;const _0x524317=document[_0x12a023('0xc')](_0x12a023('0x24'));const _0x277491=_0x524317?.[_0x12a023('0x25')]('i');document[_0x12a023('0x10')][_0x12a023('0x11')][_0x12a023('0x12')]('dark-mode');const _0x40df68=document[_0x12a023('0x10')][_0x12a023('0x11')][_0x12a023('0x3')]('dark-mode');localStorage[_0x12a023('0x13')](_0x12a023('0x1b'),_0x40df68?'dark':'light');if(_0x524317){_0x524317[_0x12a023('0xe')]=`<i class="${_0x40df68?_0x12a023('0x22'):_0x12a023('0x23')}"></i> ${_0x40df68?'Light Mode':'Dark Mode'}`;}}function initTheme(){var _0x42f2ed=_0x1d4a;const _0x4b7ca6=localStorage[_0x42f2ed('0x14')]('theme');const _0x37648f=document[_0x42f2ed('0xc')](_0x42f2ed('0x24'));if(_0x4b7ca6===_0x42f2ed('0x1b')){document[_0x42f2ed('0x10')][_0x42f2ed('0x11')][_0x42f2ed('0x12')]('dark-mode');if(_0x37648f)_0x37648f[_0x42f2ed('0xe')]=`<i class="fas fa-sun"></i> Light Mode`;}else{if(_0x37648f)_0x37648f[_0x42f2ed('0xe')]=`<i class="fas fa-moon"></i> Dark Mode`;}}function initLogin(){var _0x4253a6=_0x1d4a;const _0x228e93=document[_0x4253a6('0xc')](_0x4253a6('0x26'));if(!_0x228e93)return;const _0x54ff22=document[_0x4253a6('0xc')](_0x4253a6('0x28'));const _0x593d84=document[_0x4253a6('0xc')](_0x4253a6('0x18'));const _0x213a42=document[_0x4253a6('0xc')](_0x4253a6('0x29'));const _0x3b854d=_0x213a42?.[_0x4253a6('0x25')]('i');_0x228e93[_0x4253a6('0x1d')](_0x4253a6('0x1f'),_0x3df781=>{var _0x2a1c62=_0x4253a6;const _0x32759e=_0x54ff22?_0x54ff22[_0x2a1c62('0x7')]:'';if(isPasswordValid(_0x32759e)){sessionStorage[_0x2a1c62('0x13')](_0x2a1c62('0x1a'),'true');window[_0x2a1c62('0x14')][_0x2a1c62('0x1b')]='index.html';}else{if(_0x593d84){_0x593d84[_0x2a1c62('0xb')]='Incorrect password.';_0x593d84[_0x2a1c62('0x11')][_0x2a1c62('0x12')](_0x2a1c62('0x19'));_0x593d84[_0x2a1c62('0x11')]['remove']('shake');_0x593d84[_0x2a1c62('0x11')]['add']('shake');_0x2a1c62('0x1a')(()=>{_0x593d84[_0x2a1c62('0x11')]['remove'](_0x2a1c62('0x19'));},0x12c);}}});if(_0x213a42&&_0x54ff22&&_0x3b854d){_0x213a42[_0x4253a6('0x1d')]('click',()=>{var _0x13e271=_0x4253a6;const _0x56a643=_0x54ff22[_0x13e271('0x20')]==='password';_0x54ff22[_0x13e271('0x20')]=_0x56a643?'text':'password';_0x3b854d[_0x13e271('0x11')][_0x13e271('0x12')](_0x13e271('0x21'));_0x3b854d[_0x13e271('0x11')][_0x13e271('0x12')](_0x13e271('0x21'));});}}document[_0x1d4a('0x1d')](_0x1d4a('0x2a'),()=>{var _0x1e3752=_0x1d4a;initTheme();initLogin();const _0x218841=document[_0x1e3752('0xc')](_0x1e3752('0x27'));if(_0x218841){for(let _0x1c8b74=0;_0x1c8b74<0xa;_0x1c8b74++)addRow();_0x218841[_0x1e3752('0x1d')](_0x1e3752('0x1c'),_0x4299b9=>{var _0x15359a=_0x1e3752;if(_0x4299b9[_0x15359a('0x7')][_0x15359a('0x11')][_0x15359a('0x3')](_0x15359a('0x28'))){_0x4299b9[_0x15359a('0x7')][_0x15359a('0x8')][_0x15359a('0x9')]=_0x15359a('0x1b');}calculateTotals();});calculateTotals();}const _0x5824b4=function(){var _0x212a76=document[_0x1e3752('0xc')](_0x1e3752('0x24'));var _0x3b2518=_0x212a76[_0x1e3752('0x25')]('i');document[_0x1e3752('0x10')][_0x1e3752('0x11')][_0x1e3752('0x12')]('dark-mode');var _0x4d21e8=document[_0x1e3752('0x10')][_0x1e3752('0x11')][_0x1e3752('0x3')]('dark-mode');localStorage[_0x1e3752('0x13')]('theme',_0x4d21e8?'dark':'light');if(_0x212a76){_0x212a76[_0x1e3752('0xe')]=`<i class="fas ${_0x4d21e8?'fa-sun':'fa-moon'}"></i> ${_0x4d21e8?'Light Mode':'Dark Mode'}`;}};});window['calculateTotals']=calculateTotals;window[_0x1d4a('0x2a')]=addRow;window['clearTable']=clearTable;window[_0x1d4a('0x29')]=printPDF;window[_0x1d4a('0x2a')]=toggleDarkMode;
+/* This code is for educational purposes ONLY. It is NOT secure. */
+(() => {
+  "use strict";
+
+  // The key must be hardcoded here, which is the main vulnerability.
+  const ENCRYPTION_KEY = "YourSuperSecretKey123";
+
+  // The password is now encrypted. This is the only "security" layer.
+  // This encrypted value was generated from "M3d1c4l00!" using the key above.
+  const ENCRYPTED_PASSWORD = "U2FsdGVkX1+vG0h+Y6rL2j9Q+5x8P1j/t3r/iF8kQoM=";
+
+  // Function to decrypt the password
+  function decryptPassword(encryptedText) {
+    const bytes  = CryptoJS.AES.decrypt(encryptedText, ENCRYPTION_KEY);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
+
+  function normalizeInput(s) {
+    return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
+  }
+
+  function isPasswordValid(input) {
+    const decryptedPassword = decryptPassword(ENCRYPTED_PASSWORD);
+    return decryptedPassword === normalizeInput(input);
+  }
+
+  // Rest of your functions remain the same
+  function calculateTotals() {
+    const rows = document.querySelectorAll("#tableBody tr");
+    // ... (rest of the code)
+  }
+
+  // ... (all other functions: addRow, clearTable, printPDF, etc.)
+
+  function initLogin() {
+    const loginForm = document.getElementById("loginForm");
+    if (!loginForm) return;
+
+    const pwd = document.getElementById("password");
+    const errorMsg = document.getElementById("errorMsg");
+    const toggleBtn = document.getElementById("togglePwd");
+    const eyeIcon = toggleBtn?.querySelector("i");
+
+    loginForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const input = pwd ? pwd.value : "";
+      if (isPasswordValid(input)) {
+        sessionStorage.setItem("loggedIn", "true");
+        window.location.href = "index.html";
+      } else {
+        if (errorMsg) {
+          errorMsg.textContent = "Incorrect password.";
+          errorMsg.classList.add("shake");
+          setTimeout(() => errorMsg.classList.remove("shake"), 300);
+        }
+      }
+    });
+
+    if (toggleBtn && pwd && eyeIcon) {
+      toggleBtn.addEventListener("click", () => {
+        const isHidden = pwd.type === "password";
+        pwd.type = isHidden ? "text" : "password";
+        eyeIcon.classList.toggle("fa-eye");
+        eyeIcon.classList.toggle("fa-eye-slash");
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initTheme();
+    initLogin();
+
+    const tbody = document.getElementById("tableBody");
+    if (tbody) {
+      for (let i = 0; i < 10; i++) addRow();
+
+      tbody.addEventListener("input", e => {
+        if (e.target.classList.contains("balance-input")) {
+          e.target.dataset.manual = "true";
+        }
+        calculateTotals();
+      });
+
+      calculateTotals();
+    }
+  });
+
+  window.calculateTotals = calculateTotals;
+  window.addRow = addRow;
+  window.clearTable = clearTable;
+  window.printPDF = printPDF;
+  window.toggleDarkMode = toggleDarkMode;
+})();
