@@ -6,9 +6,10 @@
  * - Corrected the dark mode text color for the totals row (now white).
  * - Fixed the light mode background color for the totals row to match the table's background.
  * - Improved print preview to remove all input box styling for a professional, static look.
- * - **NEW:** The "Total Inc" is now visible and centered in the printout.
+ * - The "Total Inc" is now visible and centered in the printout.
+ * - **NEW:** The printout now has a consistent, sleek design with a container shadow, regardless of the theme.
  *
- * Current Version: v1.3
+ * Current Version: v1.4
  */
 
 :root {
@@ -190,18 +191,24 @@ body.dark-mode input[type="number"] {
   body {
     background-color: #fff;
     color: #000;
+    padding: 20px;
   }
 
+  /* Ensures a consistent look for the printable container */
   .container {
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 40px 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   }
 
   /* Hides elements not needed for printing */
   .controls-bar,
   footer,
-  h1 {
+  h1,
+  .total-incurred {
     display: none;
   }
 
@@ -229,15 +236,5 @@ body.dark-mode input[type="number"] {
     border: none;
     font-weight: bold;
     color: #000;
-  }
-  
-  /* Positions the Total Incurred value for the printout */
-  .total-incurred {
-    display: block;
-    text-align: center;
-    font-size: 1.1rem;
-    padding-top: 15px;
-    color: #000; /* Ensures it is black in the printout */
-    font-weight: bold;
   }
 }
