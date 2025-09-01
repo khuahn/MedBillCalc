@@ -1,10 +1,17 @@
-/* This code is for educational purposes ONLY. It is NOT secure. */
 (() => {
   "use strict";
 
-  // Function to get elements from the iframe
-  function getDocumentFromFrame() {
-    return window.frames[0]?.document;
+  // The password, encoded in Base64
+  const ENCODED_PASSWORD = "TTNkMWM0bDByIS==";
+
+  // The function to decode the Base64 password
+  function decodeBase64(encodedStr) {
+    try {
+      return atob(encodedStr);
+    } catch (e) {
+      console.error("Decoding failed:", e);
+      return null;
+    }
   }
 
   function normalizeInput(s) {
@@ -12,9 +19,10 @@
   }
 
   function checkCredentials(input) {
-    const iframeDoc = getDocumentFromFrame();
-    const passwordHolder = iframeDoc?.getElementById('passwordHolder');
-    const secretPassword = passwordHolder?.dataset.password;
+    const secretPassword = decodeBase64(ENCODED_PASSWORD);
+    if (!secretPassword) {
+      return false;
+    }
     return secretPassword === normalizeInput(input);
   }
 
@@ -106,16 +114,13 @@
     }
   }
 
-  function setupLogin() {
-    const iframeDoc = getDocumentFromFrame();
-    if (!iframeDoc) return;
-
-    const loginForm = iframeDoc.getElementById("loginForm");
+  function initLogin() {
+    const loginForm = document.getElementById("loginForm");
     if (!loginForm) return;
 
-    const pwd = iframeDoc.getElementById("password");
-    const errorMsg = iframeDoc.getElementById("errorMsg");
-    const toggleBtn = iframeDoc.getElementById("togglePwd");
+    const pwd = document.getElementById("password");
+    const errorMsg = document.getElementById("errorMsg");
+    const toggleBtn = document.getElementById("togglePwd");
     const eyeIcon = toggleBtn?.querySelector("i");
 
     loginForm.addEventListener("submit", e => {
@@ -145,12 +150,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
-    
-    // We need to wait for the iframe content to load
-    const iframe = document.querySelector('iframe');
-    iframe.addEventListener('load', () => {
-      setupLogin();
-    });
+    initLogin();
 
     const tbody = document.getElementById("tableBody");
     if (tbody) {
