@@ -1,13 +1,11 @@
 /*
- * Visual feedback for copy action.
+ * --- v1.8 - Enhanced Click-to-Copy UX ---
+ * This version improves the user experience by adding a visual cue to the click-to-copy feature.
  *
- * This version includes the following changes:
- * - Fixed the print output by moving the "Total Inc" element out of the main controls container.
- * - Adds a specific style rule to center the "Total Inc" in the printed output.
- * - Ensures a consistent, sleek container with a shadow in the printout, regardless of the user's color theme.
- *
- * Current Version: v1.7
- * Previous Version (v1.6): Total Inc was still not visible in the printout due to a conflicting HTML structure.
+ * Changes include:
+ * - A pointer cursor on hover to clearly indicate the elements are clickable.
+ * - An animated background change and border-radius for visual feedback.
+ * - A "(Click to copy)" hint that appears on hover, making the feature more intuitive for users.
  */
 
 :root {
@@ -264,4 +262,18 @@ body.dark-mode input[type="number"] {
   0% { opacity: 1; transform: translateY(0); }
   70% { opacity: 1; transform: translateY(-10px); }
   100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Hint for click-to-copy feature */
+tfoot span:hover, #incurredTotal:hover {
+  cursor: pointer;
+  background-color: rgba(0, 121, 107, 0.1);
+  border-radius: 3px;
+}
+
+tfoot span:hover::after, #incurredTotal:hover::after {
+  content: " (Click to copy)";
+  font-size: 0.8em;
+  color: var(--primary-color);
+  font-style: italic;
 }
