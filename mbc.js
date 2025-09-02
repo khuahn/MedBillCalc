@@ -2,12 +2,12 @@
  * mbc.js - Medical Bill Calculator Core Functionality
  * 
  * Version History:
- * v1.4.2 (2024-03-15) - Current
- *   - Enhanced authentication: stored password validation
- *   - Changed from sessionStorage to localStorage for persistence
+ * v1.5.0 (2024-03-15) - Current
+ *   - Added click-to-copy functionality for summary totals
+ *   - Visual feedback with "Copied!" animation
  * 
- * v1.4.1 - Reduced default rows from 10 to 5 for cleaner initial UI
- * v1.4.0 - Enhanced functionality
+ * v1.4.2 - Enhanced authentication with password validation
+ * v1.4.1 - Reduced default rows from 10 to 5
  */
 
 (() => {
@@ -37,6 +37,24 @@
       const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
       const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
 
+      function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    // Visual feedback
+    const feedback = document.createElement('div');
+    feedback.className = 'copied-feedback';
+    feedback.textContent = 'Copied!';
+    document.body.appendChild(feedback);
+    
+    // Position near cursor
+    feedback.style.top = (event.clientY - 30) + 'px';
+    feedback.style.left = event.clientX + 'px';
+    
+    // Remove after animation
+    setTimeout(() => feedback.remove(), 1000);
+  }).catch(err => {
+    console.error('Failed to copy: ', err);
+  });
+}
       // Autocalculate balance if conditions are met
       if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
         const calculatedBalance = charges - payments - adjustments;
@@ -166,7 +184,7 @@ function clearTable() {
     loginForm.addEventListener("submit", e => {
       e.preventDefault();
       const input = pwd ? pwd.value : "";
-      if (ALLOWED_PASSWORD === normalizeInput(input)) {
+      if (ALLOWED_PASSWORD === (input)) {
 localStorage.setItem("loggedIn", "true");
 localStorage.setItem("savedPassword", ALLOWED_PASSWORD); // Store current password
         window.location.href = "index.html";
@@ -193,6 +211,16 @@ localStorage.setItem("savedPassword", ALLOWED_PASSWORD); // Store current passwo
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    // Click-to-copy for summary totals
+document.addEventListener('click', (event) => {
+  if (event.target.id === 'totalCharges' || 
+      event.target.id === 'totalPayments' ||
+      event.target.id === 'totalAdjustments' || 
+      event.target.id === 'totalBalance' ||
+      event.target.id === 'incurredTotal') {
+    copyToClipboard(event.target.textContent);
+  }
+});
     initTheme();
     initLogin();
 
@@ -215,7 +243,7 @@ if (tbody.children.length === 0) {
 
       tbody.addEventListener("input", (e) => {
         const row = e.target.closest('tr');
-        const charges = parseFloat(normalizeInput(row.querySelector(".charges-input").value)) || 0;
+        const charges = parseFloat((row.querySelector(".charges-input").value)) || 0;
         const payments = parseFloat(normalizeInput(row.querySelector(".payments-input").value)) || 0;
         const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments-input").value)) || 0;
         const balanceInput = row.querySelector(".balance-input");
