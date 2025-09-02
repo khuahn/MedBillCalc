@@ -1,12 +1,10 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * 
- * Version History:
+ * * Version History:
  * v1.5.0 (2024-03-15) - Current
- *   - Added click-to-copy functionality for summary totals
- *   - Visual feedback with "Copied!" animation
- * 
- * v1.4.2 - Enhanced authentication with password validation
+ * - Added click-to-copy functionality for summary totals
+ * - Visual feedback with "Copied!" animation
+ * * v1.4.2 - Enhanced authentication with password validation
  * v1.4.1 - Reduced default rows from 10 to 5
  */
 
@@ -55,24 +53,6 @@ function copyToClipboard(text, event) {
       const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
       const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
 
-      function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(() => {
-    // Visual feedback
-    const feedback = document.createElement('div');
-    feedback.className = 'copied-feedback';
-    feedback.textContent = 'Copied!';
-    document.body.appendChild(feedback);
-    
-    // Position near cursor
-    feedback.style.top = (event.clientY - 30) + 'px';
-    feedback.style.left = event.clientX + 'px';
-    
-    // Remove after animation
-    setTimeout(() => feedback.remove(), 1000);
-  }).catch(err => {
-    console.error('Failed to copy: ', err);
-  });
-}
       // Autocalculate balance if conditions are met
       if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
         const calculatedBalance = charges - payments - adjustments;
