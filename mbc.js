@@ -13,7 +13,7 @@
 (() => {
   "use strict";
 
-  const ALLOWED_PASSWORD = "M3d1c4l00!";
+  const ALLOWED_PASSWORD = "M3d1c4l00";
   const STORAGE_KEY = 'mbcData';
 
   function normalizeInput(s) {
