@@ -264,6 +264,7 @@ body.dark-mode input[type="number"] {
   100% { opacity: 0; transform: translateY(-20px); }
 }
 
+
 /* Hint for click-to-copy feature */
 tfoot span:hover, #incurredTotal:hover {
   cursor: pointer;
@@ -276,4 +277,15 @@ tfoot span:hover::after, #incurredTotal:hover::after {
   font-size: 0.8em;
   color: var(--primary-color);
   font-style: italic;
+}
+
+/* Dark mode support for the hint */
+body.dark-mode tfoot span:hover, 
+body.dark-mode #incurredTotal:hover {
+  background-color: rgba(0, 121, 107, 0.3); /* Brighter highlight in dark mode */
+}
+
+body.dark-mode tfoot span:hover::after,
+body.dark-mode #incurredTotal:hover::after {
+  color: #4db6ac; /* Lighter teal for better contrast in dark mode */
 }
