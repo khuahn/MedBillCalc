@@ -1,3 +1,14 @@
+<!-- 
+ * index.html - Medical Bill Calculator Main Interface
+ * 
+ * Version History:
+ * v1.8.1 (2024-03-15) - Current
+ *   - Enhanced authentication: persistent login with password validation
+ *   - Changed from sessionStorage to localStorage for better user experience
+ * 
+ * v1.8.0 - Fixed print output for Total Inc element
+ * v1.7.0 - Added session-based login protection
+ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +19,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <script>
-    if (!sessionStorage.getItem("loggedIn")) {
-      window.location.replace("login.html");
-    }
-  </script>
+<script>
+  if (!localStorage.getItem("loggedIn") || 
+      localStorage.getItem("savedPassword") !== "M3d1c4l00!") {
+    window.location.replace("login.html");
+  }
+</script>
 
   <div class="container">
     <h1>Medical Bill Calculator</h1>
