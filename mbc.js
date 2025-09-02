@@ -2,15 +2,12 @@
  * mbc.js - Medical Bill Calculator Core Functionality
  * 
  * Version History:
- * v1.4.1 (2024-03-15) - Current
- *   - Reduced default rows from 10 to 5 for cleaner initial UI
- *   - Updated both clearTable() and DOMContentLoaded initialization
+ * v1.4.2 (2024-03-15) - Current
+ *   - Enhanced authentication: stored password validation
+ *   - Changed from sessionStorage to localStorage for persistence
  * 
+ * v1.4.1 - Reduced default rows from 10 to 5 for cleaner initial UI
  * v1.4.0 - Enhanced functionality
- *   - Local storage data persistence
- *   - Auto-calculation of balances  
- *   - Correct Total Incurred calculation
- *   - Improved print preview formatting
  */
 
 (() => {
@@ -170,7 +167,8 @@ function clearTable() {
       e.preventDefault();
       const input = pwd ? pwd.value : "";
       if (ALLOWED_PASSWORD === normalizeInput(input)) {
-        sessionStorage.setItem("loggedIn", "true");
+localStorage.setItem("loggedIn", "true");
+localStorage.setItem("savedPassword", ALLOWED_PASSWORD); // Store current password
         window.location.href = "index.html";
       } else {
         if (errorMsg) {
