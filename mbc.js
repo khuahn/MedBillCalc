@@ -1,20 +1,15 @@
 /*
- * Med Bill Calc (MBC) - v1.4
- *
- * This version includes the following changes:
- * - Local storage functionality to save and load data.
- * - Auto-calculation of Balance based on Charges, Payments, and Adjustments.
- * - Correct calculation of Total Incurred (Payments + Balance).
- * - "Charges" column header and a sleek modern design.
- * - Code Refinement: Reduced redundancy and improved code structure.
- * - Improved print preview to remove all input box styling for a professional, static look.
- * - **NEW:** The "Total Inc" is now a separate element for better control and visibility in printout.
- *
- * Current Version: v1.4
- * Previous Version (v1.3): Total Inc not displayed correctly in the printout.
- * Previous Version (v1.2): Included local storage functionality.
- * Previous Version (v1.1): Did not have local storage functionality.
- * Previous Version (v1.0): Initial stable version.
+ * mbc.js - Medical Bill Calculator Core Functionality
+ * 
+ * Version History:
+ * v1.4.1 (2024-03-15) - Current
+ *   - Reduced default rows from 10 to 5 for cleaner initial UI
+ * 
+ * v1.4.0 - Enhanced functionality
+ *   - Local storage data persistence
+ *   - Auto-calculation of balances
+ *   - Correct Total Incurred calculation
+ *   - Improved print preview formatting
  */
 
 (() => {
@@ -122,12 +117,15 @@
 
   function clearTable() {
     const tbody = document.getElementById("tableBody");
-    if (tbody) {
-      tbody.innerHTML = "";
-      for (let i = 0; i < 10; i++) addRow();
-      calculateTotals();
-    }
-    localStorage.removeItem(STORAGE_KEY);
+   function clearTable() {
+  const tbody = document.getElementById("tableBody");
+  if (tbody) {
+    tbody.innerHTML = "";
+    for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
+    calculateTotals();
+  }
+  localStorage.removeItem(STORAGE_KEY);
+}
   }
 
   function printPDF() {
@@ -152,12 +150,11 @@
     if (btn) btn.setAttribute('aria-pressed', String(isDark));
   }
 
-  function initTheme() {
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark") {
-      document.body.classList.add("dark-mode");
-      updateThemeToggleUI(true);
-    } else {
+  if (tbody) {
+  loadTableData();
+  if (tbody.children.length === 0) {
+    for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
+  } else {
       updateThemeToggleUI(false);
     }
   }
