@@ -1,5 +1,5 @@
 /*
- * Med Bill Calc (MBC) - Sleek Modern Design
+ * Visual feedback for copy action.
  *
  * This version includes the following changes:
  * - Fixed the print output by moving the "Total Inc" element out of the main controls container.
@@ -244,4 +244,24 @@ body.dark-mode input[type="number"] {
     font-weight: bold;
     color: #000;
   }
+}
+/* Visual feedback for copy action */
+.copied-feedback {
+  position: fixed;
+  background: var(--primary-color);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  pointer-events: none;
+  z-index: 10000;
+  animation: fadeOut 1s ease-in-out forwards;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; transform: translateY(0); }
+  70% { opacity: 1; transform: translateY(-10px); }
+  100% { opacity: 0; transform: translateY(-20px); }
 }
