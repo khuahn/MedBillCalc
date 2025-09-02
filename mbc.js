@@ -19,7 +19,25 @@
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
-
+// ADD THIS FUNCTION HERE (around line 20)
+function copyToClipboard(text, event) {
+  navigator.clipboard.writeText(text).then(() => {
+    // Visual feedback
+    const feedback = document.createElement('div');
+    feedback.className = 'copied-feedback';
+    feedback.textContent = 'Copied!';
+    document.body.appendChild(feedback);
+    
+    // Position near cursor
+    feedback.style.top = (event.clientY - 30) + 'px';
+    feedback.style.left = event.clientX + 'px';
+    
+    // Remove after animation
+    setTimeout(() => feedback.remove(), 1000);
+  }).catch(err => {
+    console.error('Failed to copy: ', err);
+  });
+}
   function calculateTotals() {
     const rows = document.querySelectorAll("#tableBody tr");
     let totalCharges = 0,
@@ -211,14 +229,14 @@ localStorage.setItem("savedPassword", ALLOWED_PASSWORD); // Store current passwo
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Click-to-copy for summary totals
+// Click-to-copy for summary totals
 document.addEventListener('click', (event) => {
   if (event.target.id === 'totalCharges' || 
       event.target.id === 'totalPayments' ||
       event.target.id === 'totalAdjustments' || 
       event.target.id === 'totalBalance' ||
       event.target.id === 'incurredTotal') {
-    copyToClipboard(event.target.textContent);
+    copyToClipboard(event.target.textContent, event); // ADD EVENT PARAMETER
   }
 });
     initTheme();
