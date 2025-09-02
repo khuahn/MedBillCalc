@@ -1,11 +1,14 @@
 /*
- * --- v1.8 - Enhanced Click-to-Copy UX ---
- * This version improves the user experience by adding a visual cue to the click-to-copy feature.
- *
- * Changes include:
- * - A pointer cursor on hover to clearly indicate the elements are clickable.
- * - An animated background change and border-radius for visual feedback.
- * - A "(Click to copy)" hint that appears on hover, making the feature more intuitive for users.
+ * mbc.css - Medical Bill Calculator Main Styles
+ * 
+ * Version History:
+ * v1.8.0 - Enhanced Click-to-Copy UX
+ *   - Added visual cues for click-to-copy feature
+ *   - Improved print compatibility for Edge browser
+ *   - Dark mode support for hover hints
+ * 
+ * v1.7.0 - Print optimization
+ * v1.6.0 - Added dark mode support
  */
 
 :root {
@@ -91,7 +94,7 @@ table {
   border-collapse: collapse;
   margin-bottom: 16px;
   border-radius: 8px;
-  overflow: hidden; /* Ensures rounded corners */
+  overflow: hidden;
 }
 
 th, td, tfoot td {
@@ -181,68 +184,71 @@ body.dark-mode input[type="number"] {
 }
 
 /* =========================
-   Print Preview
+   Print Preview - Edge Compatible
    ========================= */
 @media print {
-  body {
-    background-color: #fff;
-    color: #000;
-    padding: 20px;
+  /* Force light mode for printing - Edge fix */
+  body, body.dark-mode, body.dark-mode .container {
+    background-color: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
   }
 
-  /* Ensures a consistent look for the printable container */
-  .container {
-    max-width: 720px;
-    margin: 40px auto;
-    padding: 40px 30px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  /* Force table styles for printing */
+  table, th, td, body.dark-mode table, body.dark-mode th, body.dark-mode td {
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-  /* Hides elements not needed for printing */
-  .controls-bar,
-  footer,
-  h1 {
+  /* Force footer row styles */
+  tfoot td, body.dark-mode tfoot td {
+    background-color: #f8f8f8 !important;
+    font-weight: bold !important;
+    border: none !important;
+  }
+
+  /* Hide elements not needed for printing */
+  .controls-bar, footer, h1, .controls, #themeToggle {
     display: none !important;
   }
 
-  /* Displays Total Inc and styles it correctly */
-  .total-incurred {
+  /* Ensure Total Inc is visible and black */
+  .total-incurred, body.dark-mode .total-incurred {
     display: block !important;
+    color: #000 !important;
     text-align: center;
     font-size: 1.1rem;
-    padding-top: 15px;
-    color: #000 !important;
     font-weight: bold;
+    padding-top: 15px;
   }
 
-  /* Removes input field styles to make them look like plain text */
-  input[type="number"] {
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
+  /* Remove input field styling */
+  input[type="number"], body.dark-mode input[type="number"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
+    border: none !important;
+    background: transparent !important;
+    color: #000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
     text-align: center;
     font-weight: normal;
   }
 
-  /* Ensures all table elements are visible and styled correctly */
-  table, th, td {
-    background-color: #fff !important;
-    border: 1px solid #ccc;
-    font-weight: normal;
-    color: #000;
-  }
-
-  tfoot td {
-    border: none;
-    font-weight: bold;
-    color: #000;
+  /* Container print styling */
+  .container, body.dark-mode .container {
+    max-width: 720px !important;
+    margin: 40px auto !important;
+    padding: 40px 30px !important;
+    background: #fff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
   }
 }
+
 /* Visual feedback for copy action */
 .copied-feedback {
   position: fixed;
@@ -264,7 +270,6 @@ body.dark-mode input[type="number"] {
   100% { opacity: 0; transform: translateY(-20px); }
 }
 
-
 /* Hint for click-to-copy feature */
 tfoot span:hover, #incurredTotal:hover {
   cursor: pointer;
@@ -282,10 +287,10 @@ tfoot span:hover::after, #incurredTotal:hover::after {
 /* Dark mode support for the hint */
 body.dark-mode tfoot span:hover, 
 body.dark-mode #incurredTotal:hover {
-  background-color: rgba(0, 121, 107, 0.3); /* Brighter highlight in dark mode */
+  background-color: rgba(0, 121, 107, 0.3);
 }
 
 body.dark-mode tfoot span:hover::after,
 body.dark-mode #incurredTotal:hover::after {
-  color: #4db6ac; /* Lighter teal for better contrast in dark mode */
+  color: #4db6ac;
 }
