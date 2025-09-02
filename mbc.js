@@ -4,10 +4,11 @@
  * Version History:
  * v1.4.1 (2024-03-15) - Current
  *   - Reduced default rows from 10 to 5 for cleaner initial UI
+ *   - Updated both clearTable() and DOMContentLoaded initialization
  * 
  * v1.4.0 - Enhanced functionality
  *   - Local storage data persistence
- *   - Auto-calculation of balances
+ *   - Auto-calculation of balances  
  *   - Correct Total Incurred calculation
  *   - Improved print preview formatting
  */
@@ -115,9 +116,7 @@
     saveTableData();
   }
 
-  function clearTable() {
-    const tbody = document.getElementById("tableBody");
-   function clearTable() {
+function clearTable() {
   const tbody = document.getElementById("tableBody");
   if (tbody) {
     tbody.innerHTML = "";
@@ -126,7 +125,6 @@
   }
   localStorage.removeItem(STORAGE_KEY);
 }
-  }
 
   function printPDF() {
     window.print();
@@ -150,14 +148,15 @@
     if (btn) btn.setAttribute('aria-pressed', String(isDark));
   }
 
-  if (tbody) {
-  loadTableData();
-  if (tbody.children.length === 0) {
-    for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
+ function initTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved === "dark") {
+    document.body.classList.add("dark-mode");
+    updateThemeToggleUI(true);
   } else {
-      updateThemeToggleUI(false);
-    }
+    updateThemeToggleUI(false);
   }
+}
 
   function initLogin() {
     const loginForm = document.getElementById("loginForm");
@@ -212,9 +211,9 @@
     
     if (tbody) {
       loadTableData();
-      if (tbody.children.length === 0) {
-        for (let i = 0; i < 10; i++) addRow();
-      }
+if (tbody.children.length === 0) {
+  for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
+}
 
       tbody.addEventListener("input", (e) => {
         const row = e.target.closest('tr');
