@@ -80,6 +80,12 @@ function copyToClipboard(text, event) {
     update("incurredTotal", totalPayments + totalBalance);
   }
 
+      // Update the print version too
+    const incurredTotalPrint = document.getElementById("incurredTotalPrint");
+    if (incurredTotalPrint) {
+      incurredTotalPrint.textContent = (totalPayments + totalBalance).toFixed(2);
+    }
+
   function saveTableData() {
     const rows = document.querySelectorAll("#tableBody tr");
     const data = [];
@@ -145,7 +151,32 @@ function clearTable() {
 }
 
 function handlePrint() {
-  window.print();
+  // Update the print version with current data before printing
+  const incurredTotal = document.getElementById("incurredTotal");
+  const incurredTotalPrint = document.getElementById("incurredTotalPrint");
+  
+  if (incurredTotal && incurredTotalPrint) {
+    incurredTotalPrint.textContent = incurredTotal.textContent;
+  }
+  
+  // Show the print version and hide the screen version
+  const printElement = document.querySelector(".total-incurred-print");
+  const screenElement = document.querySelector(".total-incurred");
+  
+  if (printElement && screenElement) {
+    printElement.style.display = "block";
+    screenElement.style.display = "none";
+    
+    window.print();
+    
+    // Revert after printing
+    setTimeout(() => {
+      printElement.style.display = "none";
+      screenElement.style.display = "flex";
+    }, 100);
+  } else {
+    window.print();
+  }
 }
 
   function toggleDarkMode() {
