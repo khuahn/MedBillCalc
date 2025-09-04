@@ -55,22 +55,22 @@
       </tfoot>
     </table>
 
-    <div class="controls-bar">
-      <div class="controls">
-        <button id="addRowBtn" aria-label="Add a new row">
-          <i class="fas fa-plus-circle" aria-hidden="true"></i> Add Item
-        </button>
-        <button id="clearTableBtn" aria-label="Clear all rows">
-          <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset Calc
-        </button>
-        <button id="printPDFBtn" aria-label="Print the current table">
-          <i class="fas fa-print" aria-hidden="true"></i> Save as PDF
-        </button>
-        <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
-          <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
-          <span id="themeLabel">Dark Mode</span>
-        </button>
-      </div>
+    <div class="controls">
+  <button id="addRowBtn" aria-label="Add a new item">
+    <i class="fas fa-plus-circle" aria-hidden="true"></i> Add Item
+  </button>
+  <button id="printPDFBtn" aria-label="Save as PDF">
+    <i class="fas fa-file-pdf" aria-hidden="true"></i> Save as PDF
+  </button>
+  <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
+    <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+  <button id="clearTableBtn" class="danger-btn" aria-label="Reset calculator">
+    <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset Calc!
+  </button>
+</div>
+   
       </div>
     <div class="total-incurred">
       Total Inc : <span id="incurredTotal" style="color: red;">0.00</span>
