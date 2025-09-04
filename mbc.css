@@ -314,7 +314,7 @@ body.dark-mode #incurredTotal:hover {
 }
 
 body.dark-mode tfoot span:hover::after,
-body.dark-mode #incurmodeTotal:hover::after {
+body.dark-mode #incurredTotal:hover::after {
     color: #4db6ac;
 }
 
@@ -339,8 +339,4 @@ footer a:hover {
 
 footer span {
     opacity: 0.8;
-}
-
-body.dark-mode footer {
-    color: #aaa;
 }
