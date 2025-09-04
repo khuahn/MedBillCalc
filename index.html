@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MedBillCalc</title>
-  <link rel="stylesheet" href="mbc.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="MedBillCalc">
-  <meta property="og:description" content="Simple yet functional Medical Billing calculator">
-  <meta property="og:url" content="https://medbillcalc.pages.dev/">
-  <meta property="og:type" content="website">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Bill Calculator</title>
+  <link rel="stylesheet" href="mbc.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
@@ -26,23 +21,23 @@
         </tr>
       </thead>
       <tbody id="tableBody">
-        <!-- Rows are dynamically added by JS -->
+        <!-- Rows added dynamically -->
       </tbody>
       <tfoot>
         <tr>
-          <td><span id="totalCharges">0.00</span></td>
-          <td><span id="totalPayments">0.00</span></td>
-          <td><span id="totalAdjustments">0.00</span></td>
-          <td><span id="totalBalance">0.00</span></td>
+          <td id="totalCharges">0.00</td>
+          <td id="totalPayments">0.00</td>
+          <td id="totalAdjustments">0.00</td>
+          <td id="totalBalance">0.00</td>
         </tr>
       </tfoot>
     </table>
 
     <div class="controls-container">
       <div class="button-group">
-        <button id="addRowBtn">Add Row</button>
-        <button id="clearTableBtn" class="danger-btn">Clear All</button>
-        <button id="printPDFBtn">Print / PDF</button>
+        <button id="addRowBtn"><i class="fas fa-plus"></i> Add Row</button>
+        <button id="clearTableBtn" class="danger-btn"><i class="fas fa-trash"></i> Clear</button>
+        <button id="printPDFBtn"><i class="fas fa-print"></i> Print</button>
       </div>
       <div class="total-incurred">
         Total Incurred: <span id="incurredTotal">0.00</span>
@@ -50,19 +45,15 @@
     </div>
 
     <button id="themeToggle" aria-pressed="false">
-      <i class="fas fa-moon" id="themeIcon"></i> <span id="themeLabel">Dark</span>
+      <i id="themeIcon" class="fas fa-moon"></i>
+      <span id="themeLabel">Dark</span>
     </button>
   </div>
 
   <footer>
-    <small>
-      Med Bill Calc v1.9 Stable — For Internal Use Only<br/>
-      All Rights Reserved | ©2025 <b><a href="https://github.com/khuahn/" target="_blank">匠Jac</a></b><br/>
-      <span style="opacity:0.8;">
-        Powered by <a href="https://github.com/" target="_blank">GitHub</a> &amp;
-        <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
-      </span>
-    </small>
+    Med Bill Calc v1.9 Stable — For Internal Use Only<br>
+    All Rights Reserved | ©2025 <b><a href="https://github.com/khuahn/" target="_blank">匠Jac</a></b><br>
+    <span>Powered by <a href="https://github.com/" target="_blank">GitHub</a> & <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a></span>
   </footer>
 
   <script src="mbc.js"></script>
