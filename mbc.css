@@ -234,7 +234,7 @@ body.dark-mode .total-incurred {
     }
 
     /* Hide elements not needed for printing */
-    .controls-container, footer, h1, .button-group, #themeToggle {
+    footer, h1, #themeToggle, .button-group {
         display: none !important;
     }
 
@@ -242,7 +242,7 @@ body.dark-mode .total-incurred {
     .total-incurred, body.dark-mode .total-incurred {
         display: block !important;
         color: #000 !important;
-        text-align: center;
+        text-align: right;
         font-size: 1.1rem;
         font-weight: bold;
         padding-top: 15px;
@@ -308,7 +308,7 @@ tfoot span:hover::after, #incurredTotal:hover::after {
 }
 
 /* Dark mode support for the hint */
-body.dark-mode tfoot span:hover,
+body.dark-mode tfoot span:hover, 
 body.dark-mode #incurredTotal:hover {
     background-color: rgba(0, 121, 107, 0.3);
 }
