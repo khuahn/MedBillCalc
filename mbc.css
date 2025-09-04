@@ -1,167 +1,318 @@
 :root {
-  --primary-color: #00796b;
-  --primary-dark: #004d40;
-  --background-color: #f4f6f8;
-  --container-bg: #fff;
-  --input-bg: #e0f2f1;
-  --text-color: #333;
-  --text-color-dark: #e0f2f1;
-  --error-color: #e74c3c;
+    --primary-color: #00796b;
+    --primary-dark: #004d40;
+    --background-color: #f4f6f8;
+    --container-bg: #fff;
+    --input-bg: #e0f2f1;
+    --table-bg: #e0f2f1;
+    --text-color: #333;
+    --text-color-dark: #e0f2f1;
+    --border-color: #ccc;
+    --footer-color: #888;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* =========================
+    Base & Dark Mode
+========================= */
 body {
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 20px;
 }
 
-.container {
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: var(--container-bg);
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-/* Inputs */
-input[type="number"] {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  background-color: var(--input-bg);
-  width: 100%;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
-}
-
-/* Placeholder text */
-input::placeholder {
-  color: #999;
-  font-style: italic;
-}
-
-/* Remove spinner arrows for all browsers */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
-/* Input focus */
-input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.2);
-}
-
-/* Buttons */
-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: var(--primary-dark);
-  color: #fff;
-}
-
-/* Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-table th, table td {
-  padding: 10px;
-  text-align: left;
-}
-
-table th {
-  background-color: var(--primary-color);
-  color: #fff;
-}
-
-.copied-feedback {
-  position: fixed;
-  background: #00796b;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  z-index: 1000;
-  pointer-events: none;
-  animation: fadeout 1s forwards;
-}
-
-@keyframes fadeout {
-  0% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-20px); }
-}
-
-/* Dark Mode */
 body.dark-mode {
-  background-color: #121212;
-  color: var(--text-color-dark);
+    background-color: #121212;
+    color: var(--text-color-dark);
 }
 
 body.dark-mode .container {
-  background-color: #1e1e1e;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    background-color: #1e1e1e;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode input[type="number"] {
-  background-color: #2e2e2e;
-  color: var(--text-color-dark);
-  border-color: #444;
+    background-color: #2e2e2e;
+    color: var(--text-color-dark);
+    border-color: #444;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .container {
-    padding: 15px;
-  }
+body.dark-mode th {
+    background-color: var(--primary-dark);
 }
 
-/* Footer */
+body.dark-mode td {
+    background-color: #004d40;
+}
+
+body.dark-mode .button-group button,
+body.dark-mode #themeToggle {
+    background-color: var(--primary-dark);
+    color: var(--text-color-dark);
+}
+
+body.dark-mode tfoot td {
+    color: #fff;
+}
+
+/* =========================
+    Container & Header
+========================= */
+.container {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 40px 30px;
+    background: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 0 0 24px 0;
+    text-align: center;
+}
+
+/* =========================
+    Table
+========================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td, tfoot td {
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
+}
+
+td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+tfoot td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* =========================
+    Inputs
+========================= */
+input[type="number"],
+input[type="text"] {
+    width: 100%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Remove number input arrows for all browsers */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+input[type=number]::-moz-inner-spin-button {
+    display: none;
+}
+
+/* Placeholder support */
+input.charges-input::placeholder,
+input.payments-input::placeholder,
+input.adjustments-input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+input.balance-input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* =========================
+    Controls & Totals
+========================= */
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.button-group button,
+#themeToggle {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-group button:hover,
+#themeToggle:hover {
+    background-color: var(--primary-dark);
+}
+
+.total-incurred {
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    text-align: right;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0f2f1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+body.dark-mode .total-incurred {
+    background-color: #1e1e1e;
+    border-color: #004d40;
+    color: #e0f2f1;
+}
+
+#incurredTotal {
+    color: red !important;
+    font-size: 1.2rem;
+    margin-left: 5px;
+}
+
+.danger-btn {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.danger-btn:hover {
+    background-color: #c82333 !important;
+}
+
+/* =========================
+    Print Styles
+========================= */
+@media print {
+    body, body.dark-mode, body.dark-mode .container {
+        background-color: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+    }
+
+    table, th, td, body.dark-mode table, body.dark-mode th, body.dark-mode td {
+        background-color: #fff !important;
+        color: #000 !important;
+        border: 1px solid #ccc !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    tfoot td, body.dark-mode tfoot td {
+        background-color: #f8f8f8 !important;
+        font-weight: bold !important;
+        border: none !important;
+    }
+
+    footer, h1, #themeToggle, .button-group {
+        display: none !important;
+    }
+
+    .controls-container {
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        align-items: center !important;
+        gap: 10px !important;
+        justify-items: start !important;
+    }
+
+    .total-incurred {
+        justify-self: end !important;
+        text-align: right !important;
+        display: block !important;
+        color: #000 !important;
+        font-weight: bold !important;
+        padding-top: 15px;
+    }
+
+    input[type="number"], body.dark-mode input[type="number"] {
+        -webkit-appearance: none !important;
+        -moz-appearance: textfield !important;
+        border: none !important;
+        background: transparent !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        text-align: center;
+        font-weight: normal;
+    }
+
+    .container, body.dark-mode .container {
+        max-width: 720px !important;
+        margin: 40px auto !important;
+        padding: 40px 30px !important;
+        background: #fff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+    }
+}
+
+/* =========================
+    Footer
+========================= */
 footer {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #888;
-  margin-top: 40px;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: var(--footer-color);
 }
 
 footer a {
-  color: var(--primary-color);
-  text-decoration: none;
+    color: teal;
+    text-decoration: none;
 }
 
 footer a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
+}
+
+footer span {
+    opacity: 0.8;
 }
 
 body.dark-mode footer {
-  color: #aaa;
-}
-
-body.dark-mode footer a {
-  color: #4db6ac;
+    color: #aaa;
 }
