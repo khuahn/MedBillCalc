@@ -233,19 +233,29 @@ body.dark-mode .total-incurred {
         border: none !important;
     }
 
-    /* Hide elements not needed for printing */
-    .controls-container, footer, h1, .button-group, #themeToggle {
+    /* NEW: Print fix for controls container */
+    .controls-container {
+        display: flex !important;
+        justify-content: space-between;
+    }
+    .controls-container .button-group {
         display: none !important;
     }
-
-    /* Ensure Total Inc is visible and black */
-    .total-incurred, body.dark-mode .total-incurred {
+    .controls-container .total-incurred {
         display: block !important;
+        margin: 0 auto;
         color: #000 !important;
         text-align: center;
         font-size: 1.1rem;
         font-weight: bold;
-        padding-top: 15px;
+        background-color: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    /* Hide other elements not needed for printing */
+    footer, h1, #themeToggle {
+        display: none !important;
     }
 
     /* Remove input field styling */
@@ -344,32 +354,3 @@ footer span {
 body.dark-mode footer {
     color: #aaa;
 }
-
-/* =========================
-    Footer
-    ========================= */
-footer {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 0.9rem;
-    color: var(--footer-color);
-}
-
-footer a {
-    color: teal;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-footer span {
-    opacity: 0.8;
-}
-
-body.dark-mode footer {
-    color: #aaa;
-}
-
-/* ⬇️ FILE SHOULD END HERE - NO MORE @media print SECTION AFTER THIS ⬇️ */
