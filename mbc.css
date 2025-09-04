@@ -1,307 +1,46 @@
-/*
- * mbc.css - Medical Bill Calculator Main Styles
- */
-
-:root {
-    --primary-color: #00796b;
-    --primary-dark: #004d40;
-    --background-color: #f4f6f8;
-    --container-bg: #fff;
-    --input-bg: #e0f2f1;
-    --table-bg: #e0f2f1;
-    --text-color: #333;
-    --text-color-dark: #e0f2f1;
-    --border-color: #ccc;
-    --footer-color: #888;
+/* =========================
+    New Summary Container
+    ========================= */
+.summary-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 15px;
 }
 
-body {
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    padding: 20px;
-}
-
-body.dark-mode {
-    background-color: #121212;
-    color: var(--text-color-dark);
-}
-
-body.dark-mode .container {
-    background-color: #1e1e1e;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode input[type="number"] {
-    background-color: #2e2e2e;
-    color: var(--text-color-dark);
-    border-color: #444;
-}
-
-body.dark-mode th {
-    background-color: var(--primary-dark);
-}
-
-body.dark-mode td {
-    background-color: #004d40;
-}
-
-body.dark-mode .button-group button,
-body.dark-mode #themeToggle {
-    background-color: var(--primary-dark);
-    color: var(--text-color-dark);
-}
-
-body.dark-mode tfoot td {
-    color: #fff;
-}
-
-.container {
-    max-width: 720px;
-    margin: 40px auto;
-    padding: 40px 30px;
-    background: var(--container-bg);
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-h1 {
-    font-size: 1.8rem;
-    color: var(--primary-color);
-    margin: 0 0 24px 0;
-    text-align: center;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 16px;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-th, td, tfoot td {
-    padding: 8px;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 0.95rem;
-}
-
-th {
-    background-color: var(--primary-color);
-    color: #fff;
-    font-weight: 600;
-}
-
-td {
-    background-color: var(--table-bg);
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-tfoot td {
-    background-color: var(--table-bg);
-    color: var(--text-color);
-    font-weight: bold;
-}
-
-input[type="number"],
-input[type="text"] {
-    width: 100%;
-    padding: 6px 8px;
-    box-sizing: border-box;
-    font-size: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: #fff;
-    color: #333;
-}
-
+/* Updated: Controls Container */
 .controls-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    gap: 20px;
+  display: flex;
+  justify-content: flex-start; /* Changed from space-between */
+  align-items: center;
+  gap: 20px;
 }
 
-.button-group {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.button-group button,
-#themeToggle {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.button-group button:hover,
-#themeToggle:hover {
-    background-color: var(--primary-dark);
-}
-
+/* Updated: Total Incurred - now right-aligned in its own container */
 .total-incurred {
-    font-weight: 800;
-    color: var(--primary-color);
-    font-size: 1.1rem;
-    text-align: right;
-    padding: 10px 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e0f2f1;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
+  font-weight: 800;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  text-align: right;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0f2f1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  align-self: flex-end; /* This keeps it right-aligned */
+  margin-left: auto; /* Pushes it to the right */
 }
 
 body.dark-mode .total-incurred {
-    background-color: #1e1e1e;
-    border-color: #004d40;
-    color: #e0f2f1;
+  background-color: #1e1e1e;
+  border-color: #004d40;
+  color: #e0f2f1;
 }
 
 #incurredTotal {
-    color: red !important;
-    font-size: 1.2rem;
-    margin-left: 5px;
-}
-
-.danger-btn {
-    background-color: #dc3545 !important;
-    color: white !important;
-}
-
-.danger-btn:hover {
-    background-color: #c82333 !important;
-}
-
-@media print {
-    body, body.dark-mode, body.dark-mode .container {
-        background-color: #fff !important;
-        color: #000 !important;
-        box-shadow: none !important;
-    }
-
-    table, th, td {
-        border: 1px solid #ccc !important;
-    }
-
-    th {
-        background-color: #f0f0f0 !important;
-        color: #000 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-
-    td {
-        background-color: #fff !important;
-        color: #000 !important;
-    }
-
-    tfoot td {
-        background-color: #f8f8f8 !important;
-        font-weight: bold !important;
-        border: none !important;
-    }
-
-    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred {
-        display: none !important;
-    }
-
-    input[type="number"] {
-        -webkit-appearance: none !important;
-        -moz-appearance: textfield !important;
-        border: none !important;
-        background: transparent !important;
-        color: #000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        text-align: center;
-        font-weight: normal;
-    }
-
-    .container {
-        max-width: 720px !important;
-        margin: 40px auto !important;
-        padding: 40px 30px !important;
-        background: #fff !important;
-        border-radius: 12px !important;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
-    }
-}
-
-.copied-feedback {
-    position: fixed;
-    background: var(--primary-color);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    pointer-events: none;
-    z-index: 10000;
-    animation: fadeOut 1s ease-in-out forwards;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-@keyframes fadeOut {
-    0% { opacity: 1; transform: translateY(0); }
-    70% { opacity: 1; transform: translateY(-10px); }
-    100% { opacity: 0; transform: translateY(-20px); }
-}
-
-tfoot span:hover, #incurredTotal:hover {
-    cursor: pointer;
-    background-color: rgba(0, 121, 107, 0.1);
-    border-radius: 3px;
-}
-
-tfoot span:hover::after, #incurredTotal:hover::after {
-    content: " [COPY]";
-    font-size: 0.8em;
-    color: var(--primary-color);
-    font-style: italic;
-}
-
-body.dark-mode tfoot span:hover, 
-body.dark-mode #incurredTotal:hover {
-    background-color: rgba(0, 121, 107, 0.3);
-}
-
-body.dark-mode tfoot span:hover::after,
-body.dark-mode #incurredTotal:hover::after {
-    color: #4db6ac;
-}
-
-footer {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 0.9rem;
-    color: var(--footer-color);
-}
-
-footer a {
-    color: teal;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-footer span {
-    opacity: 0.8;
-}
-
-body.dark-mode footer {
-    color: #aaa;
+  color: red !important;
+  font-size: 1.2rem;
+  margin-left: 5px;
 }
