@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MedBillCalc</title>
-  <link rel="stylesheet" href="mbc.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medical Bill Calculator</title>
+<link rel="stylesheet" href="mbc.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <header>
@@ -13,34 +13,35 @@
   </header>
 
   <main>
-    <table id="mbcTable">
-      <thead>
-        <tr>
-          <th>Charges</th>
-          <th>Payments</th>
-          <th>Adjustments</th>
-          <th>Balance</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        <!-- Rows injected by JS -->
-      </tbody>
-      <tfoot>
-        <tr class="summary-row">
-          <td id="totalCharges" class="copyable">0.00</td>
-          <td id="totalPayments" class="copyable">0.00</td>
-          <td id="totalAdjustments" class="copyable">0.00</td>
-          <td id="totalBalance" class="copyable">0.00</td>
-        </tr>
-      </tfoot>
-    </table>
-
-    <div id="totalIncurredContainer">
-      <span>Total Incurred</span>
-      <span id="incurredTotal" class="copyable">0.00</span>
+    <div class="calculator-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Charges</th>
+            <th>Payments</th>
+            <th>Adjustments</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Rows inserted dynamically -->
+        </tbody>
+        <tfoot>
+          <tr class="summary-row">
+            <td id="totalCharges" class="summary-cell" title="Click to copy">0.00</td>
+            <td id="totalPayments" class="summary-cell" title="Click to copy">0.00</td>
+            <td id="totalAdjustments" class="summary-cell" title="Click to copy">0.00</td>
+            <td id="totalBalance" class="summary-cell" title="Click to copy">0.00</td>
+          </tr>
+          <tr class="total-incurred-row">
+            <td colspan="3" class="total-incurred-label">Total Incurred</td>
+            <td id="incurredTotal" class="total-incurred-amount" title="Click to copy">0.00</td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
 
-    <div id="actionButtons">
+    <div class="button-row">
       <button id="addRowBtn"><i class="fas fa-plus"></i> ADD</button>
       <button id="printPDFBtn"><i class="fas fa-file-pdf"></i> SAVE</button>
       <button id="clearTableBtn"><i class="fas fa-eraser"></i> RESET</button>
@@ -48,13 +49,6 @@
     </div>
   </main>
 
-  <footer>
-    <small>Med Bill Calc v1.9 Stable — For Internal Use Only<br>
-    All Rights Reserved | ©2025 <b><a href="https://github.com/khuahn/" target="_blank" style="color:teal;">匠Jac</a></b><br>
-    <span style="opacity:0.8;">Powered by <a href="https://github.com/" target="_blank" style="color:teal;">GitHub</a> &amp; 
-    <a href="https://www.cloudflare.com/" target="_blank" style="color:teal;">Cloudflare</a></span></small>
-  </footer>
-
-  <script src="mbc.js"></script>
+<script src="mbc.js"></script>
 </body>
 </html>
