@@ -4,34 +4,88 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | MedBillCalc</title>
-  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="mbc.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-   <!-- Open Graph Meta Tags -->
-<meta property="og:title" content="MedBillCalc">
-<meta property="og:description" content="Simple yet functional Medical Billing calculator">
-<meta property="og:url" content="https://medbillcalc.pages.dev/">
-<meta property="og:type" content="website">
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="MedBillCalc">
+  <meta property="og:description" content="Simple yet functional Medical Billing calculator">
+  <meta property="og:url" content="https://medbillcalc.pages.dev/">
+  <meta property="og:type" content="website">
 </head>
 <body class="login">
   <div class="login-wrapper">
     <div class="login-container">
-      <h2>Access MedBillCalc</h2>
+      <h2>Welcome to MedBillCalc</h2>
       <form id="loginForm">
         <div class="input-group">
-          <i class="fas fa-lock"></i>
-          <input type="password" id="password" placeholder="Enter Password" required />
-          <button type="button" id="togglePwd" aria-label="Show password">
-            <i class="fas fa-eye"></i>
-          </button>
+          <i class="fas fa-user"></i>
+          <input type="text" id="username" placeholder="Enter your name" required />
         </div>
         <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
         <p id="errorMsg" class="error" role="alert" aria-live="polite"></p>
       </form>
     </div>
   </div>
-  <footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888;">
-    <small>  Med Bill Calc v1.9 Stable — For Internal Use Only<br/>  All Rights Reserved | ©2025   <b><a href="https://github.com/khuahn/" target="_blank" style="color:teal;">匠Jac</a></b><br/>  <span style="opacity:0.8;">    Powered by     <a href="https://github.com/" target="_blank" style="color:teal;">GitHub</a> &amp;     <a href="https://www.cloudflare.com/" target="_blank" style="color:teal;">Cloudflare</a>  </span></small>
+
+  <footer>
+    <small>
+      Med Bill Calc v1.9 Stable — For Internal Use Only<br/>
+      All Rights Reserved | ©2025 <b><a href="https://github.com/khuahn/" target="_blank">匠Jac</a></b><br/>
+      <span style="opacity:0.8;">
+        Powered by <a href="https://github.com/" target="_blank">GitHub</a> &amp;
+        <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
+      </span>
+    </small>
   </footer>
-  <script src="mbc.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SESSION_KEY = "mbcSession";
+
+      function setSession(username) {
+        const now = new Date().getTime();
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ username, timestamp: now }));
+      }
+
+      function checkSession() {
+        const data = localStorage.getItem(SESSION_KEY);
+        if (!data) return false;
+        const session = JSON.parse(data);
+        const now = new Date().getTime();
+        const expiry = 24 * 60 * 60 * 1000; // 24 hours
+        if (now - session.timestamp > expiry) {
+          localStorage.removeItem(SESSION_KEY);
+          return false;
+        }
+        return session.username;
+      }
+
+      function redirectToIndex() {
+        window.location.href = "index.html";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const username = checkSession();
+        if (username) redirectToIndex();
+
+        const form = document.getElementById("loginForm");
+        const input = document.getElementById("username");
+        const errorMsg = document.getElementById("errorMsg");
+
+        form.addEventListener("submit", e => {
+          e.preventDefault();
+          const name = input.value.trim();
+          if (!name) {
+            errorMsg.textContent = "Please enter your name.";
+            return;
+          }
+          setSession(name);
+          redirectToIndex();
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
