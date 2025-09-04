@@ -209,6 +209,9 @@ body.dark-mode .total-incurred {
 /* =========================
     Print Styles
     ========================= */
+/* =========================
+    Print Styles
+    ========================= */
 @media print {
     body, body.dark-mode, body.dark-mode .container {
         background-color: #fff !important;
@@ -238,9 +241,50 @@ body.dark-mode .total-incurred {
         border: none !important;
     }
 
+    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred {
+        display: none !important;
+    }
 
-    .controls-container, footer, h1, .button-group, #themeToggle {
-    display: none !important;
+    /* Show the print version of total incurred */
+    .total-incurred-print {
+        display: block !important;
+        text-align: center !important;
+        font-size: 1.2rem !important;
+        font-weight: bold !important;
+        color: #000 !important;
+        margin-top: 20px !important;
+        padding: 10px !important;
+        border: 1px solid #ccc !important;
+        background-color: #f8f8f8 !important;
+        border-radius: 6px !important;
+        page-break-inside: avoid !important;
+    }
+
+    #incurredTotalPrint {
+        color: #000 !important;
+        font-weight: bold !important;
+    }
+
+    input[type="number"] {
+        -webkit-appearance: none !important;
+        -moz-appearance: textfield !important;
+        border: none !important;
+        background: transparent !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        text-align: center;
+        font-weight: normal;
+    }
+
+    .container {
+        max-width: 720px !important;
+        margin: 40px auto !important;
+        padding: 40px 30px !important;
+        background: #fff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+    }
 }
 
     /* New rule: Make the TOTAL INC container visible for printing */
