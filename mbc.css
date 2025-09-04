@@ -1,163 +1,303 @@
 :root {
-  --primary-color: #00796b;
-  --primary-dark: #004d40;
-  --background-color: #f4f6f8;
-  --card-bg: #e0f2f1;
-  --text-color: #333;
-  --summary-bg: #b2dfdb;
-  --summary-hover: #80cbc4;
-  --total-inc-bg: #00796b;
-  --total-inc-color: #fff;
-  --text-color-dark: #e0f2f1;
+    --primary-color: #00796b;
+    --primary-dark: #004d40;
+    --background-color: #f4f6f8;
+    --container-bg: #fff;
+    --table-bg: #e0f2f1;
+    --text-color: #333;
+    --text-color-dark: #e0f2f1;
+    --border-color: #ccc;
+    --footer-color: #888;
 }
 
+/* =========================
+    Base & Dark Mode
+    ========================= */
 body {
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  padding: 20px;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 20px;
 }
 
-header h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: var(--primary-color);
+body.dark-mode {
+    background-color: #121212;
+    color: var(--text-color-dark);
 }
 
-.calculator-card {
-  background-color: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto 20px auto;
+body.dark-mode .container {
+    background-color: #1e1e1e;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
+body.dark-mode input[type="number"] {
+    background-color: #2e2e2e;
+    color: var(--text-color-dark);
+    border-color: #444;
+}
+
+body.dark-mode th {
+    background-color: var(--primary-dark);
+}
+
+body.dark-mode td {
+    background-color: #004d40;
+}
+
+body.dark-mode .button-group button,
+body.dark-mode #themeToggle {
+    background-color: var(--primary-dark);
+    color: var(--text-color-dark);
+}
+
+body.dark-mode tfoot td {
+    color: #fff;
+}
+
+/* =========================
+    Container & Header
+    ========================= */
+.container {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 40px 30px;
+    background: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 0 0 24px 0;
+    text-align: center;
+}
+
+/* =========================
+    Table
+    ========================= */
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td, tfoot td {
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.95rem;
 }
 
 th {
-  background-color: var(--primary-color);
-  color: #fff;
-  font-weight: bold;
-  padding: 12px;
-  text-align: left;
-  border-radius: 6px 6px 0 0;
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
 }
 
 td {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: 500;
 }
 
-input[type="number"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  -moz-appearance: textfield; /* Firefox */
+tfoot td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+/* =========================
+    Inputs
+    ========================= */
+input[type="number"],
+input[type="text"] {
+    width: 100%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    -moz-appearance: textfield; /* remove arrows in Firefox */
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0; /* Remove arrows for Chrome/Safari */
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-input::placeholder {
-  color: #999;
+/* =========================
+    Controls & Totals
+    ========================= */
+.controls-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+    gap: 20px;
 }
 
-/* Summary Row */
-.summary-row td {
-  background-color: var(--summary-bg);
-  font-weight: bold;
-  text-align: right;
-  cursor: pointer;
-  transition: background 0.2s;
+.button-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.summary-row td:hover::after {
-  content: ' [COPY]';
-  font-weight: normal;
-  color: #555;
+.button-group button,
+#themeToggle {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Total Incurred */
-.total-incurred-row .total-incurred-label {
-  font-weight: normal;
-  text-align: right;
-  padding-right: 10px;
+.button-group button:hover,
+#themeToggle:hover {
+    background-color: var(--primary-dark);
 }
 
-.total-incurred-row .total-incurred-amount {
-  font-weight: bold;
-  background-color: var(--total-inc-bg);
-  color: var(--total-inc-color);
-  text-align: right;
-  padding: 8px;
-  border-radius: 6px;
-  cursor: pointer;
+/* Total Incurred styling */
+.total-incurred-container {
+    text-align: center;
+    margin: 12px 0;
 }
 
-.button-row {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  gap: 10px;
+.total-incurred-label {
+    font-weight: normal;
+    font-size: 1rem;
 }
 
-button {
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.2s;
+.total-incurred-amount {
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    display: inline-block;
+    margin-left: 6px;
 }
 
-button:hover {
-  background-color: var(--primary-dark);
+body.dark-mode .total-incurred-amount {
+    background-color: #1e1e1e;
+    border: 1px solid #004d40;
+    color: var(--text-color-dark);
 }
 
-/* Dark Mode */
-body.dark-mode {
-  background-color: #121212;
-  color: var(--text-color-dark);
+/* =========================
+    Print Styles
+    ========================= */
+@media print {
+    body, body.dark-mode, body.dark-mode .container {
+        background-color: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+    }
+
+    table, th, td {
+        border: 1px solid #ccc !important;
+    }
+
+    th {
+        background-color: #f0f0f0 !important;
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    td {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+
+    tfoot td {
+        background-color: #f8f8f8 !important;
+        font-weight: bold !important;
+        border: none !important;
+    }
+
+    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred-container {
+        display: none !important;
+    }
+
+    .total-incurred-print {
+        display: block !important;
+        color: #000 !important;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding-top: 15px;
+    }
+
+    input[type="number"] {
+        -webkit-appearance: none !important;
+        -moz-appearance: textfield !important;
+        border: none !important;
+        background: transparent !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        text-align: center;
+        font-weight: normal;
+    }
 }
 
-body.dark-mode .calculator-card {
-  background-color: #1e1e1e;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+/* Click-to-copy hint */
+tfoot span:hover, .total-incurred-amount:hover {
+    cursor: pointer;
+    background-color: rgba(0, 121, 107, 0.1);
+    border-radius: 3px;
 }
 
-body.dark-mode th {
-  background-color: #004d40;
+tfoot span:hover::after, .total-incurred-amount:hover::after {
+    content: " [COPY]";
+    font-size: 0.8em;
+    color: var(--primary-color);
+    font-style: italic;
 }
 
-body.dark-mode .summary-row td {
-  background-color: #004d40;
-  color: #e0f2f1;
+body.dark-mode tfoot span:hover, 
+body.dark-mode .total-incurred-amount:hover {
+    background-color: rgba(0, 121, 107, 0.3);
 }
 
-body.dark-mode .summary-row td:hover::after {
-  color: #ccc;
+body.dark-mode tfoot span:hover::after,
+body.dark-mode .total-incurred-amount:hover::after {
+    color: #4db6ac;
 }
 
-body.dark-mode .total-incurred-row .total-incurred-amount {
-  background-color: #004d40;
-  color: #e0f2f1;
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: var(--footer-color);
 }
 
-body.dark-mode button {
-  background-color: #00796b;
+footer a {
+    color: teal;
+    text-decoration: none;
 }
 
-body.dark-mode button:hover {
-  background-color: #004d40;
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer span {
+    opacity: 0.8;
+}
+
+body.dark-mode footer {
+    color: #aaa;
 }
