@@ -1,13 +1,11 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * 
- * Version History:
+ * * Version History:
  * v1.8.0 - Enhanced Click-to-Copy UX
- *   - Added visual cues for click-to-copy feature
- *   - Improved print compatibility for Edge browser
- *   - Dark mode support for hover hints
- * 
- * v1.7.0 - Print optimization
+ * - Added visual cues for click-to-copy feature
+ * - Improved print compatibility for Edge browser
+ * - Dark mode support for hover hints
+ * * v1.7.0 - Print optimization
  * v1.6.0 - Added dark mode support
  */
 
@@ -146,19 +144,21 @@ body.dark-mode input[type="number"] {
 /* =========================
    Controls & Totals
    ========================= */
-.controls-bar {
+.controls-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 12px auto 0;
+  margin-top: 20px;
+  gap: 20px;
 }
 
-.controls {
+.button-group {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
-.controls button,
+.button-group button,
 #themeToggle {
   background-color: var(--primary-color);
   color: white;
@@ -170,17 +170,44 @@ body.dark-mode input[type="number"] {
   transition: background-color 0.3s ease;
 }
 
-.controls button:hover,
+.button-group button:hover,
 #themeToggle:hover {
   background-color: var(--primary-dark);
 }
 
-  /* ← This should be the ONLY closing brace here */
+.total-incurred {
+  font-weight: 800;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  text-align: right;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0f2f1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+body.dark-mode .total-incurred {
+  background-color: #1e1e1e;
+  border-color: #004d40;
+  color: #e0f2f1;
+}
 
 #incurredTotal {
   color: red !important;
   font-size: 1.2rem;
   margin-left: 5px;
+}
+
+.danger-btn {
+  background-color: #dc3545 !important; /* Red color */
+  color: white !important;
+}
+
+.danger-btn:hover {
+  background-color: #c82333 !important; /* Darker red */
 }
 
 /* =========================
@@ -211,7 +238,7 @@ body.dark-mode input[type="number"] {
   }
 
   /* Hide elements not needed for printing */
-  .controls-bar, footer, h1, .controls, #themeToggle {
+  .controls-container, footer, h1, .button-group, #themeToggle {
     display: none !important;
   }
 
@@ -295,45 +322,29 @@ body.dark-mode #incurredTotal:hover::after {
   color: #4db6ac;
 }
 
-.danger-btn {
-  background-color: #dc3545 !important; /* Red color */
-  color: white !important;
+/* =========================
+   Footer
+   ========================= */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #888;
 }
 
-.danger-btn:hover {
-  background-color: #c82333 !important; /* Darker red */
-}
-.controls-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  gap: 20px;
+footer a {
+  color: teal;
+  text-decoration: none;
 }
 
-.button-group {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+footer a:hover {
+    text-decoration: underline;
 }
 
-.total-incurred {
-  font-weight: 800;
-  color: var(--primary-color);
-  font-size: 1.1rem;
-  text-align: right;
-  padding: 10px 15px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #e0f2f1;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-left: auto; /* Pushes to right */
-  white-space: nowrap;
+footer span {
+  opacity: 0.8;
 }
 
-body.dark-mode .total-incurred {
-  background-color: #1e1e1e;
-  border-color: #004d40;
-  color: #e0f2f1;
+body.dark-mode footer {
+    color: #aaa;
 }
