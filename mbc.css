@@ -180,23 +180,24 @@ body.dark-mode input[type="number"] {
   color: var(--primary-color);
   font-size: 1.1rem;
   text-align: right;
-  margin: 15px 0 0 auto;    /* Pushes to right edge */
+  margin: 15px 20px 0 auto;    /* Added 20px right margin to keep inside */
   padding: 10px 15px;
   display: block;
   width: fit-content;
+  max-width: 200px;            /* Prevents overflow */
   background-color: #f8f9fa;
   border-radius: 8px;
   border: 1px solid #e0f2f1;
-  /* Stick to right edge */
+  /* Keep inside container */
   margin-left: auto;
-  margin-right: 0;
+  margin-right: 20px;          /* Pushes from right edge */
 }
 
 body.dark-mode .total-incurred {
   background-color: #1e1e1e;
   border-color: #004d40;
   color: #e0f2f1;
-}
+}  /* ← This should be the ONLY closing brace here */
 
 #incurredTotal {
   color: red !important;
