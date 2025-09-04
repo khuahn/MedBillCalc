@@ -241,7 +241,31 @@ body.dark-mode .total-incurred {
 .controls-container, footer, h1, .button-group, #themeToggle {
     display: none !important;
 }
+/* New rule: Make the TOTAL INC container visible for printing */
+.total-incurred {
+    display: block !important;
+    all: initial !important; /* Brutally reset any problematic styles */
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    margin-top: 20px !important;
+    /* Specific style to match your design */
+    padding: 10px !important;
+    border: 1px solid #ccc !important;
+    background-color: #f8f8f8 !important;
+    border-radius: 6px !important;
+}
 
+/* New rule: Specifically style the number */
+#incurredTotal {
+    all: initial !important;
+    font-size: 1.2rem !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    margin-left: 5px !important;
+}
     /* Force visibility for total incurred in print */
     .total-incurred-print {
         display: block !important;
