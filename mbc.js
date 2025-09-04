@@ -1,11 +1,5 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * * Version History:
- * v1.5.0 (2024-03-15) - Current
- * - Added click-to-copy functionality for summary totals
- * - Visual feedback with "Copied!" animation
- * * v1.4.2 - Enhanced authentication with password validation
- * v1.4.1 - Reduced default rows from 10 to 5
  */
 
 (() => {
@@ -19,17 +13,14 @@
 
 function copyToClipboard(text, event) {
   navigator.clipboard.writeText(text).then(() => {
-    // Visual feedback
     const feedback = document.createElement('div');
     feedback.className = 'copied-feedback';
     feedback.textContent = 'Copied!';
     document.body.appendChild(feedback);
     
-    // Position near cursor
     feedback.style.top = (event.clientY - 30) + 'px';
     feedback.style.left = event.clientX + 'px';
     
-    // Remove after animation
     setTimeout(() => feedback.remove(), 1000);
   }).catch(err => {
     console.error('Failed to copy: ', err);
@@ -53,20 +44,17 @@ function copyToClipboard(text, event) {
       const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
       const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
 
-      // Autocalculate balance if conditions are met
       if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
         const calculatedBalance = charges - payments - adjustments;
         balanceInput.value = calculatedBalance.toFixed(2);
       }
 
-      // Summing up for the final totals
       totalCharges += charges;
       totalPayments += payments;
       totalAdjustments += adjustments;
       totalBalance += parseFloat(normalizeInput(balanceInput.value)) || 0;
     });
 
-    // Update summary section
     const update = (id, val) => {
       const el = document.getElementById(id);
       if (el) el.textContent = val.toFixed(2);
@@ -76,16 +64,8 @@ function copyToClipboard(text, event) {
     update("totalPayments", totalPayments);
     update("totalAdjustments", totalAdjustments);
     update("totalBalance", totalBalance);
-    // "Total Incurred" is the sum of all payments and balances
-    update("incurredTotal", totalPayments + totalBalance);       
-    // Update the print version too
-    const incurredTotalPrint = document.getElementById("incurredTotalPrint");
-    if (incurredTotalPrint) {
-      incurredTotalPrint.textContent = (totalPayments + totalBalance).toFixed(2);
-    }
+    update("incurredTotal", totalPayments + totalBalance);
   }
-
-
 
   function saveTableData() {
     const rows = document.querySelectorAll("#tableBody tr");
@@ -137,47 +117,21 @@ function copyToClipboard(text, event) {
   }
 
 function clearTable() {
-  // Confirmation dialog - Plan 0.5.5
   if (!confirm("Are you sure you want to reset the calculator?\n\nAll entered data will be permanently lost!")) {
-    return; // User clicked Cancel - abort reset
+    return;
   }
   
   const tbody = document.getElementById("tableBody");
   if (tbody) {
     tbody.innerHTML = "";
-    for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
+    for (let i = 0; i < 5; i++) addRow();
     calculateTotals();
   }
   localStorage.removeItem(STORAGE_KEY);
 }
 
-function handlePrint() {
-  // Update the print version with current data before printing
-  const incurredTotal = document.getElementById("incurredTotal");
-  const incurredTotalPrint = document.getElementById("incurredTotalPrint");
-  
-  if (incurredTotal && incurredTotalPrint) {
-    incurredTotalPrint.textContent = incurredTotal.textContent;
-  }
-  
-  // Show the print version and hide the screen version
-  const printElement = document.querySelector(".total-incurred-print");
-  const screenElement = document.querySelector(".total-incurred");
-  
-  if (printElement && screenElement) {
-    printElement.style.display = "block";
-    screenElement.style.display = "none";
-    
-    window.print();
-    
-    // Revert after printing
-    setTimeout(() => {
-      printElement.style.display = "none";
-      screenElement.style.display = "flex";
-    }, 100);
-  } else {
-    window.print();
-  }
+function printPDF() {
+  window.print();
 }
 
   function toggleDarkMode() {
@@ -209,16 +163,16 @@ function handlePrint() {
 }
 
   document.addEventListener("DOMContentLoaded", () => {
-// Click-to-copy for summary totals
-document.addEventListener('click', (event) => {
-  if (event.target.id === 'totalCharges' || 
-      event.target.id === 'totalPayments' ||
-      event.target.id === 'totalAdjustments' || 
-      event.target.id === 'totalBalance' ||
-      event.target.id === 'incurredTotal') {
-    copyToClipboard(event.target.textContent, event);
-  }
-});
+    document.addEventListener('click', (event) => {
+      if (event.target.id === 'totalCharges' || 
+          event.target.id === 'totalPayments' ||
+          event.target.id === 'totalAdjustments' || 
+          event.target.id === 'totalBalance' ||
+          event.target.id === 'incurredTotal') {
+        copyToClipboard(event.target.textContent, event);
+      }
+    });
+    
     initTheme();
 
     const addRowBtn = document.getElementById("addRowBtn");
@@ -229,14 +183,14 @@ document.addEventListener('click', (event) => {
 
     if (addRowBtn) addRowBtn.addEventListener("click", addRow);
     if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
-    if (printPDFBtn) printPDFBtn.addEventListener("click", handlePrint);
+    if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
     if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
     
     if (tbody) {
       loadTableData();
-if (tbody.children.length === 0) {
-  for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
-}
+      if (tbody.children.length === 0) {
+        for (let i = 0; i < 5; i++) addRow();
+      }
 
       tbody.addEventListener("input", (e) => {
         const row = e.target.closest('tr');
@@ -245,12 +199,10 @@ if (tbody.children.length === 0) {
         const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments-input").value)) || 0;
         const balanceInput = row.querySelector(".balance-input");
         
-        // Mark as manual if the balance input is changed by the user
         if (e.target.classList.contains("balance-input")) {
           balanceInput.dataset.manual = "true";
         }
         
-        // Autocalculate based on requested conditions
         if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
           const calculatedBalance = charges - payments - adjustments;
           balanceInput.value = calculatedBalance.toFixed(2);
