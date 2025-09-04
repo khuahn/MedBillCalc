@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Medical Bill Calculator</title>
-  <link rel="stylesheet" href="mbc.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medical Bill Calculator | MedBillCalc</title>
+  <link rel="stylesheet" href="mbc.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="MedBillCalc">
+  <meta property="og:description" content="Simple yet functional Medical Billing calculator">
+  <meta property="og:url" content="https://medbillcalc.pages.dev/">
+  <meta property="og:type" content="website">
+  <style>
+    /* Remove spinner arrows for all browsers */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
+  <header>
     <h1>Medical Bill Calculator</h1>
+    <button id="themeToggle" aria-label="Toggle Dark Mode"><i class="fas fa-moon" id="themeIcon"></i> <span id="themeLabel">Dark</span></button>
+  </header>
 
+  <main>
     <table>
       <thead>
         <tr>
@@ -21,7 +40,7 @@
         </tr>
       </thead>
       <tbody id="tableBody">
-        <!-- Rows added dynamically -->
+        <!-- Rows populated by mbc.js -->
       </tbody>
       <tfoot>
         <tr>
@@ -30,30 +49,28 @@
           <td id="totalAdjustments">0.00</td>
           <td id="totalBalance">0.00</td>
         </tr>
+        <tr>
+          <td colspan="4">Total Incurred: <span id="incurredTotal">0.00</span></td>
+        </tr>
       </tfoot>
     </table>
 
-    <div class="controls-container">
-      <div class="button-group">
-        <button id="addRowBtn"><i class="fas fa-plus"></i> Add Row</button>
-        <button id="clearTableBtn" class="danger-btn"><i class="fas fa-trash"></i> Clear</button>
-        <button id="printPDFBtn"><i class="fas fa-print"></i> Print</button>
-      </div>
-      <div class="total-incurred">
-        Total Incurred: <span id="incurredTotal">0.00</span>
-      </div>
+    <div class="button-group">
+      <button id="addRowBtn"><i class="fas fa-plus"></i> Add Row</button>
+      <button id="clearTableBtn"><i class="fas fa-trash"></i> Clear Table</button>
+      <button id="printPDFBtn"><i class="fas fa-print"></i> Print PDF</button>
     </div>
-
-    <button id="themeToggle" aria-pressed="false">
-      <i id="themeIcon" class="fas fa-moon"></i>
-      <span id="themeLabel">Dark</span>
-    </button>
-  </div>
+  </main>
 
   <footer>
-    Med Bill Calc v1.9 Stable — For Internal Use Only<br>
-    All Rights Reserved | ©2025 <b><a href="https://github.com/khuahn/" target="_blank">匠Jac</a></b><br>
-    <span>Powered by <a href="https://github.com/" target="_blank">GitHub</a> & <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a></span>
+    <small>
+      Med Bill Calc v1.0 Stable — For Internal Use Only<br/>
+      All Rights Reserved | ©2025 <b><a href="https://github.com/khuahn/" target="_blank" style="color:teal;">匠Jac</a></b><br/>
+      <span style="opacity:0.8;">
+        Powered by <a href="https://github.com/" target="_blank" style="color:teal;">GitHub</a> &amp;
+        <a href="https://www.cloudflare.com/" target="_blank" style="color:teal;">Cloudflare</a>
+      </span>
+    </small>
   </footer>
 
   <script src="mbc.js"></script>
