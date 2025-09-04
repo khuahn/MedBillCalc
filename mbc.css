@@ -344,3 +344,24 @@ footer span {
 body.dark-mode footer {
     color: #aaa;
 }
+
+@media print {
+    /* ... all your existing print rules stay the same ... */
+
+    /* NEW RULE: Print fix for TOTAL INC - keeps horizontal alignment */
+    .controls-container {
+        display: flex !important;
+        justify-content: space-between;
+    }
+    .controls-container .button-group {
+        display: none !important;
+    }
+    .controls-container .total-incurred {
+        display: block !important;
+        margin: 0 auto; /* Center it horizontally */
+        color: #000 !important;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+}
