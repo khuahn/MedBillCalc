@@ -1,140 +1,46 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * 
- * Version History:
+ * * Version History:
  * v1.8.0 - Enhanced Click-to-Copy UX
- *   - Added visual cues for click-to-copy feature
- *   - Improved print compatibility for Edge browser
- *   - Dark mode support for hover hints
- * 
- * v1.7.0 - Print optimization
+ * - Added visual cues for click-to-copy feature
+ * - Improved print compatibility for Edge browser
+ * - Dark mode support for hover hints
+ * * v1.7.0 - Print optimization
  * v1.6.0 - Added dark mode support
  */
 
 :root {
-  --primary-color: #00796b;
-  --primary-dark: #004d40;
-  --background-color: #f4f6f8;
-  --container-bg: #fff;
-  --input-bg: #e0f2f1;
-  --table-bg: #e0f2f1;
-  --text-color: #333;
-  --text-color-dark: #e0f2f1;
+    --primary-color: #00796b;
+    --primary-dark: #004d40;
+    --background-color: #f4f6f8;
+    --container-bg: #fff;
+    --input-bg: #e0f2f1;
+    --table-bg: #e0f2f1;
+    --text-color: #333;
+    --text-color-dark: #e0f2f1;
+    --border-color: #ccc;
+    --footer-color: #888;
 }
 
 /* =========================
-   Base & Dark Mode
-   ========================= */
+    Base & Dark Mode
+    ========================= */
 body {
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
-  padding: 20px;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 20px;
 }
 
 body.dark-mode {
-  background-color: #121212;
-  color: var(--text-color-dark);
+    background-color: #121212;
+    color: var(--text-color-dark);
 }
 
 body.dark-mode .container {
-  background-color: #1e1e1e;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode input[type="number"] {
-  background-color: #2e2e2e;
-  color: var(--text-color-dark);
-  border-color: #444;
-}
-
-body.dark-mode th {
-  background-color: var(--primary-dark);
-}
-
-body.dark-mode td {
-  background-color: #004d40;
-}
-
-body.dark-mode .controls button,
-body.dark-mode #themeToggle {
-  background-color: var(--primary-dark);
-  color: var(--text-color-dark);
-}
-
-body.dark-mode tfoot td {
-  color: #fff;
-}
-
-/* =========================
-   Container & Header
-   ========================= */
-.container {
-  max-width: 720px;
-  margin: 40px auto;
-  padding: 40px 30px;
-  background: var(--container-bg);
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-h1 {
-  font-size: 1.8rem;
-  color: var(--primary-color);
-  margin: 0 0 24px 0;
-  text-align: center;
-}
-
-/* =========================
-   Table
-   ========================= */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-th, td, tfoot td {
-  padding: 8px;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 0.95rem;
-}
-
-th {
-  background-color: var(--primary-color);
-  color: #fff;
-  font-weight: 600;
-}
-
-td {
-  background-color: var(--table-bg);
-  color: var(--text-color);
-  font-weight: 500;
-}
-
-tfoot td {
-  background-color: var(--table-bg);
-  color: var(--text-color);
-  font-weight: bold;
-}
-
-/* =========================
-   Inputs
-   ========================= */
-input[type="number"],
-input[type="text"] {
-  width: 100%;
-  padding: 6px 8px;
-  box-sizing: border-box;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #fff;
-  color: #333;
+    background-color: #1e1e1e;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode input[type="number"] {
@@ -143,154 +49,300 @@ body.dark-mode input[type="number"] {
     border-color: #444;
 }
 
+body.dark-mode th {
+    background-color: var(--primary-dark);
+}
+
+body.dark-mode td {
+    background-color: #004d40;
+}
+
+body.dark-mode .controls button,
+body.dark-mode #themeToggle {
+    background-color: var(--primary-dark);
+    color: var(--text-color-dark);
+}
+
+body.dark-mode tfoot td {
+    color: #fff;
+}
+
 /* =========================
-   Controls & Totals
-   ========================= */
-.controls-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 12px auto 0;
+    Container & Header
+    ========================= */
+.container {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 40px 30px;
+    background: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-.controls {
-  display: flex;
-  gap: 8px;
+h1 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 0 0 24px 0;
+    text-align: center;
 }
 
-.controls button,
+/* =========================
+    Table
+    ========================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td, tfoot td {
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
+}
+
+td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+tfoot td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* =========================
+    Inputs
+    ========================= */
+input[type="number"],
+input[type="text"] {
+    width: 100%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* =========================
+    Controls & Totals
+    ========================= */
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.button-group button,
 #themeToggle {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.controls button:hover,
+.button-group button:hover,
 #themeToggle:hover {
-  background-color: var(--primary-dark);
+    background-color: var(--primary-dark);
 }
 
 .total-incurred {
-  font-weight: bold;
-  color: var(--primary-color);
-  font-size: 1rem;
-  text-align: right;
-  padding-right: 8px;
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    text-align: right;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0f2f1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+body.dark-mode .total-incurred {
+    background-color: #1e1e1e;
+    border-color: #004d40;
+    color: #e0f2f1;
+}
+
+#incurredTotal {
+    color: red !important;
+    font-size: 1.2rem;
+    margin-left: 5px;
+}
+
+.danger-btn {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.danger-btn:hover {
+    background-color: #c82333 !important;
 }
 
 /* =========================
-   Print Preview - Edge Compatible
-   ========================= */
+    Print Styles
+    ========================= */
 @media print {
-  /* Force light mode for printing - Edge fix */
-  body, body.dark-mode, body.dark-mode .container {
-    background-color: #fff !important;
-    color: #000 !important;
-    box-shadow: none !important;
-  }
+    body, body.dark-mode, body.dark-mode .container {
+        background-color: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+    }
 
-  /* Force table styles for printing */
-  table, th, td, body.dark-mode table, body.dark-mode th, body.dark-mode td {
-    background-color: #fff !important;
-    color: #000 !important;
-    border: 1px solid #ccc !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+    table, th, td {
+        border: 1px solid #ccc !important;
+    }
 
-  /* Force footer row styles */
-  tfoot td, body.dark-mode tfoot td {
-    background-color: #f8f8f8 !important;
-    font-weight: bold !important;
-    border: none !important;
-  }
+    th {
+        background-color: #f0f0f0 !important;
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
 
-  /* Hide elements not needed for printing */
-  .controls-bar, footer, h1, .controls, #themeToggle {
-    display: none !important;
-  }
+    td {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
 
-  /* Ensure Total Inc is visible and black */
-  .total-incurred, body.dark-mode .total-incurred {
-    display: block !important;
-    color: #000 !important;
-    text-align: center;
-    font-size: 1.1rem;
-    font-weight: bold;
-    padding-top: 15px;
-  }
+    tfoot td {
+        background-color: #f8f8f8 !important;
+        font-weight: bold !important;
+        border: none !important;
+    }
 
-  /* Remove input field styling */
-  input[type="number"], body.dark-mode input[type="number"] {
-    -webkit-appearance: none !important;
-    -moz-appearance: textfield !important;
-    border: none !important;
-    background: transparent !important;
-    color: #000 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    text-align: center;
-    font-weight: normal;
-  }
+    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred {
+        display: none !important;
+    }
 
-  /* Container print styling */
-  .container, body.dark-mode .container {
-    max-width: 720px !important;
-    margin: 40px auto !important;
-    padding: 40px 30px !important;
-    background: #fff !important;
-    border-radius: 12px !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
-  }
+    /* Force visibility for total incurred in print */
+    .total-incurred-print {
+        display: block !important;
+        color: #000 !important;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding-top: 15px;
+    }
+
+    input[type="number"] {
+        -webkit-appearance: none !important;
+        -moz-appearance: textfield !important;
+        border: none !important;
+        background: transparent !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        text-align: center;
+        font-weight: normal;
+    }
+
+    .container {
+        max-width: 720px !important;
+        margin: 40px auto !important;
+        padding: 40px 30px !important;
+        background: #fff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+    }
 }
 
 /* Visual feedback for copy action */
 .copied-feedback {
-  position: fixed;
-  background: var(--primary-color);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  pointer-events: none;
-  z-index: 10000;
-  animation: fadeOut 1s ease-in-out forwards;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: fixed;
+    background: var(--primary-color);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 10000;
+    animation: fadeOut 1s ease-in-out forwards;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes fadeOut {
-  0% { opacity: 1; transform: translateY(0); }
-  70% { opacity: 1; transform: translateY(-10px); }
-  100% { opacity: 0; transform: translateY(-20px); }
+    0% { opacity: 1; transform: translateY(0); }
+    70% { opacity: 1; transform: translateY(-10px); }
+    100% { opacity: 0; transform: translateY(-20px); }
 }
 
 /* Hint for click-to-copy feature */
 tfoot span:hover, #incurredTotal:hover {
-  cursor: pointer;
-  background-color: rgba(0, 121, 107, 0.1);
-  border-radius: 3px;
+    cursor: pointer;
+    background-color: rgba(0, 121, 107, 0.1);
+    border-radius: 3px;
 }
 
 tfoot span:hover::after, #incurredTotal:hover::after {
-  content: " (Click to copy)";
-  font-size: 0.8em;
-  color: var(--primary-color);
-  font-style: italic;
+    content: " [COPY]";
+    font-size: 0.8em;
+    color: var(--primary-color);
+    font-style: italic;
 }
 
 /* Dark mode support for the hint */
 body.dark-mode tfoot span:hover, 
 body.dark-mode #incurredTotal:hover {
-  background-color: rgba(0, 121, 107, 0.3);
+    background-color: rgba(0, 121, 107, 0.3);
 }
 
 body.dark-mode tfoot span:hover::after,
 body.dark-mode #incurredTotal:hover::after {
-  color: #4db6ac;
+    color: #4db6ac;
+}
+
+/* =========================
+    Footer
+    ========================= */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: var(--footer-color);
+}
+
+footer a {
+    color: teal;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer span {
+    opacity: 0.8;
+}
+
+body.dark-mode footer {
+    color: #aaa;
 }
