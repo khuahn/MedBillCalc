@@ -1,336 +1,272 @@
-:root {
-    --primary-color: #00796b;
-    --primary-dark: #004d40;
-    --background-color: #f4f6f8;
-    --container-bg: #fff;
-    --input-bg: #e0f2f1;
-    --table-bg: #e0f2f1;
-    --text-color: #333;
-    --text-color-dark: #e0f2f1;
-    --border-color: #ccc;
-    --footer-color: #888;
+/*
+ * mbc.js - Medical Bill Calculator Core Functionality
+ * * Version History:
+ * v1.5.0 (2024-03-15) - Current
+ * - Added click-to-copy functionality for summary totals
+ * - Visual feedback with "Copied!" animation
+ * * v1.4.2 - Enhanced authentication with password validation
+ * v1.4.1 - Reduced default rows from 10 to 5
+ */
+
+(() => {
+  "use strict";
+
+  const ALLOWED_PASSWORD = "M3d1c4l00!";
+  const STORAGE_KEY = 'mbcData';
+
+  function normalizeInput(s) {
+    return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
+  }
+// ADD THIS FUNCTION HERE (around line 20)
+function copyToClipboard(text, event) {
+  navigator.clipboard.writeText(text).then(() => {
+    // Visual feedback
+    const feedback = document.createElement('div');
+    feedback.className = 'copied-feedback';
+    feedback.textContent = 'Copied!';
+    document.body.appendChild(feedback);
+    
+    // Position near cursor
+    feedback.style.top = (event.clientY - 30) + 'px';
+    feedback.style.left = event.clientX + 'px';
+    
+    // Remove after animation
+    setTimeout(() => feedback.remove(), 1000);
+  }).catch(err => {
+    console.error('Failed to copy: ', err);
+  });
+}
+  function calculateTotals() {
+    const rows = document.querySelectorAll("#tableBody tr");
+    let totalCharges = 0,
+      totalPayments = 0,
+      totalAdjustments = 0,
+      totalBalance = 0;
+
+    rows.forEach((row) => {
+      const chargesInput = row.querySelector(".charges-input");
+      const paymentsInput = row.querySelector(".payments-input");
+      const adjustmentsInput = row.querySelector(".adjustments-input");
+      const balanceInput = row.querySelector(".balance-input");
+
+      const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
+      const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+      const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+
+      // Autocalculate balance if conditions are met
+      if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
+        const calculatedBalance = charges - payments - adjustments;
+        balanceInput.value = calculatedBalance.toFixed(2);
+      }
+
+      // Summing up for the final totals
+      totalCharges += charges;
+      totalPayments += payments;
+      totalAdjustments += adjustments;
+      totalBalance += parseFloat(normalizeInput(balanceInput.value)) || 0;
+    });
+
+    // Update summary section
+    const update = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val.toFixed(2);
+    };
+
+    update("totalCharges", totalCharges);
+    update("totalPayments", totalPayments);
+    update("totalAdjustments", totalAdjustments);
+    update("totalBalance", totalBalance);
+    // "Total Incurred" is the sum of all payments and balances
+    update("incurredTotal", totalPayments + totalBalance);
+  }
+
+  function saveTableData() {
+    const rows = document.querySelectorAll("#tableBody tr");
+    const data = [];
+    rows.forEach(row => {
+      const charges = row.querySelector(".charges-input").value;
+      const payments = row.querySelector(".payments-input").value;
+      const adjustments = row.querySelector(".adjustments-input").value;
+      const balance = row.querySelector(".balance-input").value;
+      data.push({ charges, payments, adjustments, balance });
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function loadTableData() {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (!savedData) return;
+
+    const data = JSON.parse(savedData);
+    const tbody = document.getElementById("tableBody");
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    data.forEach(rowData => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="number" step="any" class="charges-input" value="${rowData.charges}"></td>
+        <td><input type="number" step="any" class="payments-input" value="${rowData.payments}"></td>
+        <td><input type="number" step="any" class="adjustments-input" value="${rowData.adjustments}"></td>
+        <td><input type="number" step="any" class="balance-input" value="${rowData.balance}"></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function addRow() {
+    const tbody = document.getElementById("tableBody");
+    if (!tbody) return;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><input type="number" step="any" class="charges-input"></td>
+      <td><input type="number" step="any" class="payments-input"></td>
+      <td><input type="number" step="any" class="adjustments-input"></td>
+      <td><input type="number" step="any" class="balance-input"></td>
+    `;
+    tbody.appendChild(tr);
+    saveTableData();
+  }
+
+function clearTable() {
+  // Confirmation dialog - Plan 0.5.5
+  if (!confirm("Are you sure you want to reset the calculator?\n\nAll entered data will be permanently lost!")) {
+    return; // User clicked Cancel - abort reset
+  }
+  
+  const tbody = document.getElementById("tableBody");
+  if (tbody) {
+    tbody.innerHTML = "";
+    for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
+    calculateTotals();
+  }
+  localStorage.removeItem(STORAGE_KEY);
 }
 
-/* =========================
-    Base & Dark Mode
-========================= */
-body {
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    padding: 20px;
-}
+  function printPDF() {
+    window.print();
+  }
 
-body.dark-mode {
-    background-color: #121212;
-    color: var(--text-color-dark);
-}
+  function toggleDarkMode() {
+    const isDark = document.body.classList.toggle("dark-mode");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    updateThemeToggleUI(isDark);
+  }
 
-body.dark-mode .container {
-    background-color: #1e1e1e;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode input[type="number"] {
-    background-color: #2e2e2e;
-    color: var(--text-color-dark);
-    border-color: #444;
-}
-
-body.dark-mode th {
-    background-color: var(--primary-dark);
-}
-
-body.dark-mode td {
-    background-color: #004d40;
-}
-
-body.dark-mode .button-group button,
-body.dark-mode #themeToggle {
-    background-color: var(--primary-dark);
-    color: var(--text-color-dark);
-}
-
-body.dark-mode tfoot td {
-    color: #fff;
-}
-
-/* =========================
-    Container & Header
-========================= */
-.container {
-    max-width: 720px;
-    margin: 40px auto;
-    padding: 40px 30px;
-    background: var(--container-bg);
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-h1 {
-    font-size: 1.8rem;
-    color: var(--primary-color);
-    margin: 0 0 24px 0;
-    text-align: center;
-}
-
-/* =========================
-    Table
-========================= */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 16px;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-th, td, tfoot td {
-    padding: 8px;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 0.95rem;
-}
-
-th {
-    background-color: var(--primary-color);
-    color: #fff;
-    font-weight: 600;
-}
-
-td {
-    background-color: var(--table-bg);
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-tfoot td {
-    background-color: var(--table-bg);
-    color: var(--text-color);
-    font-weight: bold;
-}
-
-/* =========================
-    Inputs
-========================= */
-input[type="number"],
-input[type="text"] {
-    width: 100%;
-    padding: 6px 8px;
-    box-sizing: border-box;
-    font-size: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: #fff;
-    color: #333;
-}
-
-/* =========================
-    Controls & Totals
-========================= */
-.controls-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    gap: 20px;
-}
-
-.button-group {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.button-group button,
-#themeToggle {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.button-group button:hover,
-#themeToggle:hover {
-    background-color: var(--primary-dark);
-}
-
-.total-incurred {
-    font-weight: 800;
-    color: var(--primary-color);
-    font-size: 1.1rem;
-    text-align: right;
-    padding: 10px 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e0f2f1;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
-
-body.dark-mode .total-incurred {
-    background-color: #1e1e1e;
-    border-color: #004d40;
-    color: #e0f2f1;
-}
-
-#incurredTotal {
-    color: red !important;
-    font-size: 1.2rem;
-    margin-left: 5px;
-}
-
-.danger-btn {
-    background-color: #dc3545 !important;
-    color: white !important;
-}
-
-.danger-btn:hover {
-    background-color: #c82333 !important;
-}
-
-/* =========================
-    Print Styles
-========================= */
-@media print {
-    body, body.dark-mode, body.dark-mode .container {
-        background-color: #fff !important;
-        color: #000 !important;
-        box-shadow: none !important;
+  function updateThemeToggleUI(isDark) {
+    const btn = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (label) label.textContent = isDark ? 'Light' : 'Dark';
+    if (icon) {
+      icon.classList.toggle('fa-moon', !isDark);
+      icon.classList.toggle('fa-sun', isDark);
     }
+    if (btn) btn.setAttribute('aria-pressed', String(isDark));
+  }
 
-    table, th, td, body.dark-mode table, body.dark-mode th, body.dark-mode td {
-        background-color: #fff !important;
-        color: #000 !important;
-        border: 1px solid #ccc !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+ function initTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved === "dark") {
+    document.body.classList.add("dark-mode");
+    updateThemeToggleUI(true);
+  } else {
+    updateThemeToggleUI(false);
+  }
+}
+
+  function initLogin() {
+    const loginForm = document.getElementById("loginForm");
+    if (!loginForm) return;
+
+    const pwd = document.getElementById("password");
+    const errorMsg = document.getElementById("errorMsg");
+    const toggleBtn = document.getElementById("togglePwd");
+
+    loginForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const input = pwd ? pwd.value : "";
+      if (ALLOWED_PASSWORD === (input)) {
+localStorage.setItem("loggedIn", "true");
+localStorage.setItem("savedPassword", ALLOWED_PASSWORD); // Store current password
+        window.location.href = "index.html";
+      } else {
+        if (errorMsg) {
+          errorMsg.textContent = "Incorrect password.";
+          errorMsg.classList.add("shake");
+          setTimeout(() => errorMsg.classList.remove("shake"), 300);
+        }
+      }
+    });
+
+    if (toggleBtn && pwd) {
+      toggleBtn.addEventListener("click", () => {
+        const isHidden = pwd.type === "password";
+        pwd.type = isHidden ? "text" : "password";
+        const eyeIcon = toggleBtn.querySelector("i");
+        if (eyeIcon) {
+          eyeIcon.classList.toggle("fa-eye");
+          eyeIcon.classList.toggle("fa-eye-slash");
+        }
+      });
     }
+  }
 
-    tfoot td, body.dark-mode tfoot td {
-        background-color: #f8f8f8 !important;
-        font-weight: bold !important;
-        border: none !important;
+  document.addEventListener("DOMContentLoaded", () => {
+// Click-to-copy for summary totals
+document.addEventListener('click', (event) => {
+  if (event.target.id === 'totalCharges' || 
+      event.target.id === 'totalPayments' ||
+      event.target.id === 'totalAdjustments' || 
+      event.target.id === 'totalBalance' ||
+      event.target.id === 'incurredTotal') {
+    copyToClipboard(event.target.textContent, event); // ADD EVENT PARAMETER
+  }
+});
+    initTheme();
+    initLogin();
+
+    const addRowBtn = document.getElementById("addRowBtn");
+    const clearTableBtn = document.getElementById("clearTableBtn");
+    const printPDFBtn = document.getElementById("printPDFBtn");
+    const themeToggle = document.getElementById("themeToggle");
+    const tbody = document.getElementById("tableBody");
+
+    if (addRowBtn) addRowBtn.addEventListener("click", addRow);
+    if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
+    if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
+    if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
+    
+    if (tbody) {
+      loadTableData();
+if (tbody.children.length === 0) {
+  for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
+}
+
+      tbody.addEventListener("input", (e) => {
+        const row = e.target.closest('tr');
+        const charges = parseFloat((row.querySelector(".charges-input").value)) || 0;
+        const payments = parseFloat(normalizeInput(row.querySelector(".payments-input").value)) || 0;
+        const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments-input").value)) || 0;
+        const balanceInput = row.querySelector(".balance-input");
+        
+        // Mark as manual if the balance input is changed by the user
+        if (e.target.classList.contains("balance-input")) {
+          balanceInput.dataset.manual = "true";
+        }
+        
+        // Autocalculate based on requested conditions
+        if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
+          const calculatedBalance = charges - payments - adjustments;
+          balanceInput.value = calculatedBalance.toFixed(2);
+        }
+
+        calculateTotals();
+        saveTableData();
+      });
+      calculateTotals();
     }
+  });
 
-    footer, h1, #themeToggle, .button-group {
-        display: none !important;
-    }
-
-    /* Controls container override for print */
-    .controls-container {
-        display: grid !important;
-        grid-template-columns: 1fr auto !important;
-        align-items: center !important;
-        gap: 10px !important;
-        justify-items: start !important;
-    }
-
-    .total-incurred {
-        justify-self: end !important;
-        text-align: right !important;
-        display: block !important;
-        color: #000 !important;
-        font-weight: bold !important;
-        padding-top: 15px;
-    }
-
-    input[type="number"], body.dark-mode input[type="number"] {
-        -webkit-appearance: none !important;
-        -moz-appearance: textfield !important;
-        border: none !important;
-        background: transparent !important;
-        color: #000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        text-align: center;
-        font-weight: normal;
-    }
-
-    .container, body.dark-mode .container {
-        max-width: 720px !important;
-        margin: 40px auto !important;
-        padding: 40px 30px !important;
-        background: #fff !important;
-        border-radius: 12px !important;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
-    }
-}
-
-/* Visual feedback for copy action */
-.copied-feedback {
-    position: fixed;
-    background: var(--primary-color);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    pointer-events: none;
-    z-index: 10000;
-    animation: fadeOut 1s ease-in-out forwards;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-@keyframes fadeOut {
-    0% { opacity: 1; transform: translateY(0); }
-    70% { opacity: 1; transform: translateY(-10px); }
-    100% { opacity: 0; transform: translateY(-20px); }
-}
-
-/* Hint for click-to-copy feature */
-tfoot span:hover, #incurredTotal:hover {
-    cursor: pointer;
-    background-color: rgba(0, 121, 107, 0.1);
-    border-radius: 3px;
-}
-
-tfoot span:hover::after, #incurredTotal:hover::after {
-    content: " [COPY]";
-    font-size: 0.8em;
-    color: var(--primary-color);
-    font-style: italic;
-}
-
-body.dark-mode tfoot span:hover, 
-body.dark-mode #incurredTotal:hover {
-    background-color: rgba(0, 121, 107, 0.3);
-}
-
-body.dark-mode tfoot span:hover::after,
-body.dark-mode #incurredTotal:hover::after {
-    color: #4db6ac;
-}
-
-/* =========================
-    Footer
-========================= */
-footer {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 0.9rem;
-    color: var(--footer-color);
-}
-
-footer a {
-    color: teal;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-footer span {
-    opacity: 0.8;
-}
-
-body.dark-mode footer {
-    color: #aaa;
-}
+})();
