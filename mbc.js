@@ -1,174 +1,159 @@
-(() => {
-  "use strict";
+// ====== Variables ======
+const mbcTable = document.getElementById("mbcTable").getElementsByTagName("tbody")[0];
+const totalChargesEl = document.getElementById("totalCharges");
+const totalPaymentsEl = document.getElementById("totalPayments");
+const totalAdjustmentsEl = document.getElementById("totalAdjustments");
+const totalBalanceEl = document.getElementById("totalBalance");
+const incurredTotalEl = document.getElementById("incurredTotal");
 
-  const ALLOWED_PASSWORD = "M3d1c4l00!";
-  const STORAGE_KEY = 'mbcData';
+const addRowBtn = document.getElementById("addRow");
+const saveBtn = document.getElementById("saveBtn");
+const clearBtn = document.getElementById("clearBtn");
+const themeToggle = document.getElementById("themeToggle");
 
-  function normalizeInput(s) {
-    return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
-  }
+let darkMode = false;
 
-  // Copy to clipboard with feedback
-  function copyToClipboard(text, event) {
-    navigator.clipboard.writeText(text).then(() => {
-      const feedback = document.createElement('div');
-      feedback.className = 'copied-feedback';
-      feedback.textContent = 'Copied!';
-      document.body.appendChild(feedback);
+// ====== Helper Functions ======
+function formatNumber(num) {
+    return parseFloat(num).toFixed(2);
+}
 
-      feedback.style.top = (event.clientY - 30) + 'px';
-      feedback.style.left = event.clientX + 'px';
+function createInputCell(type = "number", placeholder = "Enter amount") {
+    const td = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = type;
+    input.placeholder = placeholder;
+    input.value = "";
+    input.addEventListener("input", calculateTotals);
+    td.appendChild(input);
+    return td;
+}
 
-      setTimeout(() => feedback.remove(), 1000);
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
+function createBalanceCell() {
+    const td = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = "number";
+    input.placeholder = "0.00";
+    input.value = "";
+    input.addEventListener("input", calculateTotals);
+    td.appendChild(input);
+    return td;
+}
+
+function createTrashCell() {
+    const td = document.createElement("td");
+    const btn = document.createElement("button");
+    btn.innerHTML = "🗑";
+    btn.className = "danger-btn";
+    btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        td.parentElement.remove();
+        calculateTotals();
     });
-  }
+    td.appendChild(btn);
+    return td;
+}
 
-  function calculateTotals() {
-    const rows = document.querySelectorAll("#tableBody tr");
+function calculateTotals() {
     let totalCharges = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
 
-    rows.forEach(row => {
-      const chargesInput = row.querySelector(".charges-input");
-      const paymentsInput = row.querySelector(".payments-input");
-      const adjustmentsInput = row.querySelector(".adjustments-input");
-      const balanceInput = row.querySelector(".balance-input");
+    Array.from(mbcTable.rows).forEach(row => {
+        const cells = row.getElementsByTagName("input");
+        let charges = parseFloat(cells[0].value) || 0;
+        let payments = parseFloat(cells[1].value) || 0;
+        let adjustments = parseFloat(cells[2].value) || 0;
+        let balanceInput = cells[3];
 
-      const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
-      const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
-      const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+        const autoBalance = charges - payments - adjustments;
 
-      // Always auto-calculate balance from three columns
-      if (charges > 0 || payments > 0 || adjustments > 0) {
-        const calculatedBalance = charges - payments - adjustments;
-        if (!balanceInput.dataset.manual) {
-          balanceInput.value = calculatedBalance.toFixed(2);
+        // Only override if user hasn't changed balance
+        if (document.activeElement !== balanceInput) {
+            balanceInput.value = formatNumber(autoBalance);
         }
-      }
 
-      totalCharges += charges;
-      totalPayments += payments;
-      totalAdjustments += adjustments;
-      totalBalance += parseFloat(normalizeInput(balanceInput.value)) || 0;
+        totalCharges += charges;
+        totalPayments += payments;
+        totalAdjustments += adjustments;
+        totalBalance += parseFloat(balanceInput.value) || 0;
     });
 
-    const update = (id, val) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = val.toFixed(2);
-    };
+    totalChargesEl.textContent = formatNumber(totalCharges);
+    totalPaymentsEl.textContent = formatNumber(totalPayments);
+    totalAdjustmentsEl.textContent = formatNumber(totalAdjustments);
+    totalBalanceEl.textContent = formatNumber(totalBalance);
 
-    update("totalCharges", totalCharges);
-    update("totalPayments", totalPayments);
-    update("totalAdjustments", totalAdjustments);
-    update("totalBalance", totalBalance);
-    update("incurredTotal", totalPayments + totalBalance);
-  }
+    incurredTotalEl.textContent = formatNumber(totalCharges - totalPayments - totalAdjustments);
+}
 
-  function saveTableData() {
-    const rows = document.querySelectorAll("#tableBody tr");
-    const data = Array.from(rows).map(row => ({
-      charges: row.querySelector(".charges-input").value,
-      payments: row.querySelector(".payments-input").value,
-      adjustments: row.querySelector(".adjustments-input").value,
-      balance: row.querySelector(".balance-input").value
-    }));
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }
+// ====== Add Row ======
+function addRow() {
+    const row = document.createElement("tr");
+    row.appendChild(createInputCell("number", "Enter amount")); // Charges
+    row.appendChild(createInputCell("number", "Enter amount")); // Payments
+    row.appendChild(createInputCell("number", "Enter amount")); // Adjustments
+    row.appendChild(createBalanceCell()); // Balance
+    row.appendChild(createTrashCell()); // Trash
+    mbcTable.appendChild(row);
+}
 
-  function loadTableData() {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (!savedData) return;
-
-    const data = JSON.parse(savedData);
-    const tbody = document.getElementById("tableBody");
-    if (!tbody) return;
-
-    tbody.innerHTML = '';
-    data.forEach(rowData => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><input type="number" step="any" class="charges-input" placeholder="Enter amount" value="${rowData.charges}"></td>
-        <td><input type="number" step="any" class="payments-input" placeholder="Enter amount" value="${rowData.payments}"></td>
-        <td><input type="number" step="any" class="adjustments-input" placeholder="Enter amount" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="0.00" value="${rowData.balance}"></td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-
-  function addRow() {
-    const tbody = document.getElementById("tableBody");
-    if (!tbody) return;
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td><input type="number" step="any" class="charges-input" placeholder="Enter amount"></td>
-      <td><input type="number" step="any" class="payments-input" placeholder="Enter amount"></td>
-      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter amount"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="0.00"></td>
-    `;
-    tbody.appendChild(tr);
-    saveTableData();
-  }
-
-  function clearTable() {
-    if (!confirm("Are you sure you want to reset the calculator?\nAll entered data will be permanently lost!")) return;
-    const tbody = document.getElementById("tableBody");
-    if (tbody) {
-      tbody.innerHTML = '';
-      for (let i = 0; i < 5; i++) addRow();
-      calculateTotals();
-    }
-    localStorage.removeItem(STORAGE_KEY);
-  }
-
-  function printPDF() {
-    window.print();
-  }
-
-  function toggleDarkMode() {
-    const isDark = document.body.classList.toggle("dark-mode");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-  }
-
-  function initTheme() {
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark") document.body.classList.add("dark-mode");
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    initTheme();
-    loadTableData();
-
-    const tbody = document.getElementById("tableBody");
-    if (tbody.children.length === 0) for (let i = 0; i < 5; i++) addRow();
-
-    tbody.addEventListener("input", (e) => {
-      const row = e.target.closest('tr');
-      const balanceInput = row.querySelector(".balance-input");
-      if (e.target.classList.contains("balance-input")) {
-        balanceInput.dataset.manual = true;
-      } else {
-        if (balanceInput.dataset.manual) delete balanceInput.dataset.manual;
-      }
-
-      calculateTotals();
-      saveTableData();
-    });
-
-    document.getElementById("addRowBtn")?.addEventListener("click", addRow);
-    document.getElementById("clearTableBtn")?.addEventListener("click", clearTable);
-    document.getElementById("printPDFBtn")?.addEventListener("click", printPDF);
-    document.getElementById("themeToggle")?.addEventListener("click", toggleDarkMode);
-
-    // Click-to-copy for summary
-    document.addEventListener('click', (event) => {
-      if (["totalCharges","totalPayments","totalAdjustments","totalBalance","incurredTotal"].includes(event.target.id)) {
-        copyToClipboard(event.target.textContent, event);
-      }
-    });
-
+// ====== Clear Table ======
+function clearTable() {
+    mbcTable.innerHTML = "";
     calculateTotals();
-  });
-})();
+}
+
+// ====== Dark Mode Toggle ======
+function toggleDarkMode() {
+    darkMode = !darkMode;
+    document.body.classList.toggle("dark-mode", darkMode);
+}
+
+// ====== Save / Print ======
+function saveTable() {
+    window.print();
+}
+
+// ====== Click-to-Copy ======
+function copyText(e) {
+    const text = e.target.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const feedback = document.createElement("div");
+        feedback.className = "copied-feedback";
+        feedback.textContent = "Copied!";
+        document.body.appendChild(feedback);
+        const rect = e.target.getBoundingClientRect();
+        feedback.style.top = rect.top + window.scrollY - 30 + "px";
+        feedback.style.left = rect.left + window.scrollX + "px";
+        setTimeout(() => feedback.remove(), 1000);
+    });
+}
+
+// ====== Event Listeners ======
+addRowBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    addRow();
+});
+
+clearBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    clearTable();
+});
+
+saveBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    saveTable();
+});
+
+themeToggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    toggleDarkMode();
+});
+
+// Attach copy-to-clipboard
+[totalChargesEl, totalPaymentsEl, totalAdjustmentsEl, totalBalanceEl, incurredTotalEl].forEach(el => {
+    el.addEventListener("click", copyText);
+});
+
+// ====== Initialize ======
+addRow(); // Start with one row
+calculateTotals();
