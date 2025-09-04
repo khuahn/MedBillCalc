@@ -246,8 +246,6 @@ body.dark-mode .total-incurred {
         font-size: 1.1rem;
         font-weight: bold;
         padding-top: 15px;
-        /* Position to ensure it's on the page */
-        position: relative;
     }
 
     /* Remove input field styling */
@@ -265,37 +263,6 @@ body.dark-mode .total-incurred {
 
     /* Container print styling */
     .container, body.dark-mode .container {
-        max-width: 720px !important;
-        margin: 40px auto !important;
-        padding: 40px 30px !important;
-        background: #fff !important;
-        border-radius: 12px !important;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
-    }
-}
-    /* Force visibility for total incurred in print */
-    .total-incurred-print {
-        display: block !important;
-        color: #000 !important;
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: bold;
-        padding-top: 15px;
-    }
-
-    input[type="number"] {
-        -webkit-appearance: none !important;
-        -moz-appearance: textfield !important;
-        border: none !important;
-        background: transparent !important;
-        color: #000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        text-align: center;
-        font-weight: normal;
-    }
-
-    .container {
         max-width: 720px !important;
         margin: 40px auto !important;
         padding: 40px 30px !important;
@@ -341,7 +308,7 @@ tfoot span:hover::after, #incurredTotal:hover::after {
 }
 
 /* Dark mode support for the hint */
-body.dark-mode tfoot span:hover, 
+body.dark-mode tfoot span:hover,
 body.dark-mode #incurredTotal:hover {
     background-color: rgba(0, 121, 107, 0.3);
 }
