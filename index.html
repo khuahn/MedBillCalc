@@ -37,25 +37,29 @@
       </tfoot>
     </table>
 
-    <div class="controls-container">
-      <div class="button-group">
-        <button id="addRowBtn" aria-label="Add a new item">
-          <i class="fas fa-plus-circle" aria-hidden="true"></i> Add
-        </button>
-        <button id="printPDFBtn" aria-label="Save as PDF">
-          <i class="fas fa-file-pdf" aria-hidden="true"></i> Save
-        </button>
-        <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
-          <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
-          <span id="themeLabel">Light/Dark</span>
-        </button>
-        <button id="clearTableBtn" class="danger-btn" aria-label="Reset calculator">
-          <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset
-        </button>
-      </div>
-  
+    <!-- UPDATED: New container for summary and controls -->
+    <div class="summary-container">
+      <!-- TOTAL INC moved here, above the controls -->
       <div class="total-incurred">
         TOTAL INC : <span id="incurredTotal" style="color: red;">0.00</span>
+      </div>
+      
+      <div class="controls-container">
+        <div class="button-group">
+          <button id="addRowBtn" aria-label="Add a new item">
+            <i class="fas fa-plus-circle" aria-hidden="true"></i> Add
+          </button>
+          <button id="printPDFBtn" aria-label="Save as PDF">
+            <i class="fas fa-file-pdf" aria-hidden="true"></i> Save
+          </button>
+          <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
+            <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
+            <span id="themeLabel">Light/Dark</span>
+          </button>
+          <button id="clearTableBtn" class="danger-btn" aria-label="Reset calculator">
+            <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset
+          </button>
+        </div>
       </div>
     </div>
   </div>
