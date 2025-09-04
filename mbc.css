@@ -1,8 +1,20 @@
+/*
+ * mbc.css - Medical Bill Calculator Main Styles
+ * * Version History:
+ * v1.8.0 - Enhanced Click-to-Copy UX
+ * - Added visual cues for click-to-copy feature
+ * - Improved print compatibility for Edge browser
+ * - Dark mode support for hover hints
+ * * v1.7.0 - Print optimization
+ * v1.6.0 - Added dark mode support
+ */
+
 :root {
     --primary-color: #00796b;
     --primary-dark: #004d40;
     --background-color: #f4f6f8;
     --container-bg: #fff;
+    --input-bg: #e0f2f1;
     --table-bg: #e0f2f1;
     --text-color: #333;
     --text-color-dark: #e0f2f1;
@@ -108,7 +120,6 @@ tfoot td {
     background-color: var(--table-bg);
     color: var(--text-color);
     font-weight: bold;
-    border-radius: 6px;
 }
 
 /* =========================
@@ -124,13 +135,6 @@ input[type="text"] {
     border-radius: 6px;
     background-color: #fff;
     color: #333;
-    -moz-appearance: textfield; /* remove arrows in Firefox */
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }
 
 /* =========================
@@ -138,7 +142,7 @@ input::-webkit-inner-spin-button {
     ========================= */
 .controls-container {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     margin-top: 20px;
     gap: 20px;
@@ -167,32 +171,39 @@ input::-webkit-inner-spin-button {
     background-color: var(--primary-dark);
 }
 
-/* Total Incurred styling */
-.total-incurred-container {
-    text-align: center;
-    margin: 12px 0;
-}
-
-.total-incurred-label {
-    font-weight: normal;
-    font-size: 1rem;
-}
-
-.total-incurred-amount {
+.total-incurred {
     font-weight: 800;
     color: var(--primary-color);
     font-size: 1.1rem;
-    padding: 6px 12px;
-    border-radius: 8px;
+    text-align: right;
+    padding: 10px 15px;
     background-color: #f8f9fa;
-    display: inline-block;
-    margin-left: 6px;
+    border-radius: 8px;
+    border: 1px solid #e0f2f1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
-body.dark-mode .total-incurred-amount {
+body.dark-mode .total-incurred {
     background-color: #1e1e1e;
-    border: 1px solid #004d40;
-    color: var(--text-color-dark);
+    border-color: #004d40;
+    color: #e0f2f1;
+}
+
+#incurredTotal {
+    color: red !important;
+    font-size: 1.2rem;
+    margin-left: 5px;
+}
+
+.danger-btn {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.danger-btn:hover {
+    background-color: #c82333 !important;
 }
 
 /* =========================
@@ -227,10 +238,11 @@ body.dark-mode .total-incurred-amount {
         border: none !important;
     }
 
-    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred-container {
-        display: none !important;
-    }
+.controls-container, footer, h1, .button-group, #themeToggle {
+    display: none !important;
+}
 
+    /* Force visibility for total incurred in print */
     .total-incurred-print {
         display: block !important;
         color: #000 !important;
@@ -251,33 +263,66 @@ body.dark-mode .total-incurred-amount {
         text-align: center;
         font-weight: normal;
     }
+
+    .container {
+        max-width: 720px !important;
+        margin: 40px auto !important;
+        padding: 40px 30px !important;
+        background: #fff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+    }
 }
 
-/* Click-to-copy hint */
-tfoot span:hover, .total-incurred-amount:hover {
+/* Visual feedback for copy action */
+.copied-feedback {
+    position: fixed;
+    background: var(--primary-color);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 10000;
+    animation: fadeOut 1s ease-in-out forwards;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; transform: translateY(0); }
+    70% { opacity: 1; transform: translateY(-10px); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Hint for click-to-copy feature */
+tfoot span:hover, #incurredTotal:hover {
     cursor: pointer;
     background-color: rgba(0, 121, 107, 0.1);
     border-radius: 3px;
 }
 
-tfoot span:hover::after, .total-incurred-amount:hover::after {
+tfoot span:hover::after, #incurredTotal:hover::after {
     content: " [COPY]";
     font-size: 0.8em;
     color: var(--primary-color);
     font-style: italic;
 }
 
+/* Dark mode support for the hint */
 body.dark-mode tfoot span:hover, 
-body.dark-mode .total-incurred-amount:hover {
+body.dark-mode #incurredTotal:hover {
     background-color: rgba(0, 121, 107, 0.3);
 }
 
 body.dark-mode tfoot span:hover::after,
-body.dark-mode .total-incurred-amount:hover::after {
+body.dark-mode #incurredTotal:hover::after {
     color: #4db6ac;
 }
 
-/* Footer */
+/* =========================
+    Footer
+    ========================= */
 footer {
     text-align: center;
     margin-top: 40px;
