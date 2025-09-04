@@ -9,7 +9,6 @@
     --text-color-dark: #e0f2f1;
     --border-color: #ccc;
     --footer-color: #888;
-    --error-color: #e74c3c;
 }
 
 /* =========================
@@ -28,14 +27,12 @@ body.dark-mode {
     color: var(--text-color-dark);
 }
 
-body.dark-mode .container,
-body.dark-mode .login-container {
+body.dark-mode .container {
     background-color: #1e1e1e;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
-body.dark-mode input[type="number"],
-body.dark-mode input[type="text"] {
+body.dark-mode input[type="number"] {
     background-color: #2e2e2e;
     color: var(--text-color-dark);
     border-color: #444;
@@ -68,13 +65,13 @@ body.dark-mode tfoot td {
     padding: 40px 30px;
     background: var(--container-bg);
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
     font-size: 1.8rem;
     color: var(--primary-color);
-    margin-bottom: 24px;
+    margin: 0 0 24px 0;
     text-align: center;
 }
 
@@ -125,23 +122,23 @@ input[type="text"] {
     font-size: 1rem;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    background-color: var(--input-bg);
+    background-color: #fff;
     color: #333;
 }
 
-/* Remove spinner arrows in all browsers */
+/* Remove spinner arrows for all browsers */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type=number] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
-input::placeholder {
-    color: #999;
+input[type=number]::placeholder {
+  color: #888;
 }
 
 /* =========================
@@ -241,6 +238,32 @@ body.dark-mode .total-incurred {
         display: none !important;
     }
 
+    .controls-container {
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        align-items: center !important;
+        gap: 10px !important;
+        justify-items: start !important;
+    }
+
+    /* Keep Total Incurred visible and aligned */
+    .total-incurred {
+        display: flex !important;
+        justify-content: flex-end !important;
+        text-align: right !important;
+        color: #000 !important;
+        background: none !important;
+        border: none !important;
+    }
+
+    #incurredTotal {
+        display: inline !important;
+    }
+
+    tfoot span {
+        display: none !important;
+    }
+
     input[type="number"], body.dark-mode input[type="number"] {
         -webkit-appearance: none !important;
         -moz-appearance: textfield !important;
@@ -250,6 +273,16 @@ body.dark-mode .total-incurred {
         padding: 0 !important;
         margin: 0 !important;
         text-align: center;
+        font-weight: normal;
+    }
+
+    .container, body.dark-mode .container {
+        max-width: 720px !important;
+        margin: 40px auto !important;
+        padding: 40px 30px !important;
+        background: #fff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
     }
 }
 
@@ -265,7 +298,7 @@ body.dark-mode .total-incurred {
     pointer-events: none;
     z-index: 10000;
     animation: fadeOut 1s ease-in-out forwards;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes fadeOut {
@@ -274,7 +307,32 @@ body.dark-mode .total-incurred {
     100% { opacity: 0; transform: translateY(-20px); }
 }
 
-/* Footer */
+tfoot span:hover, #incurredTotal:hover {
+    cursor: pointer;
+    background-color: rgba(0, 121, 107, 0.1);
+    border-radius: 3px;
+}
+
+tfoot span:hover::after, #incurredTotal:hover::after {
+    content: " [COPY]";
+    font-size: 0.8em;
+    color: var(--primary-color);
+    font-style: italic;
+}
+
+body.dark-mode tfoot span:hover, 
+body.dark-mode #incurredTotal:hover {
+    background-color: rgba(0, 121, 107, 0.3);
+}
+
+body.dark-mode tfoot span:hover::after,
+body.dark-mode #incurredTotal:hover::after {
+    color: #4db6ac;
+}
+
+/* =========================
+    Footer
+========================= */
 footer {
     text-align: center;
     margin-top: 40px;
