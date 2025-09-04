@@ -158,7 +158,7 @@ function clearTable() {
     const btn = document.getElementById('themeToggle');
     const icon = document.getElementById('themeIcon');
     const label = document.getElementById('themeLabel');
-    if (label) label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    if (label) label.textContent = isDark ? 'Light' : 'Dark';
     if (icon) {
       icon.classList.toggle('fa-moon', !isDark);
       icon.classList.toggle('fa-sun', isDark);
