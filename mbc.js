@@ -1,14 +1,6 @@
-/*
- * mbc.js - Medical Bill Calculator Core Functionality
- * v1.5.1 (2025-09-04) - Updated
- * - Plan 0.5.1: Placeholder added, spinner arrows removed
- * - Plan 0.5.2: Balance auto-updates always, manual edits allowed
- */
-
 (() => {
   "use strict";
 
-  const ALLOWED_PASSWORD = "M3d1c4l00!";
   const STORAGE_KEY = 'mbcData';
 
   function normalizeInput(s) {
@@ -21,10 +13,8 @@
       feedback.className = 'copied-feedback';
       feedback.textContent = 'Copied!';
       document.body.appendChild(feedback);
-
       feedback.style.top = (event.clientY - 30) + 'px';
       feedback.style.left = event.clientX + 'px';
-
       setTimeout(() => feedback.remove(), 1000);
     }).catch(err => console.error('Failed to copy: ', err));
   }
@@ -33,20 +23,20 @@
     const rows = document.querySelectorAll("#tableBody tr");
     let totalCharges = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
 
-    rows.forEach((row) => {
+    rows.forEach(row => {
       const charges = parseFloat(normalizeInput(row.querySelector(".charges-input").value)) || 0;
       const payments = parseFloat(normalizeInput(row.querySelector(".payments-input").value)) || 0;
       const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments-input").value)) || 0;
       const balanceInput = row.querySelector(".balance-input");
 
-      // Always recalc balance based on other three columns
-      const calculatedBalance = charges - payments - adjustments;
-      balanceInput.value = calculatedBalance.toFixed(2);
+      if (balanceInput.dataset.manual !== "true") {
+        balanceInput.value = (charges - payments - adjustments).toFixed(2);
+      }
 
       totalCharges += charges;
       totalPayments += payments;
       totalAdjustments += adjustments;
-      totalBalance += calculatedBalance;
+      totalBalance += parseFloat(normalizeInput(balanceInput.value)) || 0;
     });
 
     const update = (id, val) => {
@@ -62,37 +52,29 @@
   }
 
   function saveTableData() {
-    const rows = document.querySelectorAll("#tableBody tr");
-    const data = [];
-    rows.forEach(row => {
-      data.push({
-        charges: row.querySelector(".charges-input").value,
-        payments: row.querySelector(".payments-input").value,
-        adjustments: row.querySelector(".adjustments-input").value,
-        balance: row.querySelector(".balance-input").value
-      });
-    });
+    const data = Array.from(document.querySelectorAll("#tableBody tr")).map(row => ({
+      charges: row.querySelector(".charges-input").value,
+      payments: row.querySelector(".payments-input").value,
+      adjustments: row.querySelector(".adjustments-input").value,
+      balance: row.querySelector(".balance-input").value
+    }));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
-  function loadTableData() {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (!savedData) return;
-
-    const data = JSON.parse(savedData);
-    const tbody = document.getElementById("tableBody");
-    if (!tbody) return;
-
-    tbody.innerHTML = '';
-    data.forEach(rowData => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><input type="number" step="any" class="charges-input" placeholder="Enter amount" value="${rowData.charges}"></td>
-        <td><input type="number" step="any" class="payments-input" placeholder="Enter amount" value="${rowData.payments}"></td>
-        <td><input type="number" step="any" class="adjustments-input" placeholder="Enter amount" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="0.00" value="${rowData.balance}"></td>
-      `;
-      tbody.appendChild(tr);
+  function setPlaceholders(row) {
+    const placeholders = {
+      "charges-input": "Enter amount",
+      "payments-input": "Enter amount",
+      "adjustments-input": "Enter amount",
+      "balance-input": "0.00"
+    };
+    Object.keys(placeholders).forEach(cls => {
+      const input = row.querySelector(`.${cls}`);
+      if (input) {
+        input.placeholder = placeholders[cls];
+        input.addEventListener("focus", () => input.placeholder = "");
+        input.addEventListener("blur", () => { if (!input.value) input.placeholder = placeholders[cls]; });
+      }
     });
   }
 
@@ -102,37 +84,48 @@
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><input type="number" step="any" class="charges-input" placeholder="Enter amount"></td>
-      <td><input type="number" step="any" class="payments-input" placeholder="Enter amount"></td>
-      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter amount"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="0.00"></td>
+      <td><input type="number" step="any" class="charges-input"></td>
+      <td><input type="number" step="any" class="payments-input"></td>
+      <td><input type="number" step="any" class="adjustments-input"></td>
+      <td><input type="number" step="any" class="balance-input"></td>
     `;
     tbody.appendChild(tr);
+    setPlaceholders(tr);
     saveTableData();
   }
 
-  function clearTable() {
-    if (!confirm("Are you sure you want to reset the calculator?\nAll entered data will be permanently lost!")) return;
+  function loadTableData() {
+    const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     const tbody = document.getElementById("tableBody");
-    if (tbody) {
-      tbody.innerHTML = "";
-      for (let i = 0; i < 5; i++) addRow();
-      calculateTotals();
-    }
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    savedData.forEach(rowData => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="number" step="any" class="charges-input" value="${rowData.charges}"></td>
+        <td><input type="number" step="any" class="payments-input" value="${rowData.payments}"></td>
+        <td><input type="number" step="any" class="adjustments-input" value="${rowData.adjustments}"></td>
+        <td><input type="number" step="any" class="balance-input" value="${rowData.balance}"></td>
+      `;
+      tbody.appendChild(tr);
+      setPlaceholders(tr);
+    });
+  }
+
+  function clearTable() {
+    if (!confirm("Are you sure you want to reset the calculator?\n\nAll entered data will be permanently lost!")) return;
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+    for (let i = 0; i < 5; i++) addRow();
+    calculateTotals();
     localStorage.removeItem(STORAGE_KEY);
   }
 
-  function printPDF() {
-    window.print();
-  }
+  function printPDF() { window.print(); }
 
   function toggleDarkMode() {
     const isDark = document.body.classList.toggle("dark-mode");
     localStorage.setItem("theme", isDark ? "dark" : "light");
-    updateThemeToggleUI(isDark);
-  }
-
-  function updateThemeToggleUI(isDark) {
     const btn = document.getElementById('themeToggle');
     const icon = document.getElementById('themeIcon');
     const label = document.getElementById('themeLabel');
@@ -148,21 +141,18 @@
     const saved = localStorage.getItem("theme");
     if (saved === "dark") {
       document.body.classList.add("dark-mode");
-      updateThemeToggleUI(true);
-    } else {
-      updateThemeToggleUI(false);
+      toggleDarkMode(); // sync UI
     }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Click-to-copy for summary totals
+    initTheme();
+
     document.addEventListener('click', (event) => {
-      if (['totalCharges', 'totalPayments', 'totalAdjustments', 'totalBalance', 'incurredTotal'].includes(event.target.id)) {
+      if (["totalCharges","totalPayments","totalAdjustments","totalBalance","incurredTotal"].includes(event.target.id)) {
         copyToClipboard(event.target.textContent, event);
       }
     });
-
-    initTheme();
 
     const addRowBtn = document.getElementById("addRowBtn");
     const clearTableBtn = document.getElementById("clearTableBtn");
@@ -181,7 +171,13 @@
         for (let i = 0; i < 5; i++) addRow();
       }
 
-      tbody.addEventListener("input", () => {
+      tbody.addEventListener("input", e => {
+        const row = e.target.closest('tr');
+        if (!row) return;
+        const balanceInput = row.querySelector(".balance-input");
+        if (e.target.classList.contains("balance-input")) {
+          balanceInput.dataset.manual = "true"; // still allows auto-update but marks manual edit
+        }
         calculateTotals();
         saveTableData();
       });
