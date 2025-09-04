@@ -130,6 +130,11 @@ function copyToClipboard(text, event) {
   }
 
 function clearTable() {
+  // Confirmation dialog - Plan 0.5.5
+  if (!confirm("Are you sure you want to reset the calculator?\n\nAll entered data will be permanently lost!")) {
+    return; // User clicked Cancel - abort reset
+  }
+  
   const tbody = document.getElementById("tableBody");
   if (tbody) {
     tbody.innerHTML = "";
