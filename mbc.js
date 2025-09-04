@@ -1,20 +1,18 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * v1.6.0 (2025-09-04)
- * - Plan 0.5.1: Added placeholders, removed spinner arrows
- * - Plan 0.5.2: Balance auto-calculates but user can still edit
+ * Version 1.0 Stable
  */
 
 (() => {
   "use strict";
 
   const STORAGE_KEY = 'mbcData';
+  const SESSION_KEY = 'mbcSession';
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
-  // Copy to clipboard with feedback
   function copyToClipboard(text, event) {
     navigator.clipboard.writeText(text).then(() => {
       const feedback = document.createElement('div');
@@ -27,7 +25,6 @@
     }).catch(err => console.error('Failed to copy: ', err));
   }
 
-  // Calculate totals
   function calculateTotals() {
     const rows = document.querySelectorAll("#tableBody tr");
     let totalCharges = 0, totalPayments = 0, totalAdjustments = 0, totalBalance = 0;
@@ -42,9 +39,10 @@
       const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
       const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
 
-      // Auto-calculate balance only if input is empty or user hasn't typed yet
-      if (!balanceInput.dataset.manual) {
-        balanceInput.value = (charges - payments - adjustments).toFixed(2);
+      // Auto-calc balance unless manual input temporarily overridden
+      if (charges > 0 && (payments > 0 || adjustments > 0)) {
+        const calculatedBalance = charges - payments - adjustments;
+        balanceInput.value = calculatedBalance.toFixed(2);
       }
 
       totalCharges += charges;
@@ -67,13 +65,14 @@
 
   function saveTableData() {
     const rows = document.querySelectorAll("#tableBody tr");
-    const data = Array.from(rows).map(row => ({
-      charges: row.querySelector(".charges-input").value,
-      payments: row.querySelector(".payments-input").value,
-      adjustments: row.querySelector(".adjustments-input").value,
-      balance: row.querySelector(".balance-input").value,
-      manual: row.querySelector(".balance-input").dataset.manual || ""
-    }));
+    const data = [];
+    rows.forEach(row => {
+      const charges = row.querySelector(".charges-input").value;
+      const payments = row.querySelector(".payments-input").value;
+      const adjustments = row.querySelector(".adjustments-input").value;
+      const balance = row.querySelector(".balance-input").value;
+      data.push({ charges, payments, adjustments, balance });
+    });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
@@ -84,15 +83,15 @@
     const data = JSON.parse(savedData);
     const tbody = document.getElementById("tableBody");
     if (!tbody) return;
-    tbody.innerHTML = '';
 
+    tbody.innerHTML = '';
     data.forEach(rowData => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td><input type="number" step="any" class="charges-input" placeholder="Enter amount" value="${rowData.charges}"></td>
         <td><input type="number" step="any" class="payments-input" placeholder="Enter amount" value="${rowData.payments}"></td>
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter amount" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="0.00" value="${rowData.balance}" data-manual="${rowData.manual || ""}"></td>
+        <td><input type="number" step="any" class="balance-input" placeholder="0.00" value="${rowData.balance}"></td>
       `;
       tbody.appendChild(tr);
     });
@@ -115,7 +114,6 @@
 
   function clearTable() {
     if (!confirm("Are you sure you want to reset the calculator?\nAll entered data will be permanently lost!")) return;
-
     const tbody = document.getElementById("tableBody");
     if (tbody) {
       tbody.innerHTML = "";
@@ -132,40 +130,39 @@
   function toggleDarkMode() {
     const isDark = document.body.classList.toggle("dark-mode");
     localStorage.setItem("theme", isDark ? "dark" : "light");
-    updateThemeToggleUI(isDark);
-  }
-
-  function updateThemeToggleUI(isDark) {
-    const btn = document.getElementById('themeToggle');
-    const icon = document.getElementById('themeIcon');
-    const label = document.getElementById('themeLabel');
-    if (label) label.textContent = isDark ? 'Light' : 'Dark';
-    if (icon) {
-      icon.classList.toggle('fa-moon', !isDark);
-      icon.classList.toggle('fa-sun', isDark);
-    }
-    if (btn) btn.setAttribute('aria-pressed', String(isDark));
   }
 
   function initTheme() {
     const saved = localStorage.getItem("theme");
-    if (saved === "dark") {
-      document.body.classList.add("dark-mode");
-      updateThemeToggleUI(true);
-    } else {
-      updateThemeToggleUI(false);
-    }
+    if (saved === "dark") document.body.classList.add("dark-mode");
+  }
+
+  function initSessionLogin() {
+    const loginForm = document.getElementById("loginForm");
+    const nameInput = document.getElementById("username");
+    const errorMsg = document.getElementById("errorMsg");
+
+    if (!loginForm || !nameInput) return;
+
+    loginForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const name = nameInput.value.trim();
+      if (!name) {
+        errorMsg.textContent = "Please enter your name.";
+        return;
+      }
+      const sessionObj = {
+        name,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(SESSION_KEY, JSON.stringify(sessionObj));
+      window.location.href = "index.html";
+    });
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Click-to-copy totals
-    document.addEventListener('click', (event) => {
-      if (['totalCharges','totalPayments','totalAdjustments','totalBalance','incurredTotal'].includes(event.target.id)) {
-        copyToClipboard(event.target.textContent, event);
-      }
-    });
-
     initTheme();
+    initSessionLogin();
 
     const addRowBtn = document.getElementById("addRowBtn");
     const clearTableBtn = document.getElementById("clearTableBtn");
@@ -180,47 +177,23 @@
 
     if (tbody) {
       loadTableData();
-      if (tbody.children.length === 0) for (let i = 0; i < 5; i++) addRow();
+      if (tbody.children.length === 0) {
+        for (let i = 0; i < 5; i++) addRow();
+      }
 
       tbody.addEventListener("input", (e) => {
         const row = e.target.closest('tr');
-        const chargesInput = row.querySelector(".charges-input");
-        const paymentsInput = row.querySelector(".payments-input");
-        const adjustmentsInput = row.querySelector(".adjustments-input");
-        const balanceInput = row.querySelector(".balance-input");
-
-        // Mark manual only if user types in balance
-        if (e.target.classList.contains("balance-input")) {
-          balanceInput.dataset.manual = "true";
-        } else {
-          // Auto-update balance from charges/payments/adjustments
-          if (!balanceInput.dataset.manual) {
-            const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
-            const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
-            const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
-            balanceInput.value = (charges - payments - adjustments).toFixed(2);
-          }
-        }
-
         calculateTotals();
         saveTableData();
       });
-
-      calculateTotals();
     }
 
-    // Remove spinner arrows (Plan 0.5.1)
-    const style = document.createElement('style');
-    style.innerHTML = `
-      input::-webkit-outer-spin-button,
-      input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+    // Click-to-copy
+    document.addEventListener('click', (event) => {
+      if (["totalCharges","totalPayments","totalAdjustments","totalBalance","incurredTotal"].includes(event.target.id)) {
+        copyToClipboard(event.target.textContent, event);
       }
-      input[type=number] {
-        -moz-appearance: textfield;
-      }
-    `;
-    document.head.appendChild(style);
+    });
   });
+
 })();
