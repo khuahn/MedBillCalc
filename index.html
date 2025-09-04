@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Medical Bill Calculator</title>
-  <link rel="stylesheet" href="mbc.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="mbc.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <meta property="og:title" content="MedBillCalc">
+  <meta property="og:description" content="Simple yet functional Medical Billing calculator">
+  <meta property="og:url" content="https://medbillcalc.pages.dev/">
+  <meta property="og:type" content="website">
 </head>
 <body>
-  <h1>Medical Bill Calculator</h1>
 
   <div class="container">
-    <table id="mbcTable">
+    <h1>Medical Bill Calculator</h1>
+    <table id="billTable">
       <thead>
         <tr>
           <th>Charges</th>
@@ -20,8 +25,7 @@
           <th>Balance</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- rows will be added dynamically -->
+      <tbody id="tableBody">
       </tbody>
       <tfoot>
         <tr>
@@ -33,26 +37,39 @@
       </tfoot>
     </table>
 
-    <div class="total-incurred-container">
-      <span class="total-incurred-label">Total Incurred:</span>
-      <span class="total-incurred-amount" id="incurredTotal">0.00</span>
-    </div>
-
     <div class="controls-container">
       <div class="button-group">
-        <button id="addRow">ADD</button>
-        <button id="saveBtn"><i class="fas fa-file-pdf"></i> SAVE</button>
-        <button id="clearBtn">RESET</button>
-        <button id="themeToggle">DARK</button>
+        <button id="addRowBtn" aria-label="Add a new item">
+          <i class="fas fa-plus-circle" aria-hidden="true"></i> Add
+        </button>
+        <button id="printPDFBtn" aria-label="Save as PDF">
+          <i class="fas fa-file-pdf" aria-hidden="true"></i> Save
+        </button>
+        <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
+          <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
+          <span id="themeLabel">Light/Dark</span>
+        </button>
+        <button id="clearTableBtn" class="danger-btn" aria-label="Reset calculator">
+          <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset
+        </button>
+      </div>
+  
+      <div class="total-incurred">
+        TOTAL INC : <span id="incurredTotal" style="color: red;">0.00</span>
       </div>
     </div>
   </div>
 
   <footer>
-    <small>Med Bill Calc v1.0 — For Internal Use Only<br/>
-      All Rights Reserved | ©2025 <b><a href="https://github.com/khuahn/" target="_blank">匠Jac</a></b><br/>
-      <span>Powered by <a href="https://github.com/" target="_blank">GitHub</a> &amp; 
-      <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a></span>
+    <small>
+      Med Bill Calc v1.9 Stable — For Internal Use Only<br/>
+      All Rights Reserved | ©2025
+      <a href="https://github.com/khuahn/" target="_blank">匠Jac</a><br/>
+      <span>
+        Powered by
+        <a href="https://github.com/" target="_blank">GitHub</a> &
+        <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
+      </span>
     </small>
   </footer>
 
