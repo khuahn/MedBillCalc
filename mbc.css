@@ -294,3 +294,12 @@ body.dark-mode tfoot span:hover::after,
 body.dark-mode #incurredTotal:hover::after {
   color: #4db6ac;
 }
+
+.danger-btn {
+  background-color: #dc3545 !important; /* Red color */
+  color: white !important;
+}
+
+.danger-btn:hover {
+  background-color: #c82333 !important; /* Darker red */
+}
