@@ -305,7 +305,7 @@ tfoot span:hover, #incurredTotal:hover {
 }
 
 tfoot span:hover::after, #incurredTotal:hover::after {
-  content: " (Copy)";
+  content: " [COPY]";
   font-size: 0.8em;
   color: var(--primary-color);
   font-style: italic;
