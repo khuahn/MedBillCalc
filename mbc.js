@@ -77,14 +77,15 @@ function copyToClipboard(text, event) {
     update("totalAdjustments", totalAdjustments);
     update("totalBalance", totalBalance);
     // "Total Incurred" is the sum of all payments and balances
-    update("incurredTotal", totalPayments + totalBalance);
-  }
-
-      // Update the print version too
+    update("incurredTotal", totalPayments + totalBalance);       
+    // Update the print version too
     const incurredTotalPrint = document.getElementById("incurredTotalPrint");
     if (incurredTotalPrint) {
       incurredTotalPrint.textContent = (totalPayments + totalBalance).toFixed(2);
     }
+  }
+
+
 
   function saveTableData() {
     const rows = document.querySelectorAll("#tableBody tr");
