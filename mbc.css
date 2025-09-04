@@ -314,7 +314,7 @@ body.dark-mode #incurredTotal:hover {
 }
 
 body.dark-mode tfoot span:hover::after,
-body.dark-mode #incurredTotal:hover::after {
+body.dark-mode #incurmodeTotal:hover::after {
     color: #4db6ac;
 }
 
