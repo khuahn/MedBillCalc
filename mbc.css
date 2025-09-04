@@ -126,19 +126,25 @@ input[type="text"] {
     color: #333;
 }
 
-/* Remove spinner arrows for all browsers */
+/* =========================
+    Remove number input spinners (all browsers)
+========================= */
+/* Chrome, Safari, Edge, Opera */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
+/* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
-input[type=number]::placeholder {
-  color: #888;
+/* Placeholder styling */
+input::placeholder {
+    color: #999;
+    font-style: italic;
 }
 
 /* =========================
@@ -246,22 +252,13 @@ body.dark-mode .total-incurred {
         justify-items: start !important;
     }
 
-    /* Keep Total Incurred visible and aligned */
     .total-incurred {
-        display: flex !important;
-        justify-content: flex-end !important;
+        justify-self: end !important;
         text-align: right !important;
+        display: block !important;
         color: #000 !important;
-        background: none !important;
-        border: none !important;
-    }
-
-    #incurredTotal {
-        display: inline !important;
-    }
-
-    tfoot span {
-        display: none !important;
+        font-weight: bold !important;
+        padding-top: 15px;
     }
 
     input[type="number"], body.dark-mode input[type="number"] {
@@ -284,50 +281,6 @@ body.dark-mode .total-incurred {
         border-radius: 12px !important;
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
     }
-}
-
-/* Visual feedback for copy action */
-.copied-feedback {
-    position: fixed;
-    background: var(--primary-color);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    pointer-events: none;
-    z-index: 10000;
-    animation: fadeOut 1s ease-in-out forwards;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-@keyframes fadeOut {
-    0% { opacity: 1; transform: translateY(0); }
-    70% { opacity: 1; transform: translateY(-10px); }
-    100% { opacity: 0; transform: translateY(-20px); }
-}
-
-tfoot span:hover, #incurredTotal:hover {
-    cursor: pointer;
-    background-color: rgba(0, 121, 107, 0.1);
-    border-radius: 3px;
-}
-
-tfoot span:hover::after, #incurredTotal:hover::after {
-    content: " [COPY]";
-    font-size: 0.8em;
-    color: var(--primary-color);
-    font-style: italic;
-}
-
-body.dark-mode tfoot span:hover, 
-body.dark-mode #incurredTotal:hover {
-    background-color: rgba(0, 121, 107, 0.3);
-}
-
-body.dark-mode tfoot span:hover::after,
-body.dark-mode #incurredTotal:hover::after {
-    color: #4db6ac;
 }
 
 /* =========================
