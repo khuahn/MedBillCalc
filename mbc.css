@@ -9,6 +9,7 @@
     --text-color-dark: #e0f2f1;
     --border-color: #ccc;
     --footer-color: #888;
+    --error-color: #e74c3c;
 }
 
 /* =========================
@@ -27,12 +28,14 @@ body.dark-mode {
     color: var(--text-color-dark);
 }
 
-body.dark-mode .container {
+body.dark-mode .container,
+body.dark-mode .login-container {
     background-color: #1e1e1e;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
 
-body.dark-mode input[type="number"] {
+body.dark-mode input[type="number"],
+body.dark-mode input[type="text"] {
     background-color: #2e2e2e;
     color: var(--text-color-dark);
     border-color: #444;
@@ -65,13 +68,13 @@ body.dark-mode tfoot td {
     padding: 40px 30px;
     background: var(--container-bg);
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
 h1 {
     font-size: 1.8rem;
     color: var(--primary-color);
-    margin: 0 0 24px 0;
+    margin-bottom: 24px;
     text-align: center;
 }
 
@@ -122,11 +125,11 @@ input[type="text"] {
     font-size: 1rem;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    background-color: #fff;
+    background-color: var(--input-bg);
     color: #333;
 }
 
-/* Remove number input arrows for all browsers */
+/* Remove spinner arrows in all browsers */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -137,21 +140,8 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-input[type=number]::-moz-inner-spin-button {
-    display: none;
-}
-
-/* Placeholder support */
-input.charges-input::placeholder,
-input.payments-input::placeholder,
-input.adjustments-input::placeholder {
+input::placeholder {
     color: #999;
-    font-style: italic;
-}
-
-input.balance-input::placeholder {
-    color: #999;
-    font-style: italic;
 }
 
 /* =========================
@@ -251,23 +241,6 @@ body.dark-mode .total-incurred {
         display: none !important;
     }
 
-    .controls-container {
-        display: grid !important;
-        grid-template-columns: 1fr auto !important;
-        align-items: center !important;
-        gap: 10px !important;
-        justify-items: start !important;
-    }
-
-    .total-incurred {
-        justify-self: end !important;
-        text-align: right !important;
-        display: block !important;
-        color: #000 !important;
-        font-weight: bold !important;
-        padding-top: 15px;
-    }
-
     input[type="number"], body.dark-mode input[type="number"] {
         -webkit-appearance: none !important;
         -moz-appearance: textfield !important;
@@ -277,22 +250,31 @@ body.dark-mode .total-incurred {
         padding: 0 !important;
         margin: 0 !important;
         text-align: center;
-        font-weight: normal;
-    }
-
-    .container, body.dark-mode .container {
-        max-width: 720px !important;
-        margin: 40px auto !important;
-        padding: 40px 30px !important;
-        background: #fff !important;
-        border-radius: 12px !important;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
     }
 }
 
-/* =========================
-    Footer
-========================= */
+/* Visual feedback for copy action */
+.copied-feedback {
+    position: fixed;
+    background: var(--primary-color);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 10000;
+    animation: fadeOut 1s ease-in-out forwards;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; transform: translateY(0); }
+    70% { opacity: 1; transform: translateY(-10px); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Footer */
 footer {
     text-align: center;
     margin-top: 40px;
