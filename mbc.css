@@ -57,7 +57,7 @@ body.dark-mode td {
     background-color: #004d40;
 }
 
-body.dark-mode .controls button,
+body.dark-mode .button-group button,
 body.dark-mode #themeToggle {
     background-color: var(--primary-dark);
     color: var(--text-color-dark);
