@@ -212,6 +212,9 @@ body.dark-mode .total-incurred {
 /* =========================
     Print Styles
     ========================= */
+/* =========================
+    Print Styles
+    ========================= */
 @media print {
     body, body.dark-mode, body.dark-mode .container {
         background-color: #fff !important;
