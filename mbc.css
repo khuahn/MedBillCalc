@@ -345,23 +345,31 @@ body.dark-mode footer {
     color: #aaa;
 }
 
-@media print {
-    /* ... all your existing print rules stay the same ... */
-
-    /* NEW RULE: Print fix for TOTAL INC - keeps horizontal alignment */
-    .controls-container {
-        display: flex !important;
-        justify-content: space-between;
-    }
-    .controls-container .button-group {
-        display: none !important;
-    }
-    .controls-container .total-incurred {
-        display: block !important;
-        margin: 0 auto; /* Center it horizontally */
-        color: #000 !important;
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: bold;
-    }
+/* =========================
+    Footer
+    ========================= */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: var(--footer-color);
 }
+
+footer a {
+    color: teal;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer span {
+    opacity: 0.8;
+}
+
+body.dark-mode footer {
+    color: #aaa;
+}
+
+/* ⬇️ FILE SHOULD END HERE - NO MORE @media print SECTION AFTER THIS ⬇️ */
