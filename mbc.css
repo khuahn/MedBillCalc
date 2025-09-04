@@ -179,14 +179,17 @@ body.dark-mode input[type="number"] {
   font-weight: bold;
   color: var(--primary-color);
   font-size: 1.1rem;
-  text-align: center;     /* ← Center instead of right */
-  margin: 20px auto 10px; /* ← Center horizontally with spacing */
-  padding: 12px 20px;
+  text-align: right;
+  margin: 15px 0 0 auto;    /* Pushes to right edge */
+  padding: 10px 15px;
   display: block;
   width: fit-content;
   background-color: #f8f9fa;
   border-radius: 8px;
   border: 1px solid #e0f2f1;
+  /* Stick to right edge */
+  margin-left: auto;
+  margin-right: 0;
 }
 
 body.dark-mode .total-incurred {
