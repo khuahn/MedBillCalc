@@ -340,3 +340,7 @@ footer a:hover {
 footer span {
     opacity: 0.8;
 }
+
+body.dark-mode footer {
+    color: #aaa;
+}
