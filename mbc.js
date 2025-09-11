@@ -92,10 +92,10 @@ function copyToClipboard(text, event) {
     data.forEach(rowData => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td><input type="number" step="any" class="charges-input" value="${rowData.charges}"></td>
-        <td><input type="number" step="any" class="payments-input" value="${rowData.payments}"></td>
-        <td><input type="number" step="any" class="adjustments-input" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" value="${rowData.balance}"></td>
+        <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount" value="${rowData.charges}"></td>
+        <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
+        <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
+        <td><input type="number" step="any" class="balance-input" placeholder="Calculated" value="${rowData.balance}" readonly></td>
       `;
       tbody.appendChild(tr);
     });
@@ -107,10 +107,10 @@ function copyToClipboard(text, event) {
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><input type="number" step="any" class="charges-input"></td>
-      <td><input type="number" step="any" class="payments-input"></td>
-      <td><input type="number" step="any" class="adjustments-input"></td>
-      <td><input type="number" step="any" class="balance-input"></td>
+      <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="balance-input" placeholder="Calculated" readonly></td>
     `;
     tbody.appendChild(tr);
     saveTableData();
