@@ -250,3 +250,40 @@
   document.addEventListener('DOMContentLoaded', initAnalytics);
   
 })();
+
+// Add this to your firebase-analytics.js file:
+
+// Secret keyword to access analytics (change this to your own secret word)
+const ADMIN_KEYWORD = 'medbilladmin';
+
+// Check if admin access is requested
+function checkAdminAccess() {
+  if (window.location.hash === `#${ADMIN_KEYWORD}`) {
+    // Show analytics button for admin
+    const analyticsBtn = document.createElement('button');
+    analyticsBtn.id = 'analyticsBtn';
+    analyticsBtn.className = 'analytics-btn';
+    analyticsBtn.title = 'View Analytics';
+    analyticsBtn.innerHTML = '<i class="fas fa-chart-bar"></i>';
+    document.body.appendChild(analyticsBtn);
+    
+    // Set up analytics button functionality
+    analyticsBtn.addEventListener('click', () => {
+      const modal = document.getElementById('analyticsModal');
+      if (modal) {
+        displayAnalytics();
+        modal.style.display = 'block';
+      }
+    });
+    
+    // Remove the hash from URL to keep it secret
+    window.history.replaceState(null, null, ' ');
+  }
+}
+
+// Call this function in your initAnalytics function
+function initAnalytics() {
+  checkAdminAccess(); // Add this line first
+  
+  // ... rest of your existing initAnalytics code
+}
