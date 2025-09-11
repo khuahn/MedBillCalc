@@ -138,29 +138,52 @@ input[type="text"] {
 }
 
 /* =========================
-    New Summary Container
+    NEW: Total Incurred Below Table
     ========================= */
-.summary-container {
+.total-incurred-below {
     display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.total-incurrated-integrated {
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    background-color: var(--table-bg);
+    width: fit-content;
+}
+
+body.dark-mode .total-incurrated-integrated {
+    color: #e0f2f1;
+}
+
+#incurredTotal {
+    color: red !important;
+    font-size: 1.2rem;
+    margin-left: 5px;
 }
 
 /* =========================
-    Controls & Totals
+    Controls Container
     ========================= */
 .controls-container {
     display: flex;
-    justify-content: flex-start; /* Changed from space-between */
-    align-items: center;
-    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .button-group {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .button-group button,
@@ -178,34 +201,6 @@ input[type="text"] {
 .button-group button:hover,
 #themeToggle:hover {
     background-color: var(--primary-dark);
-}
-
-.total-incurred {
-    font-weight: 800;
-    color: var(--primary-color);
-    font-size: 1.1rem;
-    text-align: right;
-    padding: 10px 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e0f2f1;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    align-self: flex-end; /* This keeps it right-aligned */
-    margin-left: auto; /* Pushes it to the right */
-}
-
-body.dark-mode .total-incurred {
-    background-color: #1e1e1e;
-    border-color: #004d40;
-    color: #e0f2f1;
-}
-
-#incurredTotal {
-    color: red !important;
-    font-size: 1.2rem;
-    margin-left: 5px;
 }
 
 .danger-btn {
@@ -249,7 +244,7 @@ body.dark-mode .total-incurred {
         border: none !important;
     }
 
-    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred {
+    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred-below {
         display: none !important;
     }
 
