@@ -140,7 +140,7 @@ input[type="text"] {
 /* =========================
     Controls & Totals
     ========================= */
-.summary-container {
+.controls-and-total-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -233,7 +233,7 @@ body.dark-mode .total-incurred {
     }
 
     /* Hide elements not needed for printing */
-    footer, h1, #themeToggle, .controls-container .button-group {
+    footer, h1, #themeToggle, .button-group {
         display: none !important;
     }
 
