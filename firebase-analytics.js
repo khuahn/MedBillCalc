@@ -108,36 +108,37 @@
   }
   
   // Record visit to Firebase
-  async function recordVisitToFirebase(userName) {
-    try {
-      const userInfo = await getUserInfo();
-      const deviceInfo = getDeviceInfo();
-      const userData = getUserData() || saveUserData(userName);
-      
-      const visitData = {
-        timestamp: new Date().toISOString(),
-        userName: userName,
-        userId: userData.userId,
-        ip: userInfo.ip,
-        city: userInfo.city,
-        region: userInfo.region,
-        country: userInfo.country,
-        timezone: userInfo.timezone,
-        deviceType: deviceInfo.deviceType,
-        platform: deviceInfo.platform,
-        screen: deviceInfo.screen,
-        userAgent: deviceInfo.userAgent,
-        page: window.location.href
-      };
-      
-      // Add a new document with a generated ID
-      await db.collection("visits").add(visitData);
-      
-      return visitData;
-    } catch (error) {
-      console.error("Error saving visit to Firebase:", error);
-    }
+// In your firebase-analytics.js, update the recordVisitToFirebase function:
+async function recordVisitToFirebase() {
+  try {
+    const userData = getUserData();
+    const userName = userData ? userData.name : 'Anonymous';
+    
+    const userInfo = await getUserInfo();
+    const deviceInfo = getDeviceInfo();
+    
+    const visitData = {
+      timestamp: new Date().toISOString(),
+      userName: userName,
+      userId: userData ? userData.userId : 'anonymous-' + Math.random().toString(36).substring(2),
+      ip: userInfo.ip,
+      city: userInfo.city,
+      region: userInfo.region,
+      country: userInfo.country,
+      timezone: userInfo.timezone,
+      deviceType: deviceInfo.deviceType,
+      platform: deviceInfo.platform,
+      screen: deviceInfo.screen,
+      userAgent: deviceInfo.userAgent,
+      page: window.location.href
+    };
+    
+    await db.collection("visits").add(visitData);
+    return visitData;
+  } catch (error) {
+    console.error("Error saving visit to Firebase:", error);
   }
+}
   
   // Get analytics from Firebase
   async function getAnalyticsFromFirebase() {
