@@ -138,13 +138,23 @@ input[type="text"] {
 }
 
 /* =========================
-    Controls & Totals
+    New Summary Container
     ========================= */
 .summary-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     margin-top: 20px;
+    gap: 15px;
+}
+
+/* =========================
+    Controls & Totals
+    ========================= */
+.controls-container {
+    display: flex;
+    justify-content: flex-start; /* Changed from space-between */
+    align-items: center;
+    gap: 20px;
 }
 
 .button-group {
@@ -182,6 +192,8 @@ input[type="text"] {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
+    align-self: flex-end; /* This keeps it right-aligned */
+    margin-left: auto; /* Pushes it to the right */
 }
 
 body.dark-mode .total-incurred {
@@ -209,46 +221,39 @@ body.dark-mode .total-incurred {
     Print Styles
     ========================= */
 @media print {
-    /* Force light mode for printing - Edge fix */
     body, body.dark-mode, body.dark-mode .container {
         background-color: #fff !important;
         color: #000 !important;
         box-shadow: none !important;
     }
 
-    /* Force table styles for printing */
-    table, th, td, body.dark-mode table, body.dark-mode th, body.dark-mode td {
-        background-color: #fff !important;
-        color: #000 !important;
+    table, th, td {
         border: 1px solid #ccc !important;
+    }
+
+    th {
+        background-color: #f0f0f0 !important;
+        color: #000 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
-    /* Force footer row styles */
-    tfoot td, body.dark-mode tfoot td {
+    td {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+
+    tfoot td {
         background-color: #f8f8f8 !important;
         font-weight: bold !important;
         border: none !important;
     }
 
-    /* Hide elements not needed for printing */
-    footer, h1, #themeToggle, .controls-container {
+    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred {
         display: none !important;
     }
 
-    /* Ensure Total Inc is visible and black */
-    .total-incurred, body.dark-mode .total-incurred {
-        display: block !important;
-        color: #000 !important;
-        text-align: right;
-        font-size: 1.1rem;
-        font-weight: bold;
-        padding-top: 15px;
-    }
-
-    /* Remove input field styling */
-    input[type="number"], body.dark-mode input[type="number"] {
+    input[type="number"] {
         -webkit-appearance: none !important;
         -moz-appearance: textfield !important;
         border: none !important;
@@ -260,8 +265,7 @@ body.dark-mode .total-incurred {
         font-weight: normal;
     }
 
-    /* Container print styling */
-    .container, body.dark-mode .container {
+    .container {
         max-width: 720px !important;
         margin: 40px auto !important;
         padding: 40px 30px !important;
