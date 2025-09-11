@@ -203,4 +203,16 @@ function printPDF() {
           balanceInput.dataset.manual = "true";
         }
         
-        if (charges > 0 && (payments > 0 || adjustments > 0) && balance
+        if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
+          const calculatedBalance = charges - payments - adjustments;
+          balanceInput.value = calculatedBalance.toFixed(2);
+        }
+
+        calculateTotals();
+        saveTableData();
+      });
+      calculateTotals();
+    }
+  });
+
+})();
