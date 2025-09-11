@@ -137,7 +137,7 @@ tfoot td {
     font-weight: 800; /* Bold text */
     color: var(--primary-color);
     font-size: 1.1rem;
-    border-top: 2px solid var(--primary-color);
+    /* REMOVED: border-top: 2px solid var(--primary-color); */
 }
 
 body.dark-mode .total-incurred-integrated {
@@ -244,7 +244,7 @@ input[type="text"] {
     .total-incurred-integrated {
         background-color: #f8f8f8 !important;
         color: #000 !important;
-        border-top: 2px solid #ccc !important;
+        /* REMOVED: border-top: 2px solid #ccc !important; */
     }
     
     #incurredTotal {
