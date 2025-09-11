@@ -73,24 +73,21 @@ h1 {
     text-align: center;
 }
 
-/* =========================
-   TABLE STYLING - FIXED EDGE ISSUE
-   ========================= */
 .table-with-total {
     margin-bottom: 16px;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    background-color: var(--table-bg); /* Added to prevent light edges */
+    background-color: var(--table-bg);
 }
 
 body.dark-mode .table-with-total {
-    background-color: #004d40; /* Match dark table background */
+    background-color: #004d40;
 }
 
 table {
     width: 100%;
-    border-collapse: separate; /* Changed from collapse to fix radius issues */
+    border-collapse: separate;
     border-spacing: 0;
     margin-bottom: 0;
 }
@@ -108,7 +105,6 @@ th {
     font-weight: 600;
 }
 
-/* Top rounded corners for header */
 tr:first-child th:first-child {
     border-top-left-radius: 8px;
 }
@@ -128,7 +124,6 @@ tfoot td {
     font-weight: bold;
 }
 
-/* Total Incurred as part of the table */
 .total-incurred-row {
     background-color: var(--table-bg);
 }
@@ -141,7 +136,6 @@ tfoot td {
     padding: 12px;
 }
 
-/* Bottom rounded corners for last row */
 .total-incurred-row td:first-child {
     border-bottom-left-radius: 8px;
 }
@@ -161,8 +155,9 @@ body.dark-mode .total-incurred-row td {
     font-weight: 800;
 }
 
-input[type="number"],
-input[type="text"] {
+/* Remove number input spinners */
+input[type="number"] {
+    -moz-appearance: textfield;
     width: 100%;
     padding: 6px 8px;
     box-sizing: border-box;
@@ -171,6 +166,30 @@ input[type="text"] {
     border-radius: 6px;
     background-color: #fff;
     color: #333;
+}
+
+/* Hide arrows for Webkit browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Placeholder styling */
+input[type="number"]::placeholder {
+    color: #888;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+body.dark-mode input[type="number"] {
+    background-color: #2e2e2e;
+    color: var(--text-color-dark);
+    border-color: #444;
+}
+
+body.dark-mode input[type="number"]::placeholder {
+    color: #aaa;
 }
 
 .controls-container {
@@ -297,7 +316,6 @@ input[type="text"] {
     100% { opacity: 0; transform: translateY(-20px); }
 }
 
-/* Hint for click-to-copy feature */
 tfoot span:hover, #incurredTotal:hover {
     cursor: pointer;
     background-color: rgba(0, 121, 107, 0.1);
@@ -311,7 +329,6 @@ tfoot span:hover::after, #incurredTotal:hover::after {
     font-style: italic;
 }
 
-/* Dark mode support for the hint */
 body.dark-mode tfoot span:hover, 
 body.dark-mode #incurredTotal:hover {
     background-color: rgba(0, 121, 107, 0.3);
