@@ -1,80 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Medical Bill Calculator</title>
-  <link rel="stylesheet" href="mbc.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Bill Calculator</title>
+    <link rel="stylesheet" href="mbc.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <meta property="og:title" content="MedBillCalc">
-  <meta property="og:description" content="Simple yet functional Medical Billing calculator">
-  <meta property="og:url" content="https://medbillcalc.pages.dev/">
-  <meta property="og:type" content="website">
+    <meta property="og:title" content="MedBillCalc">
+    <meta property="og:description" content="Simple yet functional Medical Billing calculator">
+    <meta property="og:url" content="https://medbillcalc.pages.dev/">
+    <meta property="og:type" content="website">
 </head>
 <body>
+    <div class="container">
+        <h1>Medical Bill Calculator</h1>
+        <table id="billTable">
+            <thead>
+                <tr>
+                    <th>Charges</th>
+                    <th>Payments</th>
+                    <th>Adjustments</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><span id="totalCharges">0.00</span></td>
+                    <td><span id="totalPayments">0.00</span></td>
+                    <td><span id="totalAdjustments">0.00</span></td>
+                    <td><span id="totalBalance">0.00</span></td>
+                </tr>
+            </tfoot>
+        </table>
 
-  <div class="container">
-    <h1>Medical Bill Calculator</h1>
-    <table id="billTable">
-      <thead>
-        <tr>
-          <th>Charges</th>
-          <th>Payments</th>
-          <th>Adjustments</th>
-          <th>Balance</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-      </tbody>
-      <tfoot>
-        <tr>
-          <td><span id="totalCharges">0.00</span></td>
-          <td><span id="totalPayments">0.00</span></td>
-          <td><span id="totalAdjustments">0.00</span></td>
-          <td><span id="totalBalance">0.00</span></td>
-        </tr>
-      </tfoot>
-    </table>
-
-    <div class="summary-container">
-      <div class="total-incurred">
-        TOTAL INC : <span id="incurredTotal" style="color: red;">0.00</span>
-      </div>
-      
-      <div class="controls-container">
-        <div class="button-group">
-          <button id="addRowBtn" aria-label="Add a new item">
-            <i class="fas fa-plus-circle" aria-hidden="true"></i> Add
-          </button>
-          <button id="printPDFBtn" aria-label="Save as PDF">
-            <i class="fas fa-file-pdf" aria-hidden="true"></i> Save
-          </button>
-          <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
-            <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
-            <span id="themeLabel">Light/Dark</span>
-          </button>
-          <button id="clearTableBtn" class="danger-btn" aria-label="Reset calculator">
-            <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset
-          </button>
+        <div class="controls-and-total-container">
+            <div class="button-group">
+                <button id="addRowBtn" aria-label="Add a new item">
+                    <i class="fas fa-plus-circle" aria-hidden="true"></i> Add
+                </button>
+                <button id="printPDFBtn" aria-label="Save as PDF">
+                    <i class="fas fa-file-pdf" aria-hidden="true"></i> Save
+                </button>
+                <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
+                    <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
+                    <span id="themeLabel">Light/Dark</span>
+                </button>
+                <button id="clearTableBtn" class="danger-btn" aria-label="Reset calculator">
+                    <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset
+                </button>
+            </div>
+            <div class="total-incurred">
+                TOTAL INC : <span id="incurredTotal" style="color: red;">0.00</span>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+    <footer>
+        <small>
+            Med Bill Calc v1.9 Stable — For Internal Use Only<br/>
+            All Rights Reserved | ©2025
+            <a href="https://github.com/khuahn/" target="_blank">匠Jac</a><br/>
+            <span>
+                Powered by
+                <a href="https://github.com/" target="_blank">GitHub</a> &
+                <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
+            </span>
+        </small>
+    </footer>
 
-  <footer>
-    <small>
-      Med Bill Calc v1.9 Stable — For Internal Use Only<br/>
-      All Rights Reserved | ©2025
-      <a href="https://github.com/khuahn/" target="_blank">匠Jac</a><br/>
-      <span>
-        Powered by
-        <a href="https://github.com/" target="_blank">GitHub</a> &
-        <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
-      </span>
-    </small>
-  </footer>
-
-  <script src="mbc.js"></script>
+    <script src="mbc.js"></script>
 </body>
 </html>
