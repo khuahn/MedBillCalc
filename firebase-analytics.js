@@ -189,3 +189,42 @@ import { db } from "./firebase-config.js";
   document.addEventListener('DOMContentLoaded', initAnalytics);
   
 })();
+
+// Add this function to debug data recording
+async function debugDataRecording(userName) {
+  try {
+    console.log("Attempting to record visit for:", userName);
+    
+    const userInfo = await getUserInfo();
+    console.log("User info:", userInfo);
+    
+    const deviceInfo = getDeviceInfo();
+    console.log("Device info:", deviceInfo);
+    
+    const visitData = {
+      timestamp: new Date().toISOString(),
+      userName: userName,
+      userId: Math.random().toString(36).substring(2) + Date.now().toString(36),
+      ip: userInfo.ip,
+      city: userInfo.city,
+      region: userInfo.region,
+      country: userInfo.country,
+      timezone: userInfo.timezone,
+      deviceType: deviceInfo.deviceType,
+      platform: deviceInfo.platform,
+      screen: deviceInfo.screen,
+      userAgent: deviceInfo.userAgent,
+      page: window.location.href
+    };
+    
+    console.log("Visit data to be saved:", visitData);
+    
+    // Add a new document with a generated ID
+    const docRef = await db.collection("visits").add(visitData);
+    console.log("Document written with ID: ", docRef.id);
+    
+    return visitData;
+  } catch (error) {
+    console.error("Error saving visit to Firebase:", error);
+  }
+}
