@@ -87,13 +87,20 @@ h1 {
 }
 
 /* =========================
-    Table
+    Table with Integrated Total Incurred
     ========================= */
+.table-with-total {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 16px;
-    border-radius: 8px;
+    margin-bottom: 0; /* Remove bottom margin to connect with Total Incurred */
+    border-radius: 8px 8px 0 0; /* Only round top corners */
     overflow: hidden;
 }
 
@@ -122,6 +129,29 @@ tfoot td {
     font-weight: bold;
 }
 
+/* Integrated Total Incurred as part of the table design */
+.total-incurred-integrated {
+    background-color: var(--table-bg);
+    padding: 12px;
+    text-align: center;
+    font-weight: 800; /* Bold text */
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    border-top: 2px solid var(--primary-color);
+}
+
+body.dark-mode .total-incurred-integrated {
+    color: #e0f2f1;
+    background-color: #004d40; /* Match dark mode table background */
+}
+
+#incurredTotal {
+    color: red !important;
+    font-size: 1.2rem;
+    margin-left: 5px;
+    font-weight: 800; /* Bold text */
+}
+
 /* =========================
     Inputs
     ========================= */
@@ -135,39 +165,6 @@ input[type="text"] {
     border-radius: 6px;
     background-color: #fff;
     color: #333;
-}
-
-/* =========================
-    NEW: Total Incurred Below Table
-    ========================= */
-.total-incurred-below {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.total-incurrated-integrated {
-    font-weight: 800;
-    color: var(--primary-color);
-    font-size: 1.1rem;
-    text-align: center;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    background-color: var(--table-bg);
-    width: fit-content;
-}
-
-body.dark-mode .total-incurrated-integrated {
-    color: #e0f2f1;
-}
-
-#incurredTotal {
-    color: red !important;
-    font-size: 1.2rem;
-    margin-left: 5px;
 }
 
 /* =========================
@@ -222,7 +219,7 @@ body.dark-mode .total-incurrated-integrated {
         box-shadow: none !important;
     }
 
-    table, th, td {
+    .table-with-total, table, th, td {
         border: 1px solid #ccc !important;
     }
 
@@ -244,7 +241,17 @@ body.dark-mode .total-incurrated-integrated {
         border: none !important;
     }
 
-    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred-below {
+    .total-incurred-integrated {
+        background-color: #f8f8f8 !important;
+        color: #000 !important;
+        border-top: 2px solid #ccc !important;
+    }
+    
+    #incurredTotal {
+        color: #000 !important;
+    }
+
+    .controls-container, footer, h1, .button-group, #themeToggle {
         display: none !important;
     }
 
