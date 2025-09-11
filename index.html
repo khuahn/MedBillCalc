@@ -128,9 +128,17 @@
     // Check if user has logged in
     const userData = localStorage.getItem('mbcUser');
     if (!userData) {
-      window.location.href = 'login.html';
+      // Use replace instead of assign to prevent back button issues
+      window.location.replace('login.html');
+    } else {
+      // User is logged in, initialize your calculator
+      initializeCalculator();
     }
   });
+  
+  function initializeCalculator() {
+    // Your existing calculator initialization code
+  }
 </script>
 </body>
 </html>
