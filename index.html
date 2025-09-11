@@ -13,36 +13,41 @@
   <meta property="og:type" content="website">
 </head>
 <body>
-<script>
-  if (!localStorage.getItem("loggedIn") || 
-      localStorage.getItem("savedPassword") !== "M3d1c4l00!") {
-    window.location.replace("login.html");
-  }
-</script>
 
   <div class="container">
     <h1>Medical Bill Calculator</h1>
-    <table id="billTable">
-      <thead>
-        <tr>
-          <th>Charges</th>
-          <th>Payments</th>
-          <th>Adjustments</th>
-          <th>Balance</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-      </tbody>
-      <tfoot>
-        <tr>
-          <td><span id="totalCharges">0.00</span></td>
-          <td><span id="totalPayments">0.00</span></td>
-          <td><span id="totalAdjustments">0.00</span></td>
-          <td><span id="totalBalance">0.00</span></td>
-        </tr>
-      </tfoot>
-    </table>
+    
+    <!-- Table with Integrated Total Incurred -->
+    <div class="table-with-total">
+      <table id="billTable">
+        <thead>
+          <tr>
+            <th>Charges</th>
+            <th>Payments</th>
+            <th>Adjustments</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><span id="totalCharges">0.00</span></td>
+            <td><span id="totalPayments">0.00</span></td>
+            <td><span id="totalAdjustments">0.00</span></td>
+            <td><span id="totalBalance">0.00</span></td>
+          </tr>
+          <!-- Integrated Total Incurred as part of the table -->
+          <tr class="total-incurred-row">
+            <td colspan="4">
+              TOTAL INC : <span id="incurredTotal">0.00</span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
 
+    <!-- Controls container -->
     <div class="controls-container">
       <div class="button-group">
         <button id="addRowBtn" aria-label="Add a new item">
@@ -59,18 +64,12 @@
           <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset
         </button>
       </div>
-  
-      <div class="total-incurred">
-        TOTAL INC : <span id="incurredTotal" style="color: red;">0.00</span>
-      </div>
     </div>
   </div>
 
   <footer>
     <small>
-      Med Bill Calc v1.9 Stable — For Internal Use Only<br/>
-      All Rights Reserved | ©2025
-      <a href="https://github.com/khuahn/" target="_blank">匠Jac</a><br/>
+      Med Bill Calc v2.0 Stable — <a href="https://github.com/khuahn/" target="_blank">匠Jac</a> | All Rights Reserved ©2025<br/>
       <span>
         Powered by
         <a href="https://github.com/" target="_blank">GitHub</a> &
