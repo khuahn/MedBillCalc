@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Analytics - Medical Bill Calculator</title>
+  <link rel="stylesheet" href="mbc.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <style>
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background-color: var(--table-bg);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-color);
+    }
+    
+    .filter-controls {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-controls select, 
+    .filter-controls input {
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+    
+    .logout-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="admin-header">
+      <h1>MedBillCalc Analytics</h1>
+      <button class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+    
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-number" id="totalVisits">0</div>
+        <div class="stat-label">Total Visits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="uniqueUsers">0</div>
+        <div class="stat-label">Unique Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="todayVisits">0</div>
+        <div class="stat-label">Visits Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="avgVisit">0</div>
+        <div class="stat-label">Avg. Visits/Day</div>
+      </div>
+    </div>
+    
+    <div class="filter-controls">
+      <select id="dateFilter">
+        <option value="7">Last 7 Days</option>
+        <option value="30" selected>Last 30 Days</option>
+        <option value="90">Last 90 Days</option>
+        <option value="365">Last Year</option>
+        <option value="all">All Time</option>
+      </select>
+      
+      <select id="userFilter">
+        <option value="all">All Users</option>
+        <!-- Will be populated dynamically -->
+      </select>
+      
+      <input type="text" id="searchInput" placeholder="Search users...">
+    </div>
+    
+    <div class="table-with-total">
+      <table>
+        <thead>
+          <tr>
+            <th>Date & Time</th>
+            <th>User</th>
+            <th>Location</th>
+            <th>Device</th>
+            <th>IP Address</th>
+          </tr>
+        </thead>
+        <tbody id="analyticsTableBody">
+          <tr>
+            <td colspan="5" style="text-align: center;">Loading analytics data...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="controls-container">
+      <button onclick="exportData()">
+        <i class="fas fa-download"></i> Export CSV
+      </button>
+      <button onclick="clearAllData()" class="danger-btn">
+        <i class="fas fa-trash"></i> Clear All Data
+      </button>
+      <button onclick="window.location.href='index.html'">
+        <i class="fas fa-calculator"></i> Go to Calculator
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Firebase config - use the same as in your main index.html
+const firebaseConfig = {
+  apiKey: "AIzaSyCSDx9lm723jQhYSTZGnItXisPrdf2zDTM",
+  authDomain: "medbillcalc-analytics.firebaseapp.com",
+  projectId: "medbillcalc-analytics",
+  storageBucket: "medbillcalc-analytics.firebasestorage.app",
+  messagingSenderId: "844810228926",
+  appId: "1:844810228926:web:42d3d33f5bd772ac847aef",
+  measurementId: "G-FCLEBTRM75"
+};
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    let allVisits = [];
+    
+    // Check if user is admin (simple check for demo purposes)
+    function checkAdminAccess() {
+      // For a real application, you would implement proper authentication
+      const isAdmin = confirm("Are you the administrator?");
+      if (!isAdmin) {
+        window.location.href = 'login.html';
+      }
+    }
+    
+    // Load analytics data
+    async function loadAnalytics() {
+      try {
+        const snapshot = await db.collection("visits")
+          .orderBy("timestamp", "desc")
+          .get();
+        
+        allVisits = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            date: new Date(data.timestamp)
+          };
+        });
+        
+        updateDisplay();
+        updateStats();
+        updateUserFilter();
+      } catch (error) {
+        console.error("Error loading analytics:", error);
+        document.getElementById('analyticsTableBody').innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align: center; color: red;">
+              Error loading analytics data. Please check your Firebase configuration.
+            </td>
+          </tr>
+        `;
+      }
+    }
+    
+    // Update stats cards
+    function updateStats() {
+      const totalVisits = allVisits.length;
+      const uniqueUsers = new Set(allVisits.map(v => v.userId)).size;
+      
+      // Today's visits
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayVisits = allVisits.filter(v => v.date >= today).length;
+      
+      // Average visits per day
+      const firstVisit = allVisits.length > 0 ? 
+        allVisits.reduce((earliest, visit) => 
+          visit.date < earliest ? visit.date : earliest, allVisits[0].date) : new Date();
+      
+      const daysDiff = Math.max(1, Math.ceil((new Date() - firstVisit) / (1000 * 60 * 60 * 24)));
+      const avgVisits = (totalVisits / daysDiff).toFixed(1);
+      
+      document.getElementById('totalVisits').textContent = totalVisits;
+      document.getElementById('uniqueUsers').textContent = uniqueUsers;
+      document.getElementById('todayVisits').textContent = todayVisits;
+      document.getElementById('avgVisit').textContent = avgVisits;
+    }
+    
+    // Update user filter dropdown
+    function updateUserFilter() {
+      const userFilter = document.getElementById('userFilter');
+      const users = [...new Set(allVisits.map(v => v.userName))].sort();
+      
+      // Clear existing options (keep "All Users")
+      while (userFilter.options.length > 1) {
+        userFilter.remove(1);
+      }
+      
+      // Add user options
+      users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user;
+        option.textContent = user;
+        userFilter.appendChild(option);
+      });
+    }
+    
+    // Update table display based on filters
+    function updateDisplay() {
+      const dateFilter = document.getElementById('dateFilter').value;
+      const userFilter = document.getElementById('userFilter').value;
+      const searchText = document.getElementById('searchInput').value.toLowerCase();
+      
+      let filteredVisits = allVisits;
+      
+      // Apply date filter
+      if (dateFilter !== 'all') {
+        const days = parseInt(dateFilter);
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - days);
+        filteredVisits = filteredVisits.filter(v => v.date >= cutoffDate);
+      }
+      
+      // Apply user filter
+      if (userFilter !== 'all') {
+        filteredVisits = filteredVisits.filter(v => v.userName === userFilter);
+      }
+      
+      // Apply search filter
+      if (searchText) {
+        filteredVisits = filteredVisits.filter(v => 
+          v.userName.toLowerCase().includes(searchText) ||
+          v.city.toLowerCase().includes(searchText) ||
+          v.country.toLowerCase().includes(searchText)
+        );
+      }
+      
+      const tbody = document.getElementById('analyticsTableBody');
+      
+      if (filteredVisits.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align: center;">
+              No data found matching your filters.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = filteredVisits.map(visit => `
+        <tr>
+          <td>${visit.date.toLocaleString()}</td>
+          <td>${visit.userName || 'Anonymous'}</td>
+          <td>${visit.city}, ${visit.country}</td>
+          <td>${visit.deviceType}</td>
+          <td>${visit.ip}</td>
+        </tr>
+      `).join('');
+    }
+    
+    // Export data to CSV
+    function exportData() {
+      const headers = ['Timestamp', 'User', 'City', 'Region', 'Country', 'Device', 'IP Address'];
+      const csvData = allVisits.map(visit => [
+        visit.timestamp,
+        visit.userName,
+        visit.city,
+        visit.region,
+        visit.country,
+        visit.deviceType,
+        visit.ip
+      ]);
+      
+      const csvContent = [headers, ...csvData]
+        .map(row => row.map(field => `"${field}"`).join(','))
+        .join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', `medbillcalc-analytics-${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    
+    // Clear all data (admin only)
+    async function clearAllData() {
+      if (!confirm('WARNING: This will permanently delete ALL analytics data. Are you sure?')) {
+        return;
+      }
+      
+      try {
+        // Note: This is a simple approach. For large datasets, you might need to batch delete
+        const snapshot = await db.collection("visits").get();
+        const batch = db.batch();
+        
+        snapshot.docs.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+        
+        await batch.commit();
+        alert('All data has been cleared successfully.');
+        loadAnalytics();
+      } catch (error) {
+        console.error("Error clearing data:", error);
+        alert('Error clearing data. Please check the console for details.');
+      }
+    }
+    
+    // Logout function
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = 'login.html';
+      }
+    }
+    
+    // Initialize admin page
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAdminAccess();
+      loadAnalytics();
+      
+      // Add event listeners to filters
+      document.getElementById('dateFilter').addEventListener('change', updateDisplay);
+      document.getElementById('userFilter').addEventListener('change', updateDisplay);
+      document.getElementById('searchInput').addEventListener('input', updateDisplay);
+    });
+  </script>
+</body>
+</html>
