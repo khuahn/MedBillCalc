@@ -1,12 +1,5 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * * Version History:
- * v1.8.0 - Enhanced Click-to-Copy UX
- * - Added visual cues for click-to-copy feature
- * - Improved print compatibility for Edge browser
- * - Dark mode support for hover hints
- * * v1.7.0 - Print optimization
- * v1.6.0 - Added dark mode support
  */
 
 :root {
@@ -22,9 +15,6 @@
     --footer-color: #888;
 }
 
-/* =========================
-    Base & Dark Mode
-    ========================= */
 body {
     font-family: 'Segoe UI', Roboto, sans-serif;
     background-color: var(--background-color);
@@ -67,9 +57,6 @@ body.dark-mode tfoot td {
     color: #fff;
 }
 
-/* =========================
-    Container & Header
-    ========================= */
 .container {
     max-width: 720px;
     margin: 40px auto;
@@ -87,14 +74,25 @@ h1 {
 }
 
 /* =========================
-    Table
-    ========================= */
-table {
-    width: 100%;
-    border-collapse: collapse;
+   TABLE STYLING - FIXED EDGE ISSUE
+   ========================= */
+.table-with-total {
     margin-bottom: 16px;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: var(--table-bg); /* Added to prevent light edges */
+}
+
+body.dark-mode .table-with-total {
+    background-color: #004d40; /* Match dark table background */
+}
+
+table {
+    width: 100%;
+    border-collapse: separate; /* Changed from collapse to fix radius issues */
+    border-spacing: 0;
+    margin-bottom: 0;
 }
 
 th, td, tfoot td {
@@ -110,6 +108,14 @@ th {
     font-weight: 600;
 }
 
+/* Top rounded corners for header */
+tr:first-child th:first-child {
+    border-top-left-radius: 8px;
+}
+tr:first-child th:last-child {
+    border-top-right-radius: 8px;
+}
+
 td {
     background-color: var(--table-bg);
     color: var(--text-color);
@@ -122,9 +128,39 @@ tfoot td {
     font-weight: bold;
 }
 
-/* =========================
-    Inputs
-    ========================= */
+/* Total Incurred as part of the table */
+.total-incurred-row {
+    background-color: var(--table-bg);
+}
+
+.total-incurred-row td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 12px;
+}
+
+/* Bottom rounded corners for last row */
+.total-incurred-row td:first-child {
+    border-bottom-left-radius: 8px;
+}
+.total-incurred-row td:last-child {
+    border-bottom-right-radius: 8px;
+}
+
+body.dark-mode .total-incurred-row td {
+    background-color: #004d40;
+    color: #e0f2f1;
+}
+
+#incurredTotal {
+    color: red !important;
+    font-size: 1.2rem;
+    margin-left: 5px;
+    font-weight: 800;
+}
+
 input[type="number"],
 input[type="text"] {
     width: 100%;
@@ -137,21 +173,17 @@ input[type="text"] {
     color: #333;
 }
 
-/* =========================
-    Controls & Totals
-    ========================= */
 .controls-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
     margin-top: 20px;
-    gap: 20px;
 }
 
 .button-group {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .button-group button,
@@ -171,32 +203,6 @@ input[type="text"] {
     background-color: var(--primary-dark);
 }
 
-.total-incurred {
-    font-weight: 800;
-    color: var(--primary-color);
-    font-size: 1.1rem;
-    text-align: right;
-    padding: 10px 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e0f2f1;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
-
-body.dark-mode .total-incurred {
-    background-color: #1e1e1e;
-    border-color: #004d40;
-    color: #e0f2f1;
-}
-
-#incurredTotal {
-    color: red !important;
-    font-size: 1.2rem;
-    margin-left: 5px;
-}
-
 .danger-btn {
     background-color: #dc3545 !important;
     color: white !important;
@@ -206,9 +212,6 @@ body.dark-mode .total-incurred {
     background-color: #c82333 !important;
 }
 
-/* =========================
-    Print Styles
-    ========================= */
 @media print {
     body, body.dark-mode, body.dark-mode .container {
         background-color: #fff !important;
@@ -216,7 +219,7 @@ body.dark-mode .total-incurred {
         box-shadow: none !important;
     }
 
-    table, th, td {
+    .table-with-total, table, th, td {
         border: 1px solid #ccc !important;
     }
 
@@ -238,18 +241,18 @@ body.dark-mode .total-incurred {
         border: none !important;
     }
 
-    .controls-container, footer, h1, .button-group, #themeToggle, .total-incurred {
-        display: none !important;
+    .total-incurred-row td {
+        background-color: #f8f8f8 !important;
+        color: #000 !important;
+        font-weight: bold !important;
+    }
+    
+    #incurredTotal {
+        color: #000 !important;
     }
 
-    /* Force visibility for total incurred in print */
-    .total-incurred-print {
-        display: block !important;
-        color: #000 !important;
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: bold;
-        padding-top: 15px;
+    .controls-container, footer, h1, .button-group, #themeToggle {
+        display: none !important;
     }
 
     input[type="number"] {
@@ -274,7 +277,6 @@ body.dark-mode .total-incurred {
     }
 }
 
-/* Visual feedback for copy action */
 .copied-feedback {
     position: fixed;
     background: var(--primary-color);
@@ -320,9 +322,6 @@ body.dark-mode #incurredTotal:hover::after {
     color: #4db6ac;
 }
 
-/* =========================
-    Footer
-    ========================= */
 footer {
     text-align: center;
     margin-top: 40px;
