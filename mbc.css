@@ -99,6 +99,14 @@ th {
     font-weight: 600;
 }
 
+/* Apply rounded corners to first and last th elements */
+th:first-child {
+    border-top-left-radius: 8px;
+}
+th:last-child {
+    border-top-right-radius: 8px;
+}
+
 td {
     background-color: var(--table-bg);
     color: var(--text-color);
@@ -122,12 +130,28 @@ tfoot td {
     font-weight: 800;
     font-size: 1.1rem;
     padding: 12px;
+    /* Apply rounded corners to bottom of the table */
     border-radius: 0 0 8px 8px;
 }
 
 body.dark-mode .total-incurred-row td {
     background-color: #004d40;
     color: #e0f2f1;
+}
+
+/* FIXED: Ensure dark mode has consistent edges */
+body.dark-mode .table-with-total {
+    background-color: #004d40; /* Match the dark table background */
+}
+
+body.dark-mode th:first-child {
+    border-top-left-radius: 8px;
+}
+body.dark-mode th:last-child {
+    border-top-right-radius: 8px;
+}
+body.dark-mode .total-incurred-row td {
+    border-radius: 0 0 8px 8px;
 }
 
 #incurredTotal {
