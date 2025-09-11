@@ -1,12 +1,5 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * * Version History:
- * v1.8.0 - Enhanced Click-to-Copy UX
- * - Added visual cues for click-to-copy feature
- * - Improved print compatibility for Edge browser
- * - Dark mode support for hover hints
- * * v1.7.0 - Print optimization
- * v1.6.0 - Added dark mode support
  */
 
 :root {
@@ -22,9 +15,6 @@
     --footer-color: #888;
 }
 
-/* =========================
-    Base & Dark Mode
-    ========================= */
 body {
     font-family: 'Segoe UI', Roboto, sans-serif;
     background-color: var(--background-color);
@@ -67,9 +57,6 @@ body.dark-mode tfoot td {
     color: #fff;
 }
 
-/* =========================
-    Container & Header
-    ========================= */
 .container {
     max-width: 720px;
     margin: 40px auto;
@@ -86,9 +73,6 @@ h1 {
     text-align: center;
 }
 
-/* =========================
-    Table with Integrated Total Incurred
-    ========================= */
 .table-with-total {
     margin-bottom: 16px;
     border-radius: 8px;
@@ -100,8 +84,6 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 0;
-    border-radius: 8px;
-    overflow: hidden;
 }
 
 th, td, tfoot td {
@@ -129,22 +111,23 @@ tfoot td {
     font-weight: bold;
 }
 
-/* CHANGED: Total Incurred now uses table background instead of header background */
+/* Total Incurred as part of the table */
 .total-incurred-row {
-    background-color: var(--table-bg) !important;
+    background-color: var(--table-bg);
 }
 
 .total-incurred-row td {
-    background-color: var(--table-bg) !important;
-    color: var(--text-color) !important;
+    background-color: var(--table-bg);
+    color: var(--text-color);
     font-weight: 800;
     font-size: 1.1rem;
     padding: 12px;
+    border-radius: 0 0 8px 8px;
 }
 
 body.dark-mode .total-incurred-row td {
-    background-color: #004d40 !important;
-    color: #e0f2f1 !important;
+    background-color: #004d40;
+    color: #e0f2f1;
 }
 
 #incurredTotal {
@@ -154,9 +137,6 @@ body.dark-mode .total-incurred-row td {
     font-weight: 800;
 }
 
-/* =========================
-    Inputs
-    ========================= */
 input[type="number"],
 input[type="text"] {
     width: 100%;
@@ -169,9 +149,6 @@ input[type="text"] {
     color: #333;
 }
 
-/* =========================
-    Controls Container
-    ========================= */
 .controls-container {
     display: flex;
     justify-content: center;
@@ -211,9 +188,6 @@ input[type="text"] {
     background-color: #c82333 !important;
 }
 
-/* =========================
-    Print Styles
-    ========================= */
 @media print {
     body, body.dark-mode, body.dark-mode .container {
         background-color: #fff !important;
@@ -279,7 +253,6 @@ input[type="text"] {
     }
 }
 
-/* Visual feedback for copy action */
 .copied-feedback {
     position: fixed;
     background: var(--primary-color);
@@ -325,9 +298,6 @@ body.dark-mode #incurredTotal:hover::after {
     color: #4db6ac;
 }
 
-/* =========================
-    Footer
-    ========================= */
 footer {
     text-align: center;
     margin-top: 40px;
