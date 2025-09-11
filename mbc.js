@@ -1,41 +1,32 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * * Version History:
- * v1.5.0 (2024-03-15) - Current
- * - Added click-to-copy functionality for summary totals
- * - Visual feedback with "Copied!" animation
- * * v1.4.2 - Enhanced authentication with password validation
- * v1.4.1 - Reduced default rows from 10 to 5
  */
 
 (() => {
   "use strict";
 
-  const ALLOWED_PASSWORD = "M3d1c4l00!";
   const STORAGE_KEY = 'mbcData';
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
-// ADD THIS FUNCTION HERE (around line 20)
+
 function copyToClipboard(text, event) {
   navigator.clipboard.writeText(text).then(() => {
-    // Visual feedback
     const feedback = document.createElement('div');
     feedback.className = 'copied-feedback';
     feedback.textContent = 'Copied!';
     document.body.appendChild(feedback);
     
-    // Position near cursor
     feedback.style.top = (event.clientY - 30) + 'px';
     feedback.style.left = event.clientX + 'px';
     
-    // Remove after animation
     setTimeout(() => feedback.remove(), 1000);
   }).catch(err => {
     console.error('Failed to copy: ', err);
   });
 }
+
   function calculateTotals() {
     const rows = document.querySelectorAll("#tableBody tr");
     let totalCharges = 0,
@@ -53,20 +44,17 @@ function copyToClipboard(text, event) {
       const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
       const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
 
-      // Autocalculate balance if conditions are met
       if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
         const calculatedBalance = charges - payments - adjustments;
         balanceInput.value = calculatedBalance.toFixed(2);
       }
 
-      // Summing up for the final totals
       totalCharges += charges;
       totalPayments += payments;
       totalAdjustments += adjustments;
       totalBalance += parseFloat(normalizeInput(balanceInput.value)) || 0;
     });
 
-    // Update summary section
     const update = (id, val) => {
       const el = document.getElementById(id);
       if (el) el.textContent = val.toFixed(2);
@@ -76,7 +64,6 @@ function copyToClipboard(text, event) {
     update("totalPayments", totalPayments);
     update("totalAdjustments", totalAdjustments);
     update("totalBalance", totalBalance);
-    // "Total Incurred" is the sum of all payments and balances
     update("incurredTotal", totalPayments + totalBalance);
   }
 
@@ -130,23 +117,22 @@ function copyToClipboard(text, event) {
   }
 
 function clearTable() {
-  // Confirmation dialog - Plan 0.5.5
   if (!confirm("Are you sure you want to reset the calculator?\n\nAll entered data will be permanently lost!")) {
-    return; // User clicked Cancel - abort reset
+    return;
   }
   
   const tbody = document.getElementById("tableBody");
   if (tbody) {
     tbody.innerHTML = "";
-    for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
+    for (let i = 0; i < 5; i++) addRow();
     calculateTotals();
   }
   localStorage.removeItem(STORAGE_KEY);
 }
 
-  function printPDF() {
-    window.print();
-  }
+function printPDF() {
+  window.print();
+}
 
   function toggleDarkMode() {
     const isDark = document.body.classList.toggle("dark-mode");
@@ -176,56 +162,18 @@ function clearTable() {
   }
 }
 
-  function initLogin() {
-    const loginForm = document.getElementById("loginForm");
-    if (!loginForm) return;
-
-    const pwd = document.getElementById("password");
-    const errorMsg = document.getElementById("errorMsg");
-    const toggleBtn = document.getElementById("togglePwd");
-
-    loginForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const input = pwd ? pwd.value : "";
-      if (ALLOWED_PASSWORD === (input)) {
-localStorage.setItem("loggedIn", "true");
-localStorage.setItem("savedPassword", ALLOWED_PASSWORD); // Store current password
-        window.location.href = "index.html";
-      } else {
-        if (errorMsg) {
-          errorMsg.textContent = "Incorrect password.";
-          errorMsg.classList.add("shake");
-          setTimeout(() => errorMsg.classList.remove("shake"), 300);
-        }
+  document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener('click', (event) => {
+      if (event.target.id === 'totalCharges' || 
+          event.target.id === 'totalPayments' ||
+          event.target.id === 'totalAdjustments' || 
+          event.target.id === 'totalBalance' ||
+          event.target.id === 'incurredTotal') {
+        copyToClipboard(event.target.textContent, event);
       }
     });
-
-    if (toggleBtn && pwd) {
-      toggleBtn.addEventListener("click", () => {
-        const isHidden = pwd.type === "password";
-        pwd.type = isHidden ? "text" : "password";
-        const eyeIcon = toggleBtn.querySelector("i");
-        if (eyeIcon) {
-          eyeIcon.classList.toggle("fa-eye");
-          eyeIcon.classList.toggle("fa-eye-slash");
-        }
-      });
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-// Click-to-copy for summary totals
-document.addEventListener('click', (event) => {
-  if (event.target.id === 'totalCharges' || 
-      event.target.id === 'totalPayments' ||
-      event.target.id === 'totalAdjustments' || 
-      event.target.id === 'totalBalance' ||
-      event.target.id === 'incurredTotal') {
-    copyToClipboard(event.target.textContent, event); // ADD EVENT PARAMETER
-  }
-});
+    
     initTheme();
-    initLogin();
 
     const addRowBtn = document.getElementById("addRowBtn");
     const clearTableBtn = document.getElementById("clearTableBtn");
@@ -240,9 +188,9 @@ document.addEventListener('click', (event) => {
     
     if (tbody) {
       loadTableData();
-if (tbody.children.length === 0) {
-  for (let i = 0; i < 5; i++) addRow(); // Changed from 10 to 5
-}
+      if (tbody.children.length === 0) {
+        for (let i = 0; i < 5; i++) addRow();
+      }
 
       tbody.addEventListener("input", (e) => {
         const row = e.target.closest('tr');
@@ -251,12 +199,10 @@ if (tbody.children.length === 0) {
         const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments-input").value)) || 0;
         const balanceInput = row.querySelector(".balance-input");
         
-        // Mark as manual if the balance input is changed by the user
         if (e.target.classList.contains("balance-input")) {
           balanceInput.dataset.manual = "true";
         }
         
-        // Autocalculate based on requested conditions
         if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
           const calculatedBalance = charges - payments - adjustments;
           balanceInput.value = calculatedBalance.toFixed(2);
