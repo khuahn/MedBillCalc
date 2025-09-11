@@ -6,6 +6,32 @@
   "use strict";
   
   const USER_KEY = 'mbcUser';
+  const ADMIN_KEYWORD = 'medbilladmin'; // Change this to your secret word
+  
+  // Check if admin access is requested
+  function checkAdminAccess() {
+    if (window.location.hash === `#${ADMIN_KEYWORD}`) {
+      // Show analytics button for admin
+      const analyticsBtn = document.createElement('button');
+      analyticsBtn.id = 'analyticsBtn';
+      analyticsBtn.className = 'analytics-btn';
+      analyticsBtn.title = 'View Analytics';
+      analyticsBtn.innerHTML = '<i class="fas fa-chart-bar"></i>';
+      document.body.appendChild(analyticsBtn);
+      
+      // Set up analytics button functionality
+      analyticsBtn.addEventListener('click', () => {
+        const modal = document.getElementById('analyticsModal');
+        if (modal) {
+          displayAnalytics();
+          modal.style.display = 'block';
+        }
+      });
+      
+      // Remove the hash from URL to keep it secret
+      window.history.replaceState(null, null, ' ');
+    }
+  }
   
   // Get user data
   function getUserData() {
@@ -19,7 +45,6 @@
       name: name,
       firstVisit: new Date().toISOString(),
       lastVisit: new Date().toISOString(),
-      // Generate a unique ID for this user
       userId: Math.random().toString(36).substring(2) + Date.now().toString(36)
     };
     localStorage.setItem(USER_KEY, JSON.stringify(userData));
@@ -186,6 +211,8 @@
   
   // Initialize analytics
   function initAnalytics() {
+    checkAdminAccess(); // Check for admin access first
+    
     const userData = getUserData();
     
     // Show welcome modal if no user data
@@ -209,18 +236,6 @@
       recordVisitToFirebase(userData.name);
     }
     
-    // Setup analytics button
-    const analyticsBtn = document.getElementById('analyticsBtn');
-    if (analyticsBtn) {
-      analyticsBtn.addEventListener('click', () => {
-        const modal = document.getElementById('analyticsModal');
-        if (modal) {
-          displayAnalytics();
-          modal.style.display = 'block';
-        }
-      });
-    }
-    
     // Close analytics modal
     const closeAnalytics = document.getElementById('closeAnalytics');
     if (closeAnalytics) {
@@ -242,6 +257,11 @@
       const welcomeModal = document.getElementById('welcomeModal');
       if (event.target === welcomeModal) {
         welcomeModal.style.display = 'none';
+        // If user closes without entering name, record as anonymous
+        if (!getUserData()) {
+          saveUserData('Anonymous');
+          recordVisitToFirebase('Anonymous');
+        }
       }
     });
   }
@@ -250,40 +270,3 @@
   document.addEventListener('DOMContentLoaded', initAnalytics);
   
 })();
-
-// Add this to your firebase-analytics.js file:
-
-// Secret keyword to access analytics (change this to your own secret word)
-const ADMIN_KEYWORD = 'medbilladmin';
-
-// Check if admin access is requested
-function checkAdminAccess() {
-  if (window.location.hash === `#${ADMIN_KEYWORD}`) {
-    // Show analytics button for admin
-    const analyticsBtn = document.createElement('button');
-    analyticsBtn.id = 'analyticsBtn';
-    analyticsBtn.className = 'analytics-btn';
-    analyticsBtn.title = 'View Analytics';
-    analyticsBtn.innerHTML = '<i class="fas fa-chart-bar"></i>';
-    document.body.appendChild(analyticsBtn);
-    
-    // Set up analytics button functionality
-    analyticsBtn.addEventListener('click', () => {
-      const modal = document.getElementById('analyticsModal');
-      if (modal) {
-        displayAnalytics();
-        modal.style.display = 'block';
-      }
-    });
-    
-    // Remove the hash from URL to keep it secret
-    window.history.replaceState(null, null, ' ');
-  }
-}
-
-// Call this function in your initAnalytics function
-function initAnalytics() {
-  checkAdminAccess(); // Add this line first
-  
-  // ... rest of your existing initAnalytics code
-}
