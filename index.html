@@ -7,6 +7,10 @@
   <link rel="stylesheet" href="mbc.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
   <meta property="og:title" content="MedBillCalc">
   <meta property="og:description" content="Simple yet functional Medical Billing calculator">
   <meta property="og:url" content="https://medbillcalc.pages.dev/">
@@ -66,10 +70,35 @@
       </div>
     </div>
   </div>
+  <!-- Welcome Modal -->
+  <div id="welcomeModal" class="modal">
+    <div class="modal-content">
+      <h2>Welcome to MedBillCalc!</h2>
+      <p>Please enter your name to get started:</p>
+      <input type="text" id="userName" placeholder="Your Name">
+      <button id="submitName">Continue</button>
+    </div>
+  </div>
 
+  <!-- Analytics Dashboard Button -->
+  <button id="analyticsBtn" class="analytics-btn" title="View Analytics">
+    <i class="fas fa-chart-bar"></i>
+  </button>
+
+  <!-- Analytics Modal -->
+  <div id="analyticsModal" class="modal">
+    <div class="modal-content">
+      <h2>Usage Analytics</h2>
+      <div id="analyticsData">
+        <p>Loading analytics data...</p>
+      </div>
+      <button id="closeAnalytics">Close</button>
+    </div>
+  </div>
+  
   <footer>
     <small>
-      Med Bill Calc v2.0 Stable — <a href="https://github.com/khuahn/" target="_blank">匠Jac</a> | All Rights Reserved ©2025<br/>
+      Med Bill Calc v2.0 Stable | Rights Reserved ©2025 — <a href="https://github.com/khuahn/" target="_blank">匠Jac</a><br/>
       <span>
         Powered by
         <a href="https://github.com/" target="_blank">GitHub</a> &
@@ -78,6 +107,23 @@
     </small>
   </footer>
 
+ <script>
+    // Your Firebase config - replace with your actual config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "YOUR_APP_ID"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+  
   <script src="mbc.js"></script>
+  <script src="firebase-analytics.js"></script>
 </body>
 </html>
