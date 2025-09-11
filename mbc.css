@@ -115,7 +115,6 @@ th {
     background-color: var(--primary-color);
     color: #fff;
     font-weight: 600;
-    font-size: 1rem; /* Header font size */
 }
 
 td {
@@ -130,27 +129,27 @@ tfoot td {
     font-weight: bold;
 }
 
-/* Integrated Total Incurred as part of the table */
+/* CHANGED: Total Incurred now uses table background instead of header background */
 .total-incurred-row {
-    background-color: var(--primary-color) !important;
+    background-color: var(--table-bg) !important;
 }
 
 .total-incurred-row td {
-    background-color: var(--primary-color) !important;
-    color: #fff !important;
+    background-color: var(--table-bg) !important;
+    color: var(--text-color) !important;
     font-weight: 800;
-    font-size: 1rem; /* Same font size as header */
+    font-size: 1.1rem;
     padding: 12px;
 }
 
 body.dark-mode .total-incurred-row td {
-    background-color: var(--primary-dark) !important;
+    background-color: #004d40 !important;
     color: #e0f2f1 !important;
 }
 
 #incurredTotal {
-    color: #ffcccc !important;
-    font-size: 1.1rem; /* Slightly larger than text but proportional */
+    color: red !important;
+    font-size: 1.2rem;
     margin-left: 5px;
     font-weight: 800;
 }
@@ -245,7 +244,7 @@ input[type="text"] {
     }
 
     .total-incurred-row td {
-        background-color: #f0f0f0 !important;
+        background-color: #f8f8f8 !important;
         color: #000 !important;
         font-weight: bold !important;
     }
@@ -301,27 +300,14 @@ input[type="text"] {
     100% { opacity: 0; transform: translateY(-20px); }
 }
 
-/* Hint for click-to-copy feature - FIXED for light mode */
-.total-incurred-row td:hover {
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.2) !important;
-    border-radius: 3px;
-}
-
-.total-incurred-row td:hover::after {
-    content: " [COPY]";
-    font-size: 0.8em;
-    color: #ffcccc !important;
-    font-style: italic;
-}
-
-tfoot span:hover {
+/* Hint for click-to-copy feature */
+tfoot span:hover, #incurredTotal:hover {
     cursor: pointer;
     background-color: rgba(0, 121, 107, 0.1);
     border-radius: 3px;
 }
 
-tfoot span:hover::after {
+tfoot span:hover::after, #incurredTotal:hover::after {
     content: " [COPY]";
     font-size: 0.8em;
     color: var(--primary-color);
@@ -329,14 +315,6 @@ tfoot span:hover::after {
 }
 
 /* Dark mode support for the hint */
-body.dark-mode .total-incurred-row td:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-body.dark-mode .total-incurred-row td:hover::after {
-    color: #4db6ac !important;
-}
-
 body.dark-mode tfoot span:hover, 
 body.dark-mode #incurredTotal:hover {
     background-color: rgba(0, 121, 107, 0.3);
