@@ -2,143 +2,61 @@
  * firebase-analytics.js - Firebase Analytics for MedBillCalc
  */
 
+// Import Firebase functions at the top
+import { collection, addDoc, orderBy, limit, getDocs, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { db } from "./firebase-config.js";
+
 (() => {
   "use strict";
   
   const USER_KEY = 'mbcUser';
-  const ADMIN_KEYWORD = 'medbilladmin'; // Change this to your secret word
   
-  // Check if admin access is requested
-  function checkAdminAccess() {
-    if (window.location.hash === `#${ADMIN_KEYWORD}`) {
-      // Show analytics button for admin
-      const analyticsBtn = document.createElement('button');
-      analyticsBtn.id = 'analyticsBtn';
-      analyticsBtn.className = 'analytics-btn';
-      analyticsBtn.title = 'View Analytics';
-      analyticsBtn.innerHTML = '<i class="fas fa-chart-bar"></i>';
-      document.body.appendChild(analyticsBtn);
-      
-      // Set up analytics button functionality
-      analyticsBtn.addEventListener('click', () => {
-        const modal = document.getElementById('analyticsModal');
-        if (modal) {
-          displayAnalytics();
-          modal.style.display = 'block';
-        }
-      });
-      
-      // Remove the hash from URL to keep it secret
-      window.history.replaceState(null, null, ' ');
-    }
-  }
+  // ... rest of your code remains the same until the Firebase functions
   
-  // Get user data
-  function getUserData() {
-    const saved = localStorage.getItem(USER_KEY);
-    return saved ? JSON.parse(saved) : null;
-  }
-  
-  // Save user data
-  function saveUserData(name) {
-    const userData = {
-      name: name,
-      firstVisit: new Date().toISOString(),
-      lastVisit: new Date().toISOString(),
-      userId: Math.random().toString(36).substring(2) + Date.now().toString(36)
-    };
-    localStorage.setItem(USER_KEY, JSON.stringify(userData));
-    return userData;
-  }
-  
-  // Update last visit
-  function updateLastVisit() {
-    const userData = getUserData();
-    if (userData) {
-      userData.lastVisit = new Date().toISOString();
-      localStorage.setItem(USER_KEY, JSON.stringify(userData));
-    }
-  }
-  
-  // Get user's IP and location
-  async function getUserInfo() {
+  // Record visit to Firebase (updated for modular Firebase)
+  async function recordVisitToFirebase(userName) {
     try {
-      const response = await fetch('https://ipapi.co/json/');
-      const data = await response.json();
-      return {
-        ip: data.ip,
-        city: data.city,
-        region: data.region,
-        country: data.country_name,
-        timezone: data.timezone
+      const userInfo = await getUserInfo();
+      const deviceInfo = getDeviceInfo();
+      const userData = getUserData() || saveUserData(userName);
+      
+      const visitData = {
+        timestamp: new Date().toISOString(),
+        userName: userName,
+        userId: userData.userId,
+        ip: userInfo.ip,
+        city: userInfo.city,
+        region: userInfo.region,
+        country: userInfo.country,
+        timezone: userInfo.timezone,
+        deviceType: deviceInfo.deviceType,
+        platform: deviceInfo.platform,
+        screen: deviceInfo.screen,
+        userAgent: deviceInfo.userAgent,
+        page: window.location.href
       };
+      
+      // Add a new document with a generated ID (modular syntax)
+      await addDoc(collection(db, "visits"), visitData);
+      
+      return visitData;
     } catch (error) {
-      console.error('Error fetching location data:', error);
-      return {
-        ip: 'Unknown',
-        city: 'Unknown',
-        region: 'Unknown',
-        country: 'Unknown',
-        timezone: 'Unknown'
-      };
+      console.error("Error saving visit to Firebase:", error);
     }
   }
   
-  // Get device info
-  function getDeviceInfo() {
-    return {
-      userAgent: navigator.userAgent,
-      platform: navigator.platform,
-      language: navigator.language,
-      screen: `${window.screen.width}x${window.screen.height}`,
-      deviceType: getDeviceType()
-    };
-  }
-  
-  // Determine device type
-  function getDeviceType() {
-    const ua = navigator.userAgent;
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-      return "Tablet";
+  // Get analytics from Firebase (updated for modular Firebase)
+  async function getAnalyticsFromFirebase() {
+    try {
+      const q = query(collection(db, "visits"), orderBy("timestamp", "desc"), limit(50));
+      const snapshot = await getDocs(q);
+      
+      return snapshot.docs.map(doc => doc.data());
+    } catch (error) {
+      console.error("Error getting analytics from Firebase:", error);
+      return [];
     }
-    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
-      return "Mobile";
-    }
-    return "Desktop";
   }
-  
-  // Record visit to Firebase
-// In your firebase-analytics.js, update the recordVisitToFirebase function:
-async function recordVisitToFirebase() {
-  try {
-    const userData = getUserData();
-    const userName = userData ? userData.name : 'Anonymous';
-    
-    const userInfo = await getUserInfo();
-    const deviceInfo = getDeviceInfo();
-    
-    const visitData = {
-      timestamp: new Date().toISOString(),
-      userName: userName,
-      userId: userData ? userData.userId : 'anonymous-' + Math.random().toString(36).substring(2),
-      ip: userInfo.ip,
-      city: userInfo.city,
-      region: userInfo.region,
-      country: userInfo.country,
-      timezone: userInfo.timezone,
-      deviceType: deviceInfo.deviceType,
-      platform: deviceInfo.platform,
-      screen: deviceInfo.screen,
-      userAgent: deviceInfo.userAgent,
-      page: window.location.href
-    };
-    
-    await db.collection("visits").add(visitData);
-    return visitData;
-  } catch (error) {
-    console.error("Error saving visit to Firebase:", error);
-  }
-}
   
   // Get analytics from Firebase
   async function getAnalyticsFromFirebase() {
