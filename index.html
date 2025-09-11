@@ -122,5 +122,15 @@
   
   <script src="mbc.js"></script>
   <script src="firebase-analytics.js"></script>
+  <!-- Add this script to your index.html before the closing </body> tag -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if user has logged in
+    const userData = localStorage.getItem('mbcUser');
+    if (!userData) {
+      window.location.href = 'login.html';
+    }
+  });
+</script>
 </body>
 </html>
