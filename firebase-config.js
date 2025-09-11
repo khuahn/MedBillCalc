@@ -1,7 +1,5 @@
-// firebase-config.js
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+// firebase-config.js (CDN version)
+// Load Firebase using script tags in HTML instead of imports
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,8 +13,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 // Make db available globally
 window.db = db;
