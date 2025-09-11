@@ -115,6 +115,7 @@ th {
     background-color: var(--primary-color);
     color: #fff;
     font-weight: 600;
+    font-size: 1rem; /* Header font size */
 }
 
 td {
@@ -138,7 +139,7 @@ tfoot td {
     background-color: var(--primary-color) !important;
     color: #fff !important;
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1rem; /* Same font size as header */
     padding: 12px;
 }
 
@@ -149,7 +150,7 @@ body.dark-mode .total-incurred-row td {
 
 #incurredTotal {
     color: #ffcccc !important;
-    font-size: 1.2rem;
+    font-size: 1.1rem; /* Slightly larger than text but proportional */
     margin-left: 5px;
     font-weight: 800;
 }
@@ -300,14 +301,27 @@ input[type="text"] {
     100% { opacity: 0; transform: translateY(-20px); }
 }
 
-/* Hint for click-to-copy feature */
-tfoot span:hover, #incurredTotal:hover {
+/* Hint for click-to-copy feature - FIXED for light mode */
+.total-incurred-row td:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 3px;
+}
+
+.total-incurred-row td:hover::after {
+    content: " [COPY]";
+    font-size: 0.8em;
+    color: #ffcccc !important;
+    font-style: italic;
+}
+
+tfoot span:hover {
     cursor: pointer;
     background-color: rgba(0, 121, 107, 0.1);
     border-radius: 3px;
 }
 
-tfoot span:hover::after, #incurredTotal:hover::after {
+tfoot span:hover::after {
     content: " [COPY]";
     font-size: 0.8em;
     color: var(--primary-color);
@@ -315,6 +329,14 @@ tfoot span:hover::after, #incurredTotal:hover::after {
 }
 
 /* Dark mode support for the hint */
+body.dark-mode .total-incurred-row td:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode .total-incurred-row td:hover::after {
+    color: #4db6ac !important;
+}
+
 body.dark-mode tfoot span:hover, 
 body.dark-mode #incurredTotal:hover {
     background-color: rgba(0, 121, 107, 0.3);
