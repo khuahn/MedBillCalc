@@ -228,3 +228,40 @@ async function debugDataRecording(userName) {
     console.error("Error saving visit to Firebase:", error);
   }
 }
+
+// Add this function to test Firebase connection
+async function testFirebaseConnection() {
+  try {
+    console.log("Testing Firebase connection...");
+    
+    // Try to add a test document
+    const testRef = await db.collection("test").add({
+      test: "connection_test",
+      timestamp: new Date().toISOString()
+    });
+    
+    console.log("Test document created with ID:", testRef.id);
+    
+    // Try to read it back
+    const testDoc = await db.collection("test").doc(testRef.id).get();
+    
+    if (testDoc.exists) {
+      console.log("Firebase connection successful! Data:", testDoc.data());
+      return true;
+    } else {
+      console.log("Firebase test failed - document not found");
+      return false;
+    }
+  } catch (error) {
+    console.error("Firebase connection error:", error);
+    return false;
+  }
+}
+
+// Call this function when your app loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait a bit for Firebase to initialize
+  setTimeout(() => {
+    testFirebaseConnection();
+  }, 1000);
+});
