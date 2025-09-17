@@ -25,20 +25,23 @@
     });
   }
 
-  function checkCompactMode() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const isCompact = urlParams.get('compact');
+ function checkCompactMode() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isCompact = urlParams.get('compact');
+  
+  if (isCompact === 'true') {
+    document.body.classList.add('compact-mode');
+    document.title = "MedBillCalc - Compact";
     
-    if (isCompact === 'true') {
-      document.body.classList.add('compact-mode');
-      document.title = "MedBillCalc - Compact";
-      
-      // Hide elements not needed in compact mode
-      const elementsToHide = document.querySelectorAll('footer, h1, .controls-container');
-      elementsToHide.forEach(el => el.style.display = 'none');
-    }
+    // Only hide footer and title, keep controls visible
+    const elementsToHide = document.querySelectorAll('footer, h1');
+    elementsToHide.forEach(el => el.style.display = 'none');
+    
+    // Ensure controls are visible
+    const controls = document.querySelector('.controls-container');
+    if (controls) controls.style.display = 'flex';
   }
-
+}
   function openCompactWindow() {
     const windowFeatures = 'width=500,height=400,menubar=no,toolbar=no,location=no,status=no,resizable=yes';
     const currentUrl = new URL(window.location.href);
