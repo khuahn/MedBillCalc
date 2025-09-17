@@ -490,3 +490,66 @@ body.dark-mode footer {
         min-height: 44px;
     }
 }
+/* ==================== */
+/* COMPACT MODE STYLES */
+/* ==================== */
+
+body.compact-mode {
+  padding: 5px !important;
+  background-color: var(--background-color);
+}
+
+body.compact-mode .container {
+  max-width: 100% !important;
+  padding: 10px !important;
+  margin: 0 auto !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+}
+
+/* Compact table styles */
+body.compact-mode .table-with-total {
+  margin-bottom: 8px;
+  border-radius: 6px;
+}
+
+body.compact-mode table {
+  font-size: 0.8rem;
+}
+
+body.compact-mode th,
+body.compact-mode td {
+  padding: 4px 2px !important;
+  font-size: 0.75rem !important;
+}
+
+body.compact-mode input[type="number"] {
+  padding: 3px 4px !important;
+  font-size: 0.75rem !important;
+  border-radius: 4px;
+}
+
+body.compact-mode .total-incurred-row td {
+  padding: 6px !important;
+  font-size: 0.85rem !important;
+}
+
+body.compact-mode #incurredTotal {
+  font-size: 0.9rem !important;
+}
+
+/* Compact button styles if you want to keep some controls */
+body.compact-mode .button-group {
+  gap: 4px;
+}
+
+body.compact-mode .button-group button,
+body.compact-mode #themeToggle {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+/* Make sure everything fits in small window */
+body.compact-mode * {
+  box-sizing: border-box;
+}
