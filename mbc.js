@@ -19,9 +19,6 @@
       feedback.textContent = 'Copied!';
       document.body.appendChild(feedback);
       
-      feedback.style.top = (event.clientY - 30) + 'px';
-      feedback.style.left = event.clientX + 'px';
-      
       setTimeout(() => feedback.remove(), 1000);
     }).catch(err => {
       console.error('Failed to copy: ', err);
