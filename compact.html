@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedBillCalc - Compact</title>
+  <link rel="stylesheet" href="mbc-compact.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="compact-mode">
+  <div class="compact-container">
+    <div class="table-with-total">
+      <table id="billTable">
+        <thead>
+          <tr>
+            <th>Charges</th>
+            <th>Payments</th>
+            <th>Adjustments</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot>
+          <tr>
+            <td><span id="totalCharges">0.00</span></td>
+            <td><span id="totalPayments">0.00</span></td>
+            <td><span id="totalAdjustments">0.00</span></td>
+            <td><span id="totalBalance">0.00</span></td>
+          </tr>
+          <tr class="total-incurred-row">
+            <td colspan="4">
+              Total Incurred : <span id="incurredTotal">0.00</span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="compact-controls">
+      <button id="compactAddBtn"><i class="fas fa-plus"></i></button>
+      <button id="compactDelBtn" class="danger-btn"><i class="fas fa-minus"></i></button>
+      <button id="compactThemeBtn"><i class="fas fa-moon"></i></button>
+    </div>
+  </div>
+
+  <script src="mbc-compact.js"></script>
+</body>
+</html>
