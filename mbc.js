@@ -1,6 +1,6 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Single row start, add/remove rows, original summary style
+ * MODIFIED: Single row start, Add/Del buttons, original summary style
  */
 
 (() => {
@@ -28,10 +28,10 @@
     });
   }
 
-  function removeRow(button) {
-    const row = button.closest('tr');
-    if (document.querySelectorAll("#tableBody tr").length > 1) {
-      row.remove();
+  function deleteLastRow() {
+    const rows = document.querySelectorAll("#tableBody tr");
+    if (rows.length > 1) {
+      rows[rows.length - 1].remove();
       calculateTotals();
       saveTableData();
     } else {
@@ -115,13 +115,8 @@
         <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
         <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
-        <td><button class="remove-row-btn" aria-label="Remove row"><i class="fas fa-times"></i></button></td>
       `;
       tbody.appendChild(tr);
-      
-      // Add event listener to the remove button
-      const removeBtn = tr.querySelector('.remove-row-btn');
-      removeBtn.addEventListener('click', () => removeRow(removeBtn));
     });
   }
 
@@ -135,14 +130,8 @@
       <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
-      <td><button class="remove-row-btn" aria-label="Remove row"><i class="fas fa-times"></i></button></td>
     `;
     tbody.appendChild(tr);
-    
-    // Add event listener to the new remove button
-    const removeBtn = tr.querySelector('.remove-row-btn');
-    removeBtn.addEventListener('click', () => removeRow(removeBtn));
-    
     saveTableData();
   }
 
@@ -206,12 +195,14 @@
     initTheme();
 
     const addRowBtn = document.getElementById("addRowBtn");
+    const delRowBtn = document.getElementById("delRowBtn");
     const clearTableBtn = document.getElementById("clearTableBtn");
     const printPDFBtn = document.getElementById("printPDFBtn");
     const themeToggle = document.getElementById("themeToggle");
     const tbody = document.getElementById("tableBody");
 
     if (addRowBtn) addRowBtn.addEventListener("click", addRow);
+    if (delRowBtn) delRowBtn.addEventListener("click", deleteLastRow);
     if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
     if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
     if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
