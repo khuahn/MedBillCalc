@@ -1,6 +1,6 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * FIXED: Smart auto-calculation without circular logic issues
+ * MODIFIED: Auto-calculation ONLY for summary/total rows, not individual fields
  */
 
 (() => {
@@ -28,41 +28,6 @@
     });
   }
 
-  function calculateRow(row) {
-    const chargesInput = row.querySelector(".charges-input");
-    const paymentsInput = row.querySelector(".payments-input");
-    const adjustmentsInput = row.querySelector(".adjustments-input");
-    const balanceInput = row.querySelector(".balance-input");
-
-    const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
-    const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
-    const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
-    const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
-
-    // Don't calculate if we don't have a base charges amount
-    if (charges <= 0) {
-      return { charges, payments, adjustments, balance };
-    }
-
-    // Get the currently focused element
-    const focusedElement = document.activeElement;
-    
-    // Only calculate values for non-focused fields
-    if (focusedElement !== paymentsInput && focusedElement !== adjustmentsInput && focusedElement !== balanceInput) {
-      // Calculate what the balance SHOULD be based on the formula
-      const expectedBalance = charges - payments - adjustments;
-      
-      // Only update balance if it's significantly different from expected
-      // This prevents circular calculations during user input
-      if (Math.abs(balance - expectedBalance) > 0.01) {
-        balanceInput.value = expectedBalance.toFixed(2);
-        return { charges, payments, adjustments, balance: expectedBalance };
-      }
-    }
-
-    return { charges, payments, adjustments, balance };
-  }
-
   function calculateTotals() {
     const rows = document.querySelectorAll("#tableBody tr");
     let totalCharges = 0,
@@ -70,14 +35,33 @@
       totalAdjustments = 0,
       totalBalance = 0;
 
+    // First pass: sum up all manually entered values
     rows.forEach((row) => {
-      const result = calculateRow(row);
-      
-      totalCharges += result.charges;
-      totalPayments += result.payments;
-      totalAdjustments += result.adjustments;
-      totalBalance += result.balance;
+      const chargesInput = row.querySelector(".charges-input");
+      const paymentsInput = row.querySelector(".payments-input");
+      const adjustmentsInput = row.querySelector(".adjustments-input");
+      const balanceInput = row.querySelector(".balance-input");
+
+      const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
+      const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+      const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+      const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
+
+      totalCharges += charges;
+      totalPayments += payments;
+      totalAdjustments += adjustments;
+      totalBalance += balance;
     });
+
+    // SECOND PASS: Smart calculation for TOTALS only (not individual rows)
+    // Condition 1: If we have total Charges, Payments, and Adjustments → Calculate total Balance
+    if (totalCharges > 0 && totalPayments > 0 && totalAdjustments > 0) {
+      totalBalance = totalCharges - totalPayments - totalAdjustments;
+    }
+    // Condition 2: If we have total Charges, Payments, and Balance → Calculate total Adjustments
+    else if (totalCharges > 0 && totalPayments > 0 && totalBalance > 0) {
+      totalAdjustments = totalCharges - totalPayments - totalBalance;
+    }
 
     const update = (id, val) => {
       const el = document.getElementById(id);
@@ -119,7 +103,7 @@
         <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount" value="${rowData.charges}"></td>
         <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="Calculated" value="${rowData.balance}"></td>
+        <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
       `;
       tbody.appendChild(tr);
     });
@@ -134,7 +118,7 @@
       <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="Calculated"></td>
+      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
     `;
     tbody.appendChild(tr);
     saveTableData();
@@ -186,19 +170,6 @@
     }
   }
 
-  // Debounce function to prevent too many calculations during rapid input
-  function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('click', (event) => {
       if (event.target.id === 'totalCharges' || 
@@ -229,14 +200,10 @@
         for (let i = 0; i < 5; i++) addRow();
       }
 
-      // Use debounced calculation to prevent too many updates during typing
-      const debouncedCalculate = debounce(() => {
+      // Calculate totals when any input changes
+      tbody.addEventListener("input", () => {
         calculateTotals();
         saveTableData();
-      }, 300);
-
-      tbody.addEventListener("input", (e) => {
-        debouncedCalculate();
       });
       
       calculateTotals();
