@@ -1,7 +1,7 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Balance column is now manually entered like other columns
- * REMOVED: All auto-calculation logic for individual row balances
+ * MODIFIED: Payments, Adjustments, and Balance auto-calculated based on Charges
+ * USING: Formula system where users can enter percentages (e.g., "20%") or formulas
  */
 
 (() => {
@@ -11,6 +11,31 @@
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
+  }
+
+  function parseFormula(formula, charges) {
+    if (!formula) return 0;
+    
+    formula = formula.trim();
+    
+    // Handle percentage input (e.g., "20%")
+    if (formula.endsWith('%')) {
+      const percent = parseFloat(formula) / 100;
+      return isNaN(percent) ? 0 : charges * percent;
+    }
+    
+    // Handle simple arithmetic (e.g., "charges*0.2" or "100")
+    try {
+      // Replace "charges" with the actual charges value
+      const expression = formula.replace(/charges/gi, charges.toString());
+      // Use Function constructor for safe evaluation
+      const result = new Function('return ' + expression)();
+      return typeof result === 'number' ? result : 0;
+    } catch (e) {
+      // If formula parsing fails, try to parse as plain number
+      const num = parseFloat(formula);
+      return isNaN(num) ? 0 : num;
+    }
   }
 
   function copyToClipboard(text, event) {
@@ -29,6 +54,37 @@
     });
   }
 
+  function calculateRow(row) {
+    const chargesInput = row.querySelector(".charges-input");
+    const paymentsInput = row.querySelector(".payments-input");
+    const adjustmentsInput = row.querySelector(".adjustments-input");
+    const balanceInput = row.querySelector(".balance-input");
+
+    const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
+    const paymentsFormula = normalizeInput(paymentsInput.value);
+    const adjustmentsFormula = normalizeInput(adjustmentsInput.value);
+
+    // Calculate payments and adjustments based on formulas
+    const payments = parseFormula(paymentsFormula, charges);
+    const adjustments = parseFormula(adjustmentsFormula, charges);
+    
+    // Calculate balance
+    const balance = charges - payments - adjustments;
+
+    // Update the values (but don't trigger infinite loop)
+    if (paymentsInput.value !== payments.toFixed(2)) {
+      paymentsInput.value = payments.toFixed(2);
+    }
+    if (adjustmentsInput.value !== adjustments.toFixed(2)) {
+      adjustmentsInput.value = adjustments.toFixed(2);
+    }
+    if (balanceInput.value !== balance.toFixed(2)) {
+      balanceInput.value = balance.toFixed(2);
+    }
+
+    return { charges, payments, adjustments, balance };
+  }
+
   function calculateTotals() {
     const rows = document.querySelectorAll("#tableBody tr");
     let totalCharges = 0,
@@ -37,21 +93,12 @@
       totalBalance = 0;
 
     rows.forEach((row) => {
-      const chargesInput = row.querySelector(".charges-input");
-      const paymentsInput = row.querySelector(".payments-input");
-      const adjustmentsInput = row.querySelector(".adjustments-input");
-      const balanceInput = row.querySelector(".balance-input");
-
-      // Simply get values from all fields without any calculation logic
-      const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
-      const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
-      const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
-      const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
-
-      totalCharges += charges;
-      totalPayments += payments;
-      totalAdjustments += adjustments;
-      totalBalance += balance;
+      const result = calculateRow(row);
+      
+      totalCharges += result.charges;
+      totalPayments += result.payments;
+      totalAdjustments += result.adjustments;
+      totalBalance += result.balance;
     });
 
     const update = (id, val) => {
@@ -92,9 +139,9 @@
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount" value="${rowData.charges}"></td>
-        <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
-        <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
+        <td><input type="text" class="payments-input" placeholder="e.g., 20% or 100" value="${rowData.payments}"></td>
+        <td><input type="text" class="adjustments-input" placeholder="e.g., 10% or 50" value="${rowData.adjustments}"></td>
+        <td><input type="number" step="any" class="balance-input" placeholder="Calculated" value="${rowData.balance}" readonly></td>
       `;
       tbody.appendChild(tr);
     });
@@ -107,10 +154,9 @@
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
-      <!-- REMOVED: readonly attribute from balance-input -->
-      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
+      <td><input type="text" class="payments-input" placeholder="e.g., 20% or 100"></td>
+      <td><input type="text" class="adjustments-input" placeholder="e.g., 10% or 50"></td>
+      <td><input type="number" step="any" class="balance-input" placeholder="Calculated" readonly></td>
     `;
     tbody.appendChild(tr);
     saveTableData();
@@ -192,10 +238,14 @@
         for (let i = 0; i < 5; i++) addRow();
       }
 
-      // SIMPLIFIED: Just recalculate totals on any input change
       tbody.addEventListener("input", (e) => {
-        calculateTotals();
-        saveTableData();
+        // Only recalculate if charges, payments, or adjustments change
+        if (e.target.classList.contains("charges-input") || 
+            e.target.classList.contains("payments-input") || 
+            e.target.classList.contains("adjustments-input")) {
+          calculateTotals();
+          saveTableData();
+        }
       });
       
       calculateTotals();
