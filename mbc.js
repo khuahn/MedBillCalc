@@ -1,7 +1,7 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Payments, Adjustments, and Balance auto-calculated based on Charges
- * USING: Formula system where users can enter percentages (e.g., "20%") or formulas
+ * MODIFIED: Intelligent auto-calculation - solves for missing values
+ * RULE: Adjustments = Charges - Payments - Balance
  */
 
 (() => {
@@ -11,31 +11,6 @@
 
   function normalizeInput(s) {
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
-  }
-
-  function parseFormula(formula, charges) {
-    if (!formula) return 0;
-    
-    formula = formula.trim();
-    
-    // Handle percentage input (e.g., "20%")
-    if (formula.endsWith('%')) {
-      const percent = parseFloat(formula) / 100;
-      return isNaN(percent) ? 0 : charges * percent;
-    }
-    
-    // Handle simple arithmetic (e.g., "charges*0.2" or "100")
-    try {
-      // Replace "charges" with the actual charges value
-      const expression = formula.replace(/charges/gi, charges.toString());
-      // Use Function constructor for safe evaluation
-      const result = new Function('return ' + expression)();
-      return typeof result === 'number' ? result : 0;
-    } catch (e) {
-      // If formula parsing fails, try to parse as plain number
-      const num = parseFloat(formula);
-      return isNaN(num) ? 0 : num;
-    }
   }
 
   function copyToClipboard(text, event) {
@@ -61,28 +36,65 @@
     const balanceInput = row.querySelector(".balance-input");
 
     const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
-    const paymentsFormula = normalizeInput(paymentsInput.value);
-    const adjustmentsFormula = normalizeInput(adjustmentsInput.value);
+    const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+    const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+    const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
 
-    // Calculate payments and adjustments based on formulas
-    const payments = parseFormula(paymentsFormula, charges);
-    const adjustments = parseFormula(adjustmentsFormula, charges);
-    
-    // Calculate balance
-    const balance = charges - payments - adjustments;
+    let calculatedAdjustments = adjustments;
+    let calculatedBalance = balance;
 
-    // Update the values (but don't trigger infinite loop)
-    if (paymentsInput.value !== payments.toFixed(2)) {
-      paymentsInput.value = payments.toFixed(2);
-    }
-    if (adjustmentsInput.value !== adjustments.toFixed(2)) {
-      adjustmentsInput.value = adjustments.toFixed(2);
-    }
-    if (balanceInput.value !== balance.toFixed(2)) {
-      balanceInput.value = balance.toFixed(2);
+    // Intelligent calculation: Solve for the missing value
+    if (charges > 0) {
+      if (payments > 0 && balance > 0) {
+        // We have Charges, Payments, Balance → Calculate Adjustments
+        calculatedAdjustments = charges - payments - balance;
+        if (adjustmentsInput.value !== calculatedAdjustments.toFixed(2)) {
+          adjustmentsInput.value = calculatedAdjustments.toFixed(2);
+        }
+      }
+      else if (payments > 0 && adjustments > 0) {
+        // We have Charges, Payments, Adjustments → Calculate Balance
+        calculatedBalance = charges - payments - adjustments;
+        if (balanceInput.value !== calculatedBalance.toFixed(2)) {
+          balanceInput.value = calculatedBalance.toFixed(2);
+        }
+      }
+      else if (adjustments > 0 && balance > 0) {
+        // We have Charges, Adjustments, Balance → Calculate Payments
+        const calculatedPayments = charges - adjustments - balance;
+        if (paymentsInput.value !== calculatedPayments.toFixed(2)) {
+          paymentsInput.value = calculatedPayments.toFixed(2);
+        }
+      }
+      else if (payments > 0) {
+        // We have Charges and Payments only → Calculate Balance (Adjustments = 0)
+        calculatedBalance = charges - payments;
+        if (balanceInput.value !== calculatedBalance.toFixed(2)) {
+          balanceInput.value = calculatedBalance.toFixed(2);
+        }
+      }
+      else if (adjustments > 0) {
+        // We have Charges and Adjustments only → Calculate Balance (Payments = 0)
+        calculatedBalance = charges - adjustments;
+        if (balanceInput.value !== calculatedBalance.toFixed(2)) {
+          balanceInput.value = calculatedBalance.toFixed(2);
+        }
+      }
+      else if (balance > 0) {
+        // We have Charges and Balance only → Calculate Adjustments (Payments = 0)
+        calculatedAdjustments = charges - balance;
+        if (adjustmentsInput.value !== calculatedAdjustments.toFixed(2)) {
+          adjustmentsInput.value = calculatedAdjustments.toFixed(2);
+        }
+      }
     }
 
-    return { charges, payments, adjustments, balance };
+    return { 
+      charges, 
+      payments: payments > 0 ? payments : 0,
+      adjustments: calculatedAdjustments > 0 ? calculatedAdjustments : 0,
+      balance: calculatedBalance > 0 ? calculatedBalance : 0
+    };
   }
 
   function calculateTotals() {
@@ -139,9 +151,9 @@
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount" value="${rowData.charges}"></td>
-        <td><input type="text" class="payments-input" placeholder="e.g., 20% or 100" value="${rowData.payments}"></td>
-        <td><input type="text" class="adjustments-input" placeholder="e.g., 10% or 50" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="Calculated" value="${rowData.balance}" readonly></td>
+        <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
+        <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
+        <td><input type="number" step="any" class="balance-input" placeholder="Calculated" value="${rowData.balance}"></td>
       `;
       tbody.appendChild(tr);
     });
@@ -154,9 +166,9 @@
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
-      <td><input type="text" class="payments-input" placeholder="e.g., 20% or 100"></td>
-      <td><input type="text" class="adjustments-input" placeholder="e.g., 10% or 50"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="Calculated" readonly></td>
+      <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="balance-input" placeholder="Calculated"></td>
     `;
     tbody.appendChild(tr);
     saveTableData();
@@ -239,13 +251,9 @@
       }
 
       tbody.addEventListener("input", (e) => {
-        // Only recalculate if charges, payments, or adjustments change
-        if (e.target.classList.contains("charges-input") || 
-            e.target.classList.contains("payments-input") || 
-            e.target.classList.contains("adjustments-input")) {
-          calculateTotals();
-          saveTableData();
-        }
+        // Recalculate when any input changes
+        calculateTotals();
+        saveTableData();
       });
       
       calculateTotals();
