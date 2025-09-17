@@ -33,7 +33,7 @@ body.dark-mode .container {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
-body.dark-mode input[type="number"] {
+body.dark-mode input[type="number"]:not(.balance-input) {
     background-color: #2e2e2e;
     color: var(--text-color-dark);
     border-color: #444;
@@ -156,7 +156,7 @@ body.dark-mode .total-incurred-row td {
 }
 
 /* Remove number input spinners */
-input[type="number"] {
+input[type="number"]:not(.balance-input) {
     -moz-appearance: textfield;
     width: 100%;
     padding: 6px 8px;
@@ -166,6 +166,26 @@ input[type="number"] {
     border-radius: 6px;
     background-color: #fff;
     color: #333;
+}
+
+/* Make balance inputs look editable like others */
+.balance-input {
+    -moz-appearance: textfield;
+    width: 100%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #fff !important;
+    color: #333 !important;
+    cursor: text !important;
+}
+
+body.dark-mode .balance-input {
+    background-color: #2e2e2e !important;
+    color: var(--text-color-dark) !important;
+    border-color: #444;
 }
 
 /* Hide arrows for Webkit browsers */
@@ -182,7 +202,7 @@ input[type="number"]::placeholder {
     opacity: 0.7;
 }
 
-body.dark-mode input[type="number"] {
+body.dark-mode input[type="number"]:not(.balance-input) {
     background-color: #2e2e2e;
     color: var(--text-color-dark);
     border-color: #444;
