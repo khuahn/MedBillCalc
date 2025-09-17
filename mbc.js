@@ -221,3 +221,34 @@
   });
 
 })();
+// Add this function to check for compact mode
+function checkCompactMode() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isCompact = urlParams.get('compact');
+  
+  if (isCompact === 'true') {
+    document.body.classList.add('compact-mode');
+    
+    // Also update the page title to indicate compact mode
+    document.title = "MedBillCalc - Compact";
+    
+    // Optional: Hide elements you don't want in compact mode
+    const elementsToHide = document.querySelectorAll('footer, h1, .controls-container');
+    elementsToHide.forEach(el => el.style.display = 'none');
+  }
+}
+
+// Add this function to open compact window
+function openCompactWindow() {
+  const windowFeatures = 'width=500,height=400,menubar=no,toolbar=no,location=no,status=no,resizable=yes';
+  const currentUrl = new URL(window.location.href);
+  currentUrl.searchParams.set('compact', 'true');
+  
+  window.open(currentUrl.href, 'medbillcalc_compact', windowFeatures);
+}
+
+// Call this in your DOMContentLoaded
+document.addEventListener("DOMContentLoaded", () => {
+  checkCompactMode(); // Check if we should be in compact mode
+  // ... your existing code
+});
