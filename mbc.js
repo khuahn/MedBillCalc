@@ -1,6 +1,6 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Auto-calculation ONLY for summary/total rows, not individual fields
+ * MODIFIED: Single row start, add/remove rows, clean summary section
  */
 
 (() => {
@@ -26,6 +26,17 @@
     }).catch(err => {
       console.error('Failed to copy: ', err);
     });
+  }
+
+  function removeRow(button) {
+    const row = button.closest('tr');
+    if (document.querySelectorAll("#tableBody tr").length > 1) {
+      row.remove();
+      calculateTotals();
+      saveTableData();
+    } else {
+      alert("You need to keep at least one row in the calculator.");
+    }
   }
 
   function calculateTotals() {
@@ -104,8 +115,13 @@
         <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
         <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
+        <td><button class="remove-row-btn" aria-label="Remove row"><i class="fas fa-times"></i></button></td>
       `;
       tbody.appendChild(tr);
+      
+      // Add event listener to the remove button
+      const removeBtn = tr.querySelector('.remove-row-btn');
+      removeBtn.addEventListener('click', () => removeRow(removeBtn));
     });
   }
 
@@ -119,8 +135,14 @@
       <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
+      <td><button class="remove-row-btn" aria-label="Remove row"><i class="fas fa-times"></i></button></td>
     `;
     tbody.appendChild(tr);
+    
+    // Add event listener to the new remove button
+    const removeBtn = tr.querySelector('.remove-row-btn');
+    removeBtn.addEventListener('click', () => removeRow(removeBtn));
+    
     saveTableData();
   }
 
@@ -132,7 +154,7 @@
     const tbody = document.getElementById("tableBody");
     if (tbody) {
       tbody.innerHTML = "";
-      for (let i = 0; i < 5; i++) addRow();
+      addRow(); // Add just one row instead of five
       calculateTotals();
     }
     localStorage.removeItem(STORAGE_KEY);
@@ -176,7 +198,8 @@
           event.target.id === 'totalPayments' ||
           event.target.id === 'totalAdjustments' || 
           event.target.id === 'totalBalance' ||
-          event.target.id === 'incurredTotal') {
+          event.target.id === 'incurredTotal' ||
+          event.target.classList.contains('summary-value')) {
         copyToClipboard(event.target.textContent, event);
       }
     });
@@ -197,7 +220,7 @@
     if (tbody) {
       loadTableData();
       if (tbody.children.length === 0) {
-        for (let i = 0; i < 5; i++) addRow();
+        addRow(); // Start with just one row instead of five
       }
 
       // Calculate totals when any input changes
