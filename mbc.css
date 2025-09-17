@@ -1,5 +1,5 @@
 /*
- * mbc.css - Medical Bill Calculator Main Styles
+ * mbc.css - Medical Bill Calculator Clean Styles
  */
 
 :root {
@@ -15,46 +15,13 @@
     --footer-color: #888;
 }
 
+/* Base Styles */
 body {
     font-family: 'Segoe UI', Roboto, sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
     padding: 20px;
-}
-
-body.dark-mode {
-    background-color: #121212;
-    color: var(--text-color-dark);
-}
-
-body.dark-mode .container {
-    background-color: #1e1e1e;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode input[type="number"] {
-    background-color: #2e2e2e;
-    color: var(--text-color-dark);
-    border-color: #444;
-}
-
-body.dark-mode th {
-    background-color: var(--primary-dark);
-}
-
-body.dark-mode td {
-    background-color: #004d40;
-}
-
-body.dark-mode .button-group button,
-body.dark-mode #themeToggle {
-    background-color: var(--primary-dark);
-    color: var(--text-color-dark);
-}
-
-body.dark-mode tfoot td {
-    color: #fff;
 }
 
 .container {
@@ -73,6 +40,7 @@ h1 {
     text-align: center;
 }
 
+/* Table Styles */
 .table-with-total {
     margin-bottom: 16px;
     border-radius: 8px;
@@ -81,18 +49,13 @@ h1 {
     background-color: var(--table-bg);
 }
 
-body.dark-mode .table-with-total {
-    background-color: #004d40;
-}
-
 table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    margin-bottom: 0;
 }
 
-th, td, tfoot td {
+th, td {
     padding: 8px;
     text-align: center;
     vertical-align: middle;
@@ -108,6 +71,7 @@ th {
 tr:first-child th:first-child {
     border-top-left-radius: 8px;
 }
+
 tr:first-child th:last-child {
     border-top-right-radius: 8px;
 }
@@ -124,10 +88,7 @@ tfoot td {
     font-weight: bold;
 }
 
-.total-incurred-row {
-    background-color: var(--table-bg);
-}
-
+/* Total Incurred Row */
 .total-incurred-row td {
     background-color: var(--table-bg);
     color: var(--text-color);
@@ -139,23 +100,19 @@ tfoot td {
 .total-incurred-row td:first-child {
     border-bottom-left-radius: 8px;
 }
+
 .total-incurred-row td:last-child {
     border-bottom-right-radius: 8px;
 }
 
-body.dark-mode .total-incurred-row td {
-    background-color: #004d40;
-    color: #e0f2f1;
-}
-
 #incurredTotal {
-    color: red !important;
+    color: red;
     font-size: 1.2rem;
     margin-left: 5px;
     font-weight: 800;
 }
 
-/* Remove number input spinners */
+/* Input Styles */
 input[type="number"] {
     -moz-appearance: textfield;
     width: 100%;
@@ -168,30 +125,19 @@ input[type="number"] {
     color: #333;
 }
 
-/* Hide arrows for Webkit browsers */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* Placeholder styling */
 input[type="number"]::placeholder {
     color: #888;
     font-style: italic;
     opacity: 0.7;
 }
 
-body.dark-mode input[type="number"] {
-    background-color: #2e2e2e;
-    color: var(--text-color-dark);
-    border-color: #444;
-}
-
-body.dark-mode input[type="number"]::placeholder {
-    color: #aaa;
-}
-
+/* Button Styles */
 .controls-container {
     display: flex;
     justify-content: center;
@@ -223,137 +169,36 @@ body.dark-mode input[type="number"]::placeholder {
 }
 
 .danger-btn {
-    background-color: #dc3545 !important;
-    color: white !important;
+    background-color: #dc3545;
+    color: white;
 }
 
 .danger-btn:hover {
-    background-color: #c82333 !important;
+    background-color: #c82333;
 }
 
-/* Remove button styling */
-.remove-row-btn {
-    background: #dc3545 !important;
-    color: white !important;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-}
-
-.remove-row-btn:hover {
-    background: #c82333 !important;
-}
-
-@media print {
-    body, body.dark-mode, body.dark-mode .container {
-        background-color: #fff !important;
-        color: #000 !important;
-        box-shadow: none !important;
-    }
-
-    .table-with-total, table, th, td {
-        border: 1px solid #ccc !important;
-    }
-
-    th {
-        background-color: #f0f0f0 !important;
-        color: #000 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-
-    td {
-        background-color: #fff !important;
-        color: #000 !important;
-    }
-
-    tfoot td {
-        background-color: #f8f8f8 !important;
-        font-weight: bold !important;
-        border: none !important;
-    }
-
-    .total-incurred-row td {
-        background-color: #f8f8f8 !important;
-        color: #000 !important;
-        font-weight: bold !important;
-    }
-    
-    #incurredTotal {
-        color: #000 !important;
-    }
-
-    .controls-container, footer, h1, .button-group, #themeToggle {
-        display: none !important;
-    }
-
-    input[type="number"] {
-        -webkit-appearance: none !important;
-        -moz-appearance: textfield !important;
-        border: none !important;
-        background: transparent !important;
-        color: #000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        text-align: center;
-        font-weight: normal;
-    }
-
-    .container {
-        max-width: 720px !important;
-        margin: 40px auto !important;
-        padding: 40px 30px !important;
-        background: #fff !important;
-        border-radius: 12px !important;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
-    }
-}
-
-.copied-feedback {
-    position: fixed;
-    background: var(--primary-color);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    pointer-events: none;
-    z-index: 10000;
-    animation: fadeOut 1s ease-in-out forwards;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-@keyframes fadeOut {
-    0% { opacity: 1; transform: translateY(0); }
-    70% { opacity: 1; transform: translateY(-10px); }
-    100% { opacity: 0; transform: translateY(-20px); }
-}
-
+/* Copy Functionality */
 tfoot span:hover, #incurredTotal:hover {
     cursor: pointer;
     background-color: rgba(0, 121, 107, 0.1);
     border-radius: 3px;
+    position: relative;
 }
 
 tfoot span:hover::after, #incurredTotal:hover::after {
-    content: " [COPY]";
+    content: "\f0c5";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
     font-size: 0.8em;
     color: var(--primary-color);
-    font-style: italic;
+    margin-left: 5px;
 }
 
-body.dark-mode tfoot span:hover, 
-body.dark-mode #incurredTotal:hover {
-    background-color: rgba(0, 121, 107, 0.3);
+#incurredTotal:hover::after {
+    color: #d32f2f;
 }
 
-body.dark-mode tfoot span:hover::after,
-body.dark-mode #incurredTotal:hover::after {
-    color: #4db6ac;
-}
-
+/* Footer */
 footer {
     text-align: center;
     margin-top: 40px;
@@ -374,150 +219,233 @@ footer span {
     opacity: 0.8;
 }
 
+/* Dark Mode */
+body.dark-mode {
+    background-color: #121212;
+    color: var(--text-color-dark);
+}
+
+body.dark-mode .container {
+    background-color: #1e1e1e;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode input[type="number"] {
+    background-color: #2e2e2e;
+    color: var(--text-color-dark);
+    border-color: #444;
+}
+
+body.dark-mode input[type="number"]::placeholder {
+    color: #aaa;
+}
+
+body.dark-mode th {
+    background-color: var(--primary-dark);
+}
+
+body.dark-mode td {
+    background-color: #004d40;
+}
+
+body.dark-mode .button-group button,
+body.dark-mode #themeToggle {
+    background-color: var(--primary-dark);
+    color: var(--text-color-dark);
+}
+
+body.dark-mode tfoot td {
+    color: #fff;
+}
+
+body.dark-mode .total-incurred-row td {
+    background-color: #004d40;
+    color: #e0f2f1;
+}
+
+body.dark-mode tfoot span:hover, 
+body.dark-mode #incurredTotal:hover {
+    background-color: rgba(0, 121, 107, 0.3);
+}
+
+body.dark-mode tfoot span:hover::after,
+body.dark-mode #incurredTotal:hover::after {
+    color: #4db6ac;
+}
+
+body.dark-mode #incurredTotal:hover::after {
+    color: #ff6b6b;
+}
+
 body.dark-mode footer {
     color: #aaa;
 }
-/* ==================== */
-/* MOBILE RESPONSIVENESS */
-/* ==================== */
 
+/* Print Styles */
+@media print {
+    body, body.dark-mode, body.dark-mode .container {
+        background-color: #fff;
+        color: #000;
+        box-shadow: none;
+    }
+
+    .table-with-total, table, th, td {
+        border: 1px solid #ccc;
+    }
+
+    th {
+        background-color: #f0f0f0;
+        color: #000;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    td {
+        background-color: #fff;
+        color: #000;
+    }
+
+    tfoot td {
+        background-color: #f8f8f8;
+        font-weight: bold;
+        border: none;
+    }
+
+    .total-incurred-row td {
+        background-color: #f8f8f8;
+        color: #000;
+        font-weight: bold;
+    }
+    
+    #incurredTotal {
+        color: #000;
+    }
+
+    .controls-container, footer, h1, .button-group, #themeToggle {
+        display: none;
+    }
+
+    input[type="number"] {
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+        border: none;
+        background: transparent;
+        color: #000;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        font-weight: normal;
+    }
+
+    .container {
+        max-width: 720px;
+        margin: 40px auto;
+        padding: 40px 30px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .container {
-    padding: 20px 15px;
-    margin: 20px auto;
-  }
-  
-  h1 {
-    font-size: 1.5rem;
-    margin: 0 0 20px 0;
-  }
-  
-  /* Table responsiveness */
-  .table-with-total {
-    overflow-x: auto;
-    margin-bottom: 15px;
-  }
-  
-  table {
-    min-width: 500px; /* Minimum width before scrolling */
-  }
-  
-  th, td, tfoot td {
-    padding: 10px 6px;
-    font-size: 0.9rem;
-  }
-  
-  /* Larger touch targets for inputs */
-  input[type="number"] {
-    padding: 10px 8px;
-    font-size: 16px; /* Prevents zoom on iOS */
-  }
-  
-  /* Button group adjustments */
-  .button-group {
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-  }
-  
-  .button-group button,
-  #themeToggle {
-    padding: 12px;
-    font-size: 1rem;
-    width: 100%;
-  }
-  
-  /* Remove button larger for touch */
-  .remove-row-btn {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-  }
-  
-  /* Summary row adjustments */
-  .total-incurred-row td {
-    font-size: 1rem;
-    padding: 10px;
-  }
-  
-  #incurredTotal {
-    font-size: 1.1rem;
-  }
-  
-  /* Copy hover effects for touch devices */
-  tfoot span:hover, #incurredTotal:hover {
-    background-color: transparent;
-  }
+    .container {
+        padding: 20px 15px;
+        margin: 20px auto;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+        margin: 0 0 20px 0;
+    }
+    
+    .table-with-total {
+        overflow-x: auto;
+        margin-bottom: 15px;
+    }
+    
+    table {
+        min-width: 500px;
+    }
+    
+    th, td {
+        padding: 10px 6px;
+        font-size: 0.9rem;
+    }
+    
+    input[type="number"] {
+        padding: 10px 8px;
+        font-size: 16px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    
+    .button-group button,
+    #themeToggle {
+        padding: 12px;
+        font-size: 1rem;
+        width: 100%;
+    }
+    
+    .total-incurred-row td {
+        font-size: 1rem;
+        padding: 10px;
+    }
+    
+    #incurredTotal {
+        font-size: 1.1rem;
+    }
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: 15px 10px;
-  }
-  
-  h1 {
-    font-size: 1.3rem;
-  }
-  
-  th, td, tfoot td {
-    padding: 8px 4px;
-    font-size: 0.85rem;
-  }
-  
-  input[type="number"] {
-    padding: 8px 6px;
-    font-size: 14px;
-  }
-  
-  /* Stack summary numbers if really tight */
-  .total-incurred-row td {
-    font-size: 0.95rem;
-  }
-  
-  #incurredTotal {
-    font-size: 1rem;
-  }
+    .container {
+        padding: 15px 10px;
+    }
+    
+    h1 {
+        font-size: 1.3rem;
+    }
+    
+    th, td {
+        padding: 8px 4px;
+        font-size: 0.85rem;
+    }
+    
+    input[type="number"] {
+        padding: 8px 6px;
+        font-size: 14px;
+    }
+    
+    .total-incurred-row td {
+        font-size: 0.95rem;
+    }
+    
+    #incurredTotal {
+        font-size: 1rem;
+    }
 }
 
-/* Prevent zoom on iOS input focus */
+/* iOS Input Fix */
 @media (max-width: 768px) {
-  input[type="number"] {
-    font-size: 16px !important;
-  }
-  
-  select, textarea {
-    font-size: 16px !important;
-  }
+    input[type="number"] {
+        font-size: 16px;
+    }
 }
 
-/* Better touch feedback */
+/* Touch Device Optimization */
 @media (hover: none) and (pointer: coarse) {
-  .button-group button:active,
-  #themeToggle:active,
-  .remove-row-btn:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
-  
-  /* Enhanced touch targets */
-  .button-group button,
-  #themeToggle {
-    min-height: 44px; /* Apple's recommended minimum touch target */
-  }
-  
-  .remove-row-btn {
-    min-height: 36px;
-    min-width: 36px;
-  }
-}
-
-/* Print adjustments for mobile */
-@media print and (max-width: 768px) {
-  .container {
-    padding: 10px !important;
-    margin: 10px auto !important;
-  }
-  
-  table {
-    min-width: 100% !important;
-  }
+    .button-group button:active,
+    #themeToggle:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    .button-group button,
+    #themeToggle {
+        min-height: 44px;
+    }
 }
