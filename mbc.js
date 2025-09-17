@@ -2,6 +2,42 @@
  * mbc.js - Medical Bill Calculator Core Functionality
  */
 
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('SW registered: ', registration);
+      })
+      .catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+
+// Optional: Prompt user to install PWA
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  // You can show your own install button here if wanted
+  console.log('PWA install prompt available');
+});
+
+// Function to manually trigger install
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted PWA install');
+      }
+      deferredPrompt = null;
+    });
+  }
+}
+
 (() => {
   "use strict";
 
