@@ -33,7 +33,7 @@ body.dark-mode .container {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
-body.dark-mode input[type="number"]:not(.balance-input) {
+body.dark-mode input[type="number"] {
     background-color: #2e2e2e;
     color: var(--text-color-dark);
     border-color: #444;
@@ -156,7 +156,7 @@ body.dark-mode .total-incurred-row td {
 }
 
 /* Remove number input spinners */
-input[type="number"]:not(.balance-input) {
+input[type="number"] {
     -moz-appearance: textfield;
     width: 100%;
     padding: 6px 8px;
@@ -166,26 +166,6 @@ input[type="number"]:not(.balance-input) {
     border-radius: 6px;
     background-color: #fff;
     color: #333;
-}
-
-/* Make balance inputs look editable like others */
-.balance-input {
-    -moz-appearance: textfield;
-    width: 100%;
-    padding: 6px 8px;
-    box-sizing: border-box;
-    font-size: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: #fff !important;
-    color: #333 !important;
-    cursor: text !important;
-}
-
-body.dark-mode .balance-input {
-    background-color: #2e2e2e !important;
-    color: var(--text-color-dark) !important;
-    border-color: #444;
 }
 
 /* Hide arrows for Webkit browsers */
@@ -202,7 +182,7 @@ input[type="number"]::placeholder {
     opacity: 0.7;
 }
 
-body.dark-mode input[type="number"]:not(.balance-input) {
+body.dark-mode input[type="number"] {
     background-color: #2e2e2e;
     color: var(--text-color-dark);
     border-color: #444;
@@ -249,6 +229,21 @@ body.dark-mode input[type="number"]::placeholder {
 
 .danger-btn:hover {
     background-color: #c82333 !important;
+}
+
+/* Remove button styling */
+.remove-row-btn {
+    background: #dc3545 !important;
+    color: white !important;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.remove-row-btn:hover {
+    background: #c82333 !important;
 }
 
 @media print {
@@ -381,285 +376,4 @@ footer span {
 
 body.dark-mode footer {
     color: #aaa;
-}
-/* Add these rules to your existing CSS */
-
-/* Style for formula inputs (text type) */
-input[type="text"].payments-input,
-input[type="text"].adjustments-input {
-    background-color: #e8f5e8 !important; /* Light green background */
-    border: 1px solid #4caf50 !important;
-    font-style: italic;
-}
-
-body.dark-mode input[type="text"].payments-input,
-body.dark-mode input[type="text"].adjustments-input {
-    background-color: #1b5e20 !important;
-    border-color: #4caf50 !important;
-    color: #e0f2f1 !important;
-}
-
-/* Keep number inputs styled as before */
-input[type="number"].charges-input,
-input[type="number"].balance-input {
-    background-color: #fff !important;
-}
-
-body.dark-mode input[type="number"].charges-input,
-body.dark-mode input[type="number"].balance-input {
-    background-color: #2e2e2e !important;
-    color: #e0f2f1 !important;
-}
-/* Add to your existing CSS */
-
-/* Summary Section */
-.summary-section {
-  margin: 30px 0;
-  padding: 20px;
-  background: var(--table-bg);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.summary-section h2 {
-  margin: 0 0 15px 0;
-  color: var(--primary-color);
-  font-size: 1.3rem;
-  text-align: center;
-}
-
-.summary-items {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.summary-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  border-left: 4px solid var(--primary-color);
-}
-
-.summary-item.highlight {
-  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
-  border-left: 4px solid #4caf50;
-  font-weight: bold;
-}
-
-body.dark-mode .summary-item {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .summary-item.highlight {
-  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
-}
-
-.summary-label {
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.summary-value {
-  font-weight: bold;
-  color: var(--primary-color);
-  font-size: 1.1rem;
-}
-
-.summary-item.highlight .summary-value {
-  color: #d32f2f;
-  font-size: 1.2rem;
-}
-
-/* Summary copy functionality */
-.summary-value:hover {
-  cursor: pointer;
-  background-color: rgba(0, 121, 107, 0.1);
-  border-radius: 3px;
-  padding: 2px 5px;
-}
-
-.summary-value:hover::after {
-  content: " [COPY]";
-  font-size: 0.7em;
-  color: var(--primary-color);
-  font-style: italic;
-}
-
-/* Remove button styling */
-.remove-row-btn {
-  background: #dc3545 !important;
-  color: white !important;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.remove-row-btn:hover {
-  background: #c82333 !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .summary-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-  }
-  
-  .summary-value {
-    align-self: flex-end;
-  }
-}
-
-@media print {
-  .summary-section {
-    background: #fff !important;
-    border: 1px solid #ccc !important;
-  }
-  
-  .summary-item {
-    background: #f8f8f8 !important;
-    border-left: 4px solid #ccc !important;
-  }
-  
-  .summary-item.highlight {
-    background: #e8f5e8 !important;
-    border-left: 4px solid #4caf50 !important;
-  }
-}
-/* Add to your existing CSS */
-
-/* Table Summary Styles */
-.summary-row {
-  background-color: var(--table-bg) !important;
-}
-
-.summary-row td {
-  padding: 20px !important;
-  background-color: var(--table-bg) !important;
-}
-
-.table-summary {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  width: 100%;
-}
-
-.summary-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  border-left: 4px solid var(--primary-color);
-  font-size: 0.95rem;
-}
-
-.summary-item.highlight {
-  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
-  border-left: 4px solid #4caf50;
-  font-weight: bold;
-  grid-column: span 2;
-  justify-self: center;
-  width: 80%;
-}
-
-body.dark-mode .summary-item {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .summary-item.highlight {
-  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
-}
-
-.summary-label {
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.summary-value {
-  font-weight: bold;
-  color: var(--primary-color);
-  font-size: 1rem;
-}
-
-.summary-item.highlight .summary-value {
-  color: #d32f2f;
-  font-size: 1.1rem;
-}
-
-/* Summary copy functionality */
-.summary-value:hover {
-  cursor: pointer;
-  background-color: rgba(0, 121, 107, 0.1);
-  border-radius: 3px;
-  padding: 2px 5px;
-}
-
-.summary-value:hover::after {
-  content: " [COPY]";
-  font-size: 0.7em;
-  color: var(--primary-color);
-  font-style: italic;
-}
-
-body.dark-mode .summary-value:hover {
-  background-color: rgba(0, 121, 107, 0.3);
-}
-
-/* Remove button styling */
-.remove-row-btn {
-  background: #dc3545 !important;
-  color: white !important;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.remove-row-btn:hover {
-  background: #c82333 !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .table-summary {
-    grid-template-columns: 1fr;
-  }
-  
-  .summary-item.highlight {
-    grid-column: span 1;
-    width: 100%;
-  }
-  
-  .summary-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-  }
-  
-  .summary-value {
-    align-self: flex-end;
-  }
-}
-
-@media print {
-  .summary-item {
-    background: #f8f8f8 !important;
-    border-left: 4px solid #ccc !important;
-  }
-  
-  .summary-item.highlight {
-    background: #e8f5e8 !important;
-    border-left: 4px solid #4caf50 !important;
-  }
 }
