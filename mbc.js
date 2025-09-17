@@ -1,6 +1,6 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Single row start, Add/Del buttons, original summary style
+ * MODIFIED: Single row start, Add/Del buttons, original summary style + Compact mode
  */
 
 (() => {
@@ -23,6 +23,28 @@
     }).catch(err => {
       console.error('Failed to copy: ', err);
     });
+  }
+
+  function checkCompactMode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isCompact = urlParams.get('compact');
+    
+    if (isCompact === 'true') {
+      document.body.classList.add('compact-mode');
+      document.title = "MedBillCalc - Compact";
+      
+      // Hide elements not needed in compact mode
+      const elementsToHide = document.querySelectorAll('footer, h1, .controls-container');
+      elementsToHide.forEach(el => el.style.display = 'none');
+    }
+  }
+
+  function openCompactWindow() {
+    const windowFeatures = 'width=500,height=400,menubar=no,toolbar=no,location=no,status=no,resizable=yes';
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('compact', 'true');
+    
+    window.open(currentUrl.href, 'medbillcalc_compact', windowFeatures);
   }
 
   function deleteLastRow() {
@@ -189,20 +211,23 @@
       }
     });
     
+    checkCompactMode(); // Check for compact mode parameter
     initTheme();
 
     const addRowBtn = document.getElementById("addRowBtn");
     const delRowBtn = document.getElementById("delRowBtn");
-    const clearTableBtn = document.getElementById("clearTableBtn");
+    const compactModeBtn = document.getElementById("compactModeBtn");
     const printPDFBtn = document.getElementById("printPDFBtn");
     const themeToggle = document.getElementById("themeToggle");
+    const clearTableBtn = document.getElementById("clearTableBtn");
     const tbody = document.getElementById("tableBody");
 
     if (addRowBtn) addRowBtn.addEventListener("click", addRow);
     if (delRowBtn) delRowBtn.addEventListener("click", deleteLastRow);
-    if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
+    if (compactModeBtn) compactModeBtn.addEventListener("click", openCompactWindow);
     if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
     if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
+    if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
     
     if (tbody) {
       loadTableData();
@@ -221,34 +246,3 @@
   });
 
 })();
-// Add this function to check for compact mode
-function checkCompactMode() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const isCompact = urlParams.get('compact');
-  
-  if (isCompact === 'true') {
-    document.body.classList.add('compact-mode');
-    
-    // Also update the page title to indicate compact mode
-    document.title = "MedBillCalc - Compact";
-    
-    // Optional: Hide elements you don't want in compact mode
-    const elementsToHide = document.querySelectorAll('footer, h1, .controls-container');
-    elementsToHide.forEach(el => el.style.display = 'none');
-  }
-}
-
-// Add this function to open compact window
-function openCompactWindow() {
-  const windowFeatures = 'width=500,height=400,menubar=no,toolbar=no,location=no,status=no,resizable=yes';
-  const currentUrl = new URL(window.location.href);
-  currentUrl.searchParams.set('compact', 'true');
-  
-  window.open(currentUrl.href, 'medbillcalc_compact', windowFeatures);
-}
-
-// Call this in your DOMContentLoaded
-document.addEventListener("DOMContentLoaded", () => {
-  checkCompactMode(); // Check if we should be in compact mode
-  // ... your existing code
-});
