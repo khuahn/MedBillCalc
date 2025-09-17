@@ -1,6 +1,6 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Single row start, add/remove rows, clean summary section
+ * MODIFIED: Single row start, add/remove rows, summary within table
  */
 
 (() => {
