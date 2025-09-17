@@ -1,6 +1,5 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Single row start, Add/Del buttons, original summary style + Compact mode
  */
 
 (() => {
@@ -23,31 +22,6 @@
     }).catch(err => {
       console.error('Failed to copy: ', err);
     });
-  }
-
- function checkCompactMode() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const isCompact = urlParams.get('compact');
-  
-  if (isCompact === 'true') {
-    document.body.classList.add('compact-mode');
-    document.title = "MedBillCalc - Compact";
-    
-    // Only hide footer and title, keep controls visible
-    const elementsToHide = document.querySelectorAll('footer, h1');
-    elementsToHide.forEach(el => el.style.display = 'none');
-    
-    // Ensure controls are visible
-    const controls = document.querySelector('.controls-container');
-    if (controls) controls.style.display = 'flex';
-  }
-}
-  function openCompactWindow() {
-    const windowFeatures = 'width=500,height=400,menubar=no,toolbar=no,location=no,status=no,resizable=yes';
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('compact', 'true');
-    
-    window.open(currentUrl.href, 'medbillcalc_compact', windowFeatures);
   }
 
   function deleteLastRow() {
@@ -214,12 +188,10 @@
       }
     });
     
-    checkCompactMode(); // Check for compact mode parameter
     initTheme();
 
     const addRowBtn = document.getElementById("addRowBtn");
     const delRowBtn = document.getElementById("delRowBtn");
-    const compactModeBtn = document.getElementById("compactModeBtn");
     const printPDFBtn = document.getElementById("printPDFBtn");
     const themeToggle = document.getElementById("themeToggle");
     const clearTableBtn = document.getElementById("clearTableBtn");
@@ -227,7 +199,6 @@
 
     if (addRowBtn) addRowBtn.addEventListener("click", addRow);
     if (delRowBtn) delRowBtn.addEventListener("click", deleteLastRow);
-    if (compactModeBtn) compactModeBtn.addEventListener("click", openCompactWindow);
     if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
     if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
     if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
