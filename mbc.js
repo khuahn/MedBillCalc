@@ -1,7 +1,6 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Intelligent auto-calculation - solves for missing values
- * RULE: Adjustments = Charges - Payments - Balance
+ * REVISED: All columns editable, smart auto-calculation with manual override
  */
 
 (() => {
@@ -36,64 +35,72 @@
     const balanceInput = row.querySelector(".balance-input");
 
     const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
-    const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
-    const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
-    const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
+    let payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+    let adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+    let balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
 
-    let calculatedAdjustments = adjustments;
-    let calculatedBalance = balance;
+    // Store original values before any calculation
+    const originalPayments = payments;
+    const originalAdjustments = adjustments;
+    const originalBalance = balance;
 
-    // Intelligent calculation: Solve for the missing value
+    // Only auto-calculate if we have a Charges value to work with
     if (charges > 0) {
-      if (payments > 0 && balance > 0) {
-        // We have Charges, Payments, Balance → Calculate Adjustments
-        calculatedAdjustments = charges - payments - balance;
-        if (adjustmentsInput.value !== calculatedAdjustments.toFixed(2)) {
-          adjustmentsInput.value = calculatedAdjustments.toFixed(2);
+      // Count how many values we have (excluding charges)
+      const valuesEntered = [payments, adjustments, balance].filter(val => val > 0).length;
+      
+      // If we have exactly 2 values entered (plus charges), calculate the missing one
+      if (valuesEntered === 2) {
+        if (payments > 0 && balance > 0 && adjustments === 0) {
+          // Calculate Adjustments: Charges - Payments - Balance
+          adjustments = charges - payments - balance;
+          if (adjustmentsInput.value !== adjustments.toFixed(2) && adjustmentsInput !== document.activeElement) {
+            adjustmentsInput.value = adjustments.toFixed(2);
+          }
+        }
+        else if (payments > 0 && adjustments > 0 && balance === 0) {
+          // Calculate Balance: Charges - Payments - Adjustments
+          balance = charges - payments - adjustments;
+          if (balanceInput.value !== balance.toFixed(2) && balanceInput !== document.activeElement) {
+            balanceInput.value = balance.toFixed(2);
+          }
+        }
+        else if (adjustments > 0 && balance > 0 && payments === 0) {
+          // Calculate Payments: Charges - Adjustments - Balance
+          payments = charges - adjustments - balance;
+          if (paymentsInput.value !== payments.toFixed(2) && paymentsInput !== document.activeElement) {
+            paymentsInput.value = payments.toFixed(2);
+          }
         }
       }
-      else if (payments > 0 && adjustments > 0) {
-        // We have Charges, Payments, Adjustments → Calculate Balance
-        calculatedBalance = charges - payments - adjustments;
-        if (balanceInput.value !== calculatedBalance.toFixed(2)) {
-          balanceInput.value = calculatedBalance.toFixed(2);
+      // If we have only 1 value entered (plus charges), calculate balance as default
+      else if (valuesEntered === 1) {
+        if (payments > 0) {
+          balance = charges - payments;
+          if (balanceInput.value !== balance.toFixed(2) && balanceInput !== document.activeElement) {
+            balanceInput.value = balance.toFixed(2);
+          }
         }
-      }
-      else if (adjustments > 0 && balance > 0) {
-        // We have Charges, Adjustments, Balance → Calculate Payments
-        const calculatedPayments = charges - adjustments - balance;
-        if (paymentsInput.value !== calculatedPayments.toFixed(2)) {
-          paymentsInput.value = calculatedPayments.toFixed(2);
+        else if (adjustments > 0) {
+          balance = charges - adjustments;
+          if (balanceInput.value !== balance.toFixed(2) && balanceInput !== document.activeElement) {
+            balanceInput.value = balance.toFixed(2);
+          }
         }
-      }
-      else if (payments > 0) {
-        // We have Charges and Payments only → Calculate Balance (Adjustments = 0)
-        calculatedBalance = charges - payments;
-        if (balanceInput.value !== calculatedBalance.toFixed(2)) {
-          balanceInput.value = calculatedBalance.toFixed(2);
-        }
-      }
-      else if (adjustments > 0) {
-        // We have Charges and Adjustments only → Calculate Balance (Payments = 0)
-        calculatedBalance = charges - adjustments;
-        if (balanceInput.value !== calculatedBalance.toFixed(2)) {
-          balanceInput.value = calculatedBalance.toFixed(2);
-        }
-      }
-      else if (balance > 0) {
-        // We have Charges and Balance only → Calculate Adjustments (Payments = 0)
-        calculatedAdjustments = charges - balance;
-        if (adjustmentsInput.value !== calculatedAdjustments.toFixed(2)) {
-          adjustmentsInput.value = calculatedAdjustments.toFixed(2);
+        else if (balance > 0) {
+          adjustments = charges - balance;
+          if (adjustmentsInput.value !== adjustments.toFixed(2) && adjustmentsInput !== document.activeElement) {
+            adjustmentsInput.value = adjustments.toFixed(2);
+          }
         }
       }
     }
 
     return { 
       charges, 
-      payments: payments > 0 ? payments : 0,
-      adjustments: calculatedAdjustments > 0 ? calculatedAdjustments : 0,
-      balance: calculatedBalance > 0 ? calculatedBalance : 0
+      payments: originalPayments > 0 ? originalPayments : payments,
+      adjustments: originalAdjustments > 0 ? originalAdjustments : adjustments,
+      balance: originalBalance > 0 ? originalBalance : balance
     };
   }
 
@@ -153,7 +160,7 @@
         <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount" value="${rowData.charges}"></td>
         <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="Calculated" value="${rowData.balance}"></td>
+        <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
       `;
       tbody.appendChild(tr);
     });
@@ -168,7 +175,7 @@
       <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="Calculated"></td>
+      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
     `;
     tbody.appendChild(tr);
     saveTableData();
@@ -251,7 +258,7 @@
       }
 
       tbody.addEventListener("input", (e) => {
-        // Recalculate when any input changes
+        // Recalculate when any input changes, but don't interfere with currently focused field
         calculateTotals();
         saveTableData();
       });
