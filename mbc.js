@@ -1,6 +1,6 @@
 /*
  * mbc.js - Medical Bill Calculator Core Functionality
- * MODIFIED: Single row start, add/remove rows, summary within table
+ * MODIFIED: Single row start, add/remove rows, original summary style
  */
 
 (() => {
@@ -198,8 +198,7 @@
           event.target.id === 'totalPayments' ||
           event.target.id === 'totalAdjustments' || 
           event.target.id === 'totalBalance' ||
-          event.target.id === 'incurredTotal' ||
-          event.target.classList.contains('summary-value')) {
+          event.target.id === 'incurredTotal') {
         copyToClipboard(event.target.textContent, event);
       }
     });
