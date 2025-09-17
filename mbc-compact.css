@@ -1,0 +1,50 @@
+.compact-mode {
+  margin: 0;
+  padding: 10px;
+  background: #f4f6f8;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.compact-container {
+  max-width: 100%;
+}
+
+.compact-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.compact-controls button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Make everything more compact */
+.table-with-total {
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+
+th, td {
+  padding: 6px 4px !important;
+  font-size: 0.85rem !important;
+}
+
+input[type="number"] {
+  padding: 4px 6px !important;
+  font-size: 0.9rem !important;
+}
+
+.total-incurred-row td {
+  padding: 8px !important;
+  font-size: 1rem !important;
+}
+
+#incurredTotal {
+  font-size: 1.1rem !important;
+}
