@@ -382,3 +382,31 @@ footer span {
 body.dark-mode footer {
     color: #aaa;
 }
+/* Add these rules to your existing CSS */
+
+/* Style for formula inputs (text type) */
+input[type="text"].payments-input,
+input[type="text"].adjustments-input {
+    background-color: #e8f5e8 !important; /* Light green background */
+    border: 1px solid #4caf50 !important;
+    font-style: italic;
+}
+
+body.dark-mode input[type="text"].payments-input,
+body.dark-mode input[type="text"].adjustments-input {
+    background-color: #1b5e20 !important;
+    border-color: #4caf50 !important;
+    color: #e0f2f1 !important;
+}
+
+/* Keep number inputs styled as before */
+input[type="number"].charges-input,
+input[type="number"].balance-input {
+    background-color: #fff !important;
+}
+
+body.dark-mode input[type="number"].charges-input,
+body.dark-mode input[type="number"].balance-input {
+    background-color: #2e2e2e !important;
+    color: #e0f2f1 !important;
+}
