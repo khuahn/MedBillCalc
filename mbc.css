@@ -377,3 +377,147 @@ footer span {
 body.dark-mode footer {
     color: #aaa;
 }
+/* ==================== */
+/* MOBILE RESPONSIVENESS */
+/* ==================== */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 15px;
+    margin: 20px auto;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    margin: 0 0 20px 0;
+  }
+  
+  /* Table responsiveness */
+  .table-with-total {
+    overflow-x: auto;
+    margin-bottom: 15px;
+  }
+  
+  table {
+    min-width: 500px; /* Minimum width before scrolling */
+  }
+  
+  th, td, tfoot td {
+    padding: 10px 6px;
+    font-size: 0.9rem;
+  }
+  
+  /* Larger touch targets for inputs */
+  input[type="number"] {
+    padding: 10px 8px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Button group adjustments */
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .button-group button,
+  #themeToggle {
+    padding: 12px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  /* Remove button larger for touch */
+  .remove-row-btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  
+  /* Summary row adjustments */
+  .total-incurred-row td {
+    font-size: 1rem;
+    padding: 10px;
+  }
+  
+  #incurredTotal {
+    font-size: 1.1rem;
+  }
+  
+  /* Copy hover effects for touch devices */
+  tfoot span:hover, #incurredTotal:hover {
+    background-color: transparent;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 15px 10px;
+  }
+  
+  h1 {
+    font-size: 1.3rem;
+  }
+  
+  th, td, tfoot td {
+    padding: 8px 4px;
+    font-size: 0.85rem;
+  }
+  
+  input[type="number"] {
+    padding: 8px 6px;
+    font-size: 14px;
+  }
+  
+  /* Stack summary numbers if really tight */
+  .total-incurred-row td {
+    font-size: 0.95rem;
+  }
+  
+  #incurredTotal {
+    font-size: 1rem;
+  }
+}
+
+/* Prevent zoom on iOS input focus */
+@media (max-width: 768px) {
+  input[type="number"] {
+    font-size: 16px !important;
+  }
+  
+  select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Better touch feedback */
+@media (hover: none) and (pointer: coarse) {
+  .button-group button:active,
+  #themeToggle:active,
+  .remove-row-btn:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
+  /* Enhanced touch targets */
+  .button-group button,
+  #themeToggle {
+    min-height: 44px; /* Apple's recommended minimum touch target */
+  }
+  
+  .remove-row-btn {
+    min-height: 36px;
+    min-width: 36px;
+  }
+}
+
+/* Print adjustments for mobile */
+@media print and (max-width: 768px) {
+  .container {
+    padding: 10px !important;
+    margin: 10px auto !important;
+  }
+  
+  table {
+    min-width: 100% !important;
+  }
+}
