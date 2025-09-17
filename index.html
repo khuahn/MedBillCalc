@@ -17,7 +17,7 @@
   <div class="container">
     <h1>Medical Bill Calculator</h1>
     
-    <!-- Table with Integrated Summary -->
+    <!-- Table with Integrated Total Incurred -->
     <div class="table-with-total">
       <table id="billTable">
         <thead>
@@ -33,31 +33,18 @@
           <!-- Rows will be added by JavaScript -->
         </tbody>
         <tfoot>
-          <!-- Summary Section within Table -->
-          <tr class="summary-row">
+          <!-- Original Summary Style -->
+          <tr>
+            <td><span id="totalCharges">0.00</span></td>
+            <td><span id="totalPayments">0.00</span></td>
+            <td><span id="totalAdjustments">0.00</span></td>
+            <td><span id="totalBalance">0.00</span></td>
+            <td></td>
+          </tr>
+          <!-- Integrated Total Incurred as part of the table -->
+          <tr class="total-incurred-row">
             <td colspan="5">
-              <div class="table-summary">
-                <div class="summary-item">
-                  <span class="summary-label">Total Charged:</span>
-                  <span class="summary-value" id="totalCharges">0.00</span>
-                </div>
-                <div class="summary-item">
-                  <span class="summary-label">Total Payment:</span>
-                  <span class="summary-value" id="totalPayments">0.00</span>
-                </div>
-                <div class="summary-item">
-                  <span class="summary-label">Total Adjustment:</span>
-                  <span class="summary-value" id="totalAdjustments">0.00</span>
-                </div>
-                <div class="summary-item">
-                  <span class="summary-label">Total Balance:</span>
-                  <span class="summary-value" id="totalBalance">0.00</span>
-                </div>
-                <div class="summary-item highlight">
-                  <span class="summary-label">Total Incurred:</span>
-                  <span class="summary-value" id="incurredTotal">0.00</span>
-                </div>
-              </div>
+              Total Incurred : <span id="incurredTotal">0.00</span>
             </td>
           </tr>
         </tfoot>
