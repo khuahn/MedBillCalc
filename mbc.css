@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.2 - Fixed print margins for dark mode
+ * Version: 2.3 - Removed locking, improved printing, icon-only buttons
  */
 
 :root {
@@ -11,7 +11,7 @@
     --input-bg: #e0f2f1;
     --table-bg: #e0f2f1;
     --text-color: #333;
-    --text-color-dark: #e0f2f1;
+    --text-color-dark: #e0e0e0;
     --border-color: #ccc;
     --footer-color: #888;
 }
@@ -135,16 +135,10 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-input[type="number"]::placeholder {
-    color: #888;
-    font-style: italic;
-    opacity: 0.7;
-}
-
 /* Button Styles */
 .controls-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 20px;
 }
 
@@ -152,7 +146,7 @@ input[type="number"]::placeholder {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .button-group button,
@@ -165,6 +159,11 @@ input[type="number"]::placeholder {
     font-size: 0.95rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    min-width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-group button:hover,
@@ -179,18 +178,6 @@ input[type="number"]::placeholder {
 
 .danger-btn:hover {
     background-color: #c82333 !important;
-}
-
-/* Locked row styling - Light mode */
-tr.locked-row {
-    background-color: #f0f9eb !important;
-}
-
-.locked-input {
-    background-color: #e8f5e8 !important;
-    color: #2e7d32 !important;
-    font-weight: bold !important;
-    cursor: not-allowed !important;
 }
 
 /* Copy functionality */
@@ -288,10 +275,6 @@ body.dark-mode input[type="number"] {
     border-color: #444;
 }
 
-body.dark-mode input[type="number"]::placeholder {
-    color: #aaa;
-}
-
 body.dark-mode th {
     background-color: var(--primary-dark);
 }
@@ -329,17 +312,6 @@ body.dark-mode #incurredTotal:hover::after {
     color: #ff6b6b;
 }
 
-/* Dark mode locked rows - distinctive style without green */
-body.dark-mode tr.locked-row {
-    background-color: #2a2a2a !important;
-}
-
-body.dark-mode .locked-input {
-    background-color: #3a3a3a !important;
-    color: #e0e0e0 !important;
-    font-weight: bold !important;
-}
-
 body.dark-mode .copied-feedback {
     background: var(--primary-dark);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -349,9 +321,9 @@ body.dark-mode footer {
     color: #aaa;
 }
 
-/* Print Styles - Grayscale Only - FIXED VERSION */
+/* Print Styles - Always Light Mode Look */
 @media print {
-  /* Reset everything to grayscale */
+  /* Reset everything to light mode appearance */
   * {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
@@ -361,7 +333,7 @@ body.dark-mode footer {
     text-shadow: none !important;
   }
   
-  /* Fix for body margins in print */
+  /* Force light mode appearance */
   body, body.dark-mode {
     background: white !important;
     color: black !important;
@@ -382,7 +354,6 @@ body.dark-mode footer {
     border-radius: 8px !important;
     border: 1px solid #ddd !important;
     width: auto !important;
-    /* Ensure proper box model */
     box-sizing: border-box !important;
   }
   
@@ -393,7 +364,7 @@ body.dark-mode footer {
     padding: 0 !important;
   }
   
-  /* Table styling - grayscale only */
+  /* Table styling - light mode only */
   .table-with-total {
     background: white !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
@@ -402,7 +373,6 @@ body.dark-mode footer {
     margin-bottom: 16px !important;
     border: 1px solid #ddd !important;
     width: 100% !important;
-    /* Ensure proper box sizing */
     box-sizing: border-box !important;
   }
   
@@ -413,8 +383,8 @@ body.dark-mode footer {
   }
   
   th {
-    background: #f0f0f0 !important;
-    color: black !important;
+    background: #00796b !important;
+    color: white !important;
     font-weight: bold !important;
     border: 1px solid #ddd !important;
   }
@@ -428,19 +398,19 @@ body.dark-mode footer {
   }
   
   td {
-    background: white !important;
+    background: #e0f2f1 !important;
     color: black !important;
     border: 1px solid #ddd !important;
   }
   
   tfoot td {
-    background: #f8f8f8 !important;
+    background: #e0f2f1 !important;
     color: black !important;
     font-weight: bold !important;
   }
   
   .total-incurred-row td {
-    background: #f0f0f0 !important;
+    background: #e0f2f1 !important;
     color: black !important;
     font-weight: bold !important;
     font-size: 1.1rem !important;
@@ -478,34 +448,13 @@ body.dark-mode footer {
     width: 100% !important;
   }
   
-  /* Locked rows styling for print - FIXED */
-  tr.locked-row, 
-  body.dark-mode tr.locked-row {
-    background: #f8f8f8 !important;
-  }
-  
-  tr.locked-row td,
-  body.dark-mode tr.locked-row td {
-    background: #f8f8f8 !important;
-    color: black !important;
-    border: 1px solid #ddd !important;
-  }
-  
-  .locked-input,
-  body.dark-mode .locked-input {
-    background: transparent !important;
-    color: black !important;
-    font-weight: bold !important;
-  }
-  
   /* Hide empty rows in print */
-  tr:not(.locked-row) input[type="number"]:not([value]):not(:focus),
-  tr:not(.locked-row) input[type="number"][value=""] {
-    display: none;
+  tr:not(:has(input[value])) {
+    display: none !important;
   }
-  
-  tr:not(.locked-row):has(input[type="number"]:not([value]):not(:focus)),
-  tr:not(.locked-row):has(input[type="number"][value=""]) {
+
+  tr input[type="number"]:not([value]):not(:focus),
+  tr input[type="number"][value=""] {
     display: none !important;
   }
 
@@ -515,7 +464,6 @@ body.dark-mode footer {
   h1, 
   .button-group, 
   #themeToggle,
-  .remove-row-btn,
   .copied-feedback {
     display: none !important;
   }
@@ -591,7 +539,7 @@ body.dark-mode footer {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 6px;
-    justify-content: center;
+    justify-content: flex-start;
   }
   
   .button-group button,
@@ -600,14 +548,13 @@ body.dark-mode footer {
     font-size: 0.9rem;
     min-width: auto;
     flex: 1;
-    min-width: 60px;
+    min-width: 44px;
     white-space: nowrap;
   }
   
   /* Specific button adjustments */
   .button-group button i {
     font-size: 0.9rem;
-    margin-right: 3px;
   }
   
   /* Summary row adjustments */
@@ -654,12 +601,11 @@ body.dark-mode footer {
   #themeToggle {
     padding: 8px 6px;
     font-size: 0.8rem;
-    min-width: 50px;
+    min-width: 40px;
   }
   
   .button-group button i {
     font-size: 0.8rem;
-    margin-right: 2px;
   }
   
   .total-incurred-row td {
@@ -682,31 +628,17 @@ body.dark-mode footer {
   #themeToggle {
     padding: 6px 4px;
     font-size: 0.75rem;
-    min-width: 45px;
+    min-width: 36px;
   }
   
   .button-group button i {
     font-size: 0.75rem;
-    margin-right: 1px;
-  }
-  
-  /* Hide button text on very small screens, show only icons */
-  .button-group button span {
-    display: none;
-  }
-  
-  .button-group button i {
-    margin-right: 0;
   }
 }
 
 /* Fix for iOS input zoom */
 @media (max-width: 768px) {
   input[type="number"] {
-    font-size: 16px !important;
-  }
-  
-  select, textarea {
     font-size: 16px !important;
   }
 }
