@@ -1,6 +1,6 @@
 /*
- * mbc.js - Medical Bill Calculator with Improved Feedback
- * Version: 2.7 - Fixed feedback positioning and timing
+ * mbc.js - Medical Bill Calculator with Improved Auto-Calculation
+ * Version: 2.8 - Fixed single-click population for all fields
  */
 
 (() => {
@@ -53,32 +53,37 @@
       let adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
       let balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
 
+      // Check if fields are empty (not just zero)
+      const paymentsEmpty = paymentsInput.value === '';
+      const adjustmentsEmpty = adjustmentsInput.value === '';
+      const balanceEmpty = balanceInput.value === '';
+
       // Hospital billing logic: if charges exist but no payments/adjustments, consider as balance
       if (charges > 0) {
-        const hasPayments = payments > 0 || paymentsInput.value !== '';
-        const hasAdjustments = adjustments > 0 || adjustmentsInput.value !== '';
-        const hasBalance = balance > 0 || balanceInput.value !== '';
-        
-        // If charges are provided but nothing else, set balance to charges
-        if (!hasPayments && !hasAdjustments && !hasBalance) {
+        // If only charges are provided, set payments and adjustments to 0, balance to charges
+        if (paymentsEmpty && adjustmentsEmpty && balanceEmpty) {
+          payments = 0;
+          adjustments = 0;
           balance = charges;
+          paymentsInput.value = payments.toFixed(2);
+          adjustmentsInput.value = adjustments.toFixed(2);
           balanceInput.value = balance.toFixed(2);
         }
         // If charges and only one other value is provided, calculate the remaining two
-        else if ([hasPayments, hasAdjustments, hasBalance].filter(Boolean).length === 1) {
-          if (hasPayments) {
+        else if ([!paymentsEmpty, !adjustmentsEmpty, !balanceEmpty].filter(Boolean).length === 1) {
+          if (!paymentsEmpty) {
             // Charges and payments provided: set adjustments to 0, balance to charges - payments
             adjustments = 0;
             balance = charges - payments;
             adjustmentsInput.value = adjustments.toFixed(2);
             balanceInput.value = balance.toFixed(2);
-          } else if (hasAdjustments) {
+          } else if (!adjustmentsEmpty) {
             // Charges and adjustments provided: set payments to 0, balance to charges - adjustments
             payments = 0;
             balance = charges - adjustments;
             paymentsInput.value = payments.toFixed(2);
             balanceInput.value = balance.toFixed(2);
-          } else if (hasBalance) {
+          } else if (!balanceEmpty) {
             // Charges and balance provided: set payments and adjustments to 0
             payments = 0;
             adjustments = 0;
@@ -87,20 +92,20 @@
           }
         }
         // If two values are provided, calculate the third
-        else if ([hasPayments, hasAdjustments, hasBalance].filter(Boolean).length === 2) {
-          if (!hasPayments) {
+        else if ([!paymentsEmpty, !adjustmentsEmpty, !balanceEmpty].filter(Boolean).length === 2) {
+          if (paymentsEmpty) {
             // Calculate payments: Charges - Adjustments - Balance
             payments = charges - adjustments - balance;
             if (payments >= 0) {
               paymentsInput.value = payments.toFixed(2);
             }
-          } else if (!hasAdjustments) {
+          } else if (adjustmentsEmpty) {
             // Calculate adjustments: Charges - Payments - Balance
             adjustments = charges - payments - balance;
             if (adjustments >= 0) {
               adjustmentsInput.value = adjustments.toFixed(2);
             }
-          } else if (!hasBalance) {
+          } else if (balanceEmpty) {
             // Calculate balance: Charges - Payments - Adjustments
             balance = charges - payments - adjustments;
             if (balance >= 0) {
