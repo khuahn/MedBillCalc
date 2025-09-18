@@ -1,0 +1,738 @@
+/*
+ * mbc.css - Medical Bill Calculator Clean Styles
+ */
+
+:root {
+    --primary-color: #00796b;
+    --primary-dark: #004d40;
+    --background-color: #f4f6f8;
+    --container-bg: #fff;
+    --input-bg: #e0f2f1;
+    --table-bg: #e0f2f1;
+    --text-color: #333;
+    --text-color-dark: #e0f2f1;
+    --border-color: #ccc;
+    --footer-color: #888;
+}
+
+/* Base Styles */
+body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 20px;
+}
+
+.container {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 40px 30px;
+    background: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 0 0 24px 0;
+    text-align: center;
+}
+
+/* Table Styles */
+.table-with-total {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: var(--table-bg);
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
+}
+
+tr:first-child th:first-child {
+    border-top-left-radius: 8px;
+}
+
+tr:first-child th:last-child {
+    border-top-right-radius: 8px;
+}
+
+td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+tfoot td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* Total Incurred Row */
+.total-incurred-row td {
+    background-color: var(--table-bg);
+    color: var(--text-color);
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 12px;
+}
+
+.total-incurred-row td:first-child {
+    border-bottom-left-radius: 8px;
+}
+
+.total-incurred-row td:last-child {
+    border-bottom-right-radius: 8px;
+}
+
+#incurredTotal {
+    color: red;
+    font-size: 1.2rem;
+    margin-left: 5px;
+    font-weight: 800;
+}
+
+/* Input Styles */
+input[type="number"] {
+    -moz-appearance: textfield;
+    width: 100%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"]::placeholder {
+    color: #888;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+/* Button Styles */
+.controls-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.button-group button,
+#themeToggle {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-group button:hover,
+#themeToggle:hover {
+    background-color: var(--primary-dark);
+}
+
+.danger-btn {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.danger-btn:hover {
+    background-color: #c82333 !important;
+}
+
+/* Copy Functionality */
+tfoot span:hover, #incurredTotal:hover {
+    cursor: pointer;
+    background-color: rgba(0, 121, 107, 0.1);
+    border-radius: 3px;
+    position: relative;
+}
+
+tfoot span:hover::after, #incurredTotal:hover::after {
+    content: "\f0c5";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 0.8em;
+    color: var(--primary-color);
+    margin-left: 5px;
+}
+
+#incurredTotal:hover::after {
+    color: #d32f2f;
+}
+
+/* Copied Feedback */
+.copied-feedback {
+    position: fixed;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 10000;
+    animation: fadeOut 1s ease-in-out forwards;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0 auto;
+    text-align: center;
+    min-width: 120px;
+}
+
+@keyframes fadeOut {
+    0% { 
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    70% { 
+        opacity: 1;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    100% { 
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: var(--footer-color);
+}
+
+footer a {
+    color: teal;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer span {
+    opacity: 0.8;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #121212;
+    color: var(--text-color-dark);
+}
+
+body.dark-mode .container {
+    background-color: #1e1e1e;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode input[type="number"] {
+    background-color: #2e2e2e;
+    color: var(--text-color-dark);
+    border-color: #444;
+}
+
+body.dark-mode input[type="number"]::placeholder {
+    color: #aaa;
+}
+
+body.dark-mode th {
+    background-color: var(--primary-dark);
+}
+
+body.dark-mode td {
+    background-color: #004d40;
+}
+
+body.dark-mode .button-group button,
+body.dark-mode #themeToggle {
+    background-color: var(--primary-dark);
+    color: var(--text-color-dark);
+}
+
+body.dark-mode tfoot td {
+    color: #fff;
+}
+
+body.dark-mode .total-incurred-row td {
+    background-color: #004d40;
+    color: #e0f2f1;
+}
+
+body.dark-mode tfoot span:hover, 
+body.dark-mode #incurredTotal:hover {
+    background-color: rgba(0, 121, 107, 0.3);
+}
+
+body.dark-mode tfoot span:hover::after,
+body.dark-mode #incurredTotal:hover::after {
+    color: #4db6ac;
+}
+
+body.dark-mode #incurredTotal:hover::after {
+    color: #ff6b6b;
+}
+
+body.dark-mode .copied-feedback {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode footer {
+    color: #aaa;
+}
+
+/* ==================== */
+/* PRINT STYLES */
+/* ==================== */
+
+@media print {
+  /* Reset everything to print-friendly light mode */
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  body, body.dark-mode {
+    background-color: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.4;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .container {
+    max-width: 100% !important;
+    padding: 0.5in !important;
+    margin: 0 !important;
+    background: white !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+  }
+  
+  /* Table styles */
+  .table-with-total, table {
+    width: 100% !important;
+    border: 1px solid #ccc !important;
+    border-collapse: collapse !important;
+    page-break-inside: avoid;
+  }
+  
+  th, td {
+    border: 1px solid #ccc !important;
+    padding: 6px 4px !important;
+    background: white !important;
+    color: black !important;
+    font-size: 10pt !important;
+  }
+  
+  th {
+    background: #f0f0f0 !important;
+    font-weight: bold !important;
+    color: black !important;
+  }
+  
+  /* Input fields - make them look like regular text */
+  input[type="number"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
+    appearance: none !important;
+    border: none !important;
+    background: transparent !important;
+    color: black !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    font-size: 10pt !important;
+    font-weight: normal !important;
+    text-align: center !important;
+    outline: none !important;
+  }
+  
+  /* Remove all input styling for print */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+  
+  /* Summary and totals */
+  tfoot td {
+    background: #f8f8f8 !important;
+    font-weight: bold !important;
+    color: black !important;
+  }
+  
+  .total-incurred-row td {
+    background: #e8e8e8 !important;
+    color: black !important;
+    font-weight: bold !important;
+    font-size: 11pt !important;
+  }
+  
+  #incurredTotal {
+    color: black !important;
+    font-weight: bold !important;
+  }
+  
+  /* Hide non-essential elements */
+  .controls-container, 
+  footer, 
+  h1, 
+  .button-group, 
+  #themeToggle,
+  .remove-row-btn,
+  .copied-feedback {
+    display: none !important;
+  }
+  
+  /* Page breaks */
+  table {
+    page-break-inside: avoid;
+  }
+  
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  
+  /* Ensure good contrast */
+  .table-with-total {
+    border: 1px solid #000 !important;
+  }
+  
+  /* Remove any animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Links */
+  a {
+    text-decoration: underline !important;
+    color: #0000EE !important;
+  }
+  
+  a:after {
+    content: " (" attr(href) ") ";
+    font-size: 90%;
+  }
+  
+  /* Don't show URLs for these */
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+}
+
+/* Additional print-specific optimizations */
+@media print and (max-width: 768px) {
+  .container {
+    padding: 0.25in !important;
+  }
+  
+  th, td {
+    padding: 4px 2px !important;
+    font-size: 9pt !important;
+  }
+  
+  input[type="number"] {
+    font-size: 9pt !important;
+  }
+}
+
+/* Ensure dark mode doesn't affect print */
+body.dark-mode {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* Force light colors for print preview */
+@media print {
+  @page {
+    margin: 0.5in;
+    size: portrait;
+  }
+  
+  /* Remove URL from printed pages */
+  .container:after {
+    content: "Medical Bill Calculator - medbillcalc.pages.dev";
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-size: 8pt;
+    color: #666;
+  }
+}
+
+/* ==================== */
+/* MOBILE RESPONSIVENESS */
+/* ==================== */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+    margin: 15px auto;
+  }
+  
+  h1 {
+    font-size: 1.4rem;
+    margin: 0 0 15px 0;
+  }
+  
+  /* Table responsiveness */
+  .table-with-total {
+    overflow-x: auto;
+    margin-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    min-width: 100%; /* Changed from 500px to 100% */
+    width: 100%;
+  }
+  
+  th, td {
+    padding: 8px 4px;
+    font-size: 0.85rem;
+    word-wrap: break-word;
+  }
+  
+  /* Input field adaptations */
+  input[type="number"] {
+    padding: 8px 6px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Keep buttons horizontal but wrap if needed */
+  .button-group {
+    flex-direction: row; /* Force horizontal layout */
+    flex-wrap: wrap; /* Allow wrapping to next line if needed */
+    gap: 6px;
+    justify-content: center;
+  }
+  
+  .button-group button,
+  #themeToggle {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    min-width: auto; /* Remove fixed min-width */
+    flex: 1; /* Allow buttons to grow/shrink equally */
+    min-width: 60px; /* Minimum reasonable size */
+    white-space: nowrap; /* Prevent text wrapping inside buttons */
+  }
+  
+  /* Specific button adjustments */
+  .button-group button i {
+    font-size: 0.9rem;
+    margin-right: 3px;
+  }
+  
+  /* Remove button adjustments */
+  .remove-row-btn {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+  
+  /* Summary row adjustments */
+  .total-incurred-row td {
+    font-size: 0.95rem;
+    padding: 10px 5px;
+  }
+  
+  #incurredTotal {
+    font-size: 1rem;
+  }
+  
+  /* Ensure table cells don't overflow */
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+  
+  h1 {
+    font-size: 1.2rem;
+  }
+  
+  th, td {
+    padding: 6px 3px;
+    font-size: 0.8rem;
+  }
+  
+  input[type="number"] {
+    padding: 6px 4px;
+    font-size: 14px;
+  }
+  
+  .button-group {
+    gap: 4px;
+  }
+  
+  .button-group button,
+  #themeToggle {
+    padding: 8px 6px;
+    font-size: 0.8rem;
+    min-width: 50px;
+  }
+  
+  .button-group button i {
+    font-size: 0.8rem;
+    margin-right: 2px;
+  }
+  
+  .total-incurred-row td {
+    font-size: 0.9rem;
+    padding: 8px 4px;
+  }
+  
+  #incurredTotal {
+    font-size: 0.95rem;
+  }
+}
+
+/* Special handling for very small screens */
+@media (max-width: 360px) {
+  .button-group {
+    gap: 3px;
+  }
+  
+  .button-group button,
+  #themeToggle {
+    padding: 6px 4px;
+    font-size: 0.75rem;
+    min-width: 45px;
+  }
+  
+  .button-group button i {
+    font-size: 0.75rem;
+    margin-right: 1px;
+  }
+  
+  /* Hide button text on very small screens, show only icons */
+  .button-group button span {
+    display: none;
+  }
+  
+  .button-group button i {
+    margin-right: 0;
+  }
+}
+
+/* Ensure inputs never overflow their containers */
+input[type="number"] {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Prevent table from causing horizontal scroll */
+.table-with-total {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Fix for iOS input zoom */
+@media (max-width: 768px) {
+  input[type="number"] {
+    font-size: 16px !important;
+  }
+  
+  select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Better touch feedback for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .button-group button:active,
+  #themeToggle:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+  
+  .button-group button,
+  #themeToggle {
+    min-height: 44px; /* Apple's recommended minimum touch target */
+  }
+  
+  input[type="number"] {
+    min-height: 44px; /* Better touch targets for inputs too */
+  }
+}
+
+/* Prevent horizontal scrolling on body */
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+/* iOS Input Fix */
+@media (max-width: 768px) {
+    input[type="number"] {
+        font-size: 16px;
+    }
+}
+
+/* Touch Device Optimization */
+@media (hover: none) and (pointer: coarse) {
+    .button-group button:active,
+    #themeToggle:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    .button-group button,
+    #themeToggle {
+        min-height: 44px;
+    }
+}
