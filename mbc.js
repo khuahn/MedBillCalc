@@ -1,5 +1,5 @@
 /*
- * mbc.js - Medical Bill Calculator with Row Locking
+ * mbc.js - Medical Bill Calculator with Auto-Lock Feature
  */
 
 (() => {
@@ -24,79 +24,53 @@
     });
   }
 
-  function calculateMissingValue(row) {
+  function calculateAndLockRow(row) {
     const chargesInput = row.querySelector(".charges-input");
     const paymentsInput = row.querySelector(".payments-input");
     const adjustmentsInput = row.querySelector(".adjustments-input");
     const balanceInput = row.querySelector(".balance-input");
 
     const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
-    const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
-    const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
-    const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
+    let payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+    let adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+    let balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
 
-    let calculatedValue = 0;
-    let fieldToSet = null;
-
-    // Determine which field is missing and calculate it
+    // Calculate missing value if possible
     if (charges > 0) {
       if (payments === 0 && adjustments > 0 && balance > 0) {
         // Calculate Payments: Charges - Adjustments - Balance
-        calculatedValue = charges - adjustments - balance;
-        fieldToSet = paymentsInput;
+        payments = charges - adjustments - balance;
+        paymentsInput.value = payments.toFixed(2);
       } else if (adjustments === 0 && payments > 0 && balance > 0) {
         // Calculate Adjustments: Charges - Payments - Balance
-        calculatedValue = charges - payments - balance;
-        fieldToSet = adjustmentsInput;
+        adjustments = charges - payments - balance;
+        adjustmentsInput.value = adjustments.toFixed(2);
       } else if (balance === 0 && payments > 0 && adjustments > 0) {
         // Calculate Balance: Charges - Payments - Adjustments
-        calculatedValue = charges - payments - adjustments;
-        fieldToSet = balanceInput;
+        balance = charges - payments - adjustments;
+        balanceInput.value = balance.toFixed(2);
       }
     }
 
-    return { calculatedValue, fieldToSet };
-  }
-
-  function lockRow(row) {
-    const { calculatedValue, fieldToSet } = calculateMissingValue(row);
-    
-    // If there's a missing value, calculate and set it
-    if (fieldToSet && !isNaN(calculatedValue)) {
-      fieldToSet.value = calculatedValue.toFixed(2);
+    // Lock the row if we have at least charges and one other value
+    if (charges > 0 && (payments > 0 || adjustments > 0 || balance > 0)) {
+      const inputs = row.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.readOnly = true;
+        input.classList.add('locked-input');
+      });
+      row.classList.add('locked-row');
     }
 
-    // Lock all inputs in the row
-    const inputs = row.querySelectorAll('input');
-    inputs.forEach(input => {
-      input.readOnly = true;
-      input.classList.add('locked-input');
-    });
-
-    // Add lock status indicator
-    const statusCell = row.querySelector('.row-status') || row.insertCell(-1);
-    statusCell.className = 'row-status';
-    statusCell.innerHTML = '<span class="lock-icon"><i class="fas fa-lock"></i></span><span class="lock-status">Locked</span>';
-    
-    // Add locked class to row
-    row.classList.add('locked-row');
+    return { charges, payments, adjustments, balance };
   }
 
   function unlockRow(row) {
-    // Unlock all inputs in the row
     const inputs = row.querySelectorAll('input');
     inputs.forEach(input => {
       input.readOnly = false;
       input.classList.remove('locked-input');
     });
-
-    // Remove lock status indicator
-    const statusCell = row.querySelector('.row-status');
-    if (statusCell) {
-      statusCell.innerHTML = '';
-    }
-    
-    // Remove locked class from row
     row.classList.remove('locked-row');
   }
 
@@ -104,17 +78,11 @@
     const tbody = document.getElementById("tableBody");
     if (!tbody) return;
 
-    // Lock the current row if it has data
+    // Calculate, lock, and add current row values to totals
     const rows = tbody.querySelectorAll('tr');
     if (rows.length > 0) {
-      const lastRow = rows[rows.length - 1];
-      const hasData = Array.from(lastRow.querySelectorAll('input')).some(input => {
-        return parseFloat(normalizeInput(input.value)) > 0;
-      });
-      
-      if (hasData && !lastRow.classList.contains('locked-row')) {
-        lockRow(lastRow);
-      }
+      const currentRow = rows[rows.length - 1];
+      calculateAndLockRow(currentRow);
     }
 
     // Add new row
@@ -124,9 +92,11 @@
       <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
-      <td class="row-status"></td>
     `;
     tbody.appendChild(tr);
+    
+    // Recalculate totals and save
+    calculateTotals();
     saveTableData();
   }
 
@@ -136,11 +106,9 @@
       const rowToRemove = rows[rows.length - 1];
       
       // Unlock the previous row before removing current one
-      if (rows.length > 1) {
-        const previousRow = rows[rows.length - 2];
-        if (previousRow.classList.contains('locked-row')) {
-          unlockRow(previousRow);
-        }
+      const previousRow = rows[rows.length - 2];
+      if (previousRow.classList.contains('locked-row')) {
+        unlockRow(previousRow);
       }
       
       rowToRemove.remove();
@@ -217,11 +185,15 @@
         <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
         <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
-        <td class="row-status"></td>
       `;
       
       if (rowData.isLocked) {
-        lockRow(tr);
+        const inputs = tr.querySelectorAll('input');
+        inputs.forEach(input => {
+          input.readOnly = true;
+          input.classList.add('locked-input');
+        });
+        tr.classList.add('locked-row');
       }
       
       tbody.appendChild(tr);
