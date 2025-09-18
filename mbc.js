@@ -2,6 +2,42 @@
  * mbc.js - Medical Bill Calculator Core Functionality
  */
 
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('SW registered: ', registration);
+      })
+      .catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+
+// Optional: Prompt user to install PWA
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  // You can show your own install button here if wanted
+  console.log('PWA install prompt available');
+});
+
+// Function to manually trigger install
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted PWA install');
+      }
+      deferredPrompt = null;
+    });
+  }
+}
+
 (() => {
   "use strict";
 
@@ -11,21 +47,29 @@
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
-function copyToClipboard(text, event) {
-  navigator.clipboard.writeText(text).then(() => {
-    const feedback = document.createElement('div');
-    feedback.className = 'copied-feedback';
-    feedback.textContent = 'Copied!';
-    document.body.appendChild(feedback);
-    
-    feedback.style.top = (event.clientY - 30) + 'px';
-    feedback.style.left = event.clientX + 'px';
-    
-    setTimeout(() => feedback.remove(), 1000);
-  }).catch(err => {
-    console.error('Failed to copy: ', err);
-  });
-}
+  function copyToClipboard(text, event) {
+    navigator.clipboard.writeText(text).then(() => {
+      const feedback = document.createElement('div');
+      feedback.className = 'copied-feedback';
+      feedback.textContent = 'Copied!';
+      document.body.appendChild(feedback);
+      
+      setTimeout(() => feedback.remove(), 1000);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }
+
+  function deleteLastRow() {
+    const rows = document.querySelectorAll("#tableBody tr");
+    if (rows.length > 1) {
+      rows[rows.length - 1].remove();
+      calculateTotals();
+      saveTableData();
+    } else {
+      alert("You need to keep at least one row in the calculator.");
+    }
+  }
 
   function calculateTotals() {
     const rows = document.querySelectorAll("#tableBody tr");
@@ -34,6 +78,7 @@ function copyToClipboard(text, event) {
       totalAdjustments = 0,
       totalBalance = 0;
 
+    // First pass: sum up all manually entered values
     rows.forEach((row) => {
       const chargesInput = row.querySelector(".charges-input");
       const paymentsInput = row.querySelector(".payments-input");
@@ -43,17 +88,23 @@ function copyToClipboard(text, event) {
       const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
       const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
       const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
-
-      if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
-        const calculatedBalance = charges - payments - adjustments;
-        balanceInput.value = calculatedBalance.toFixed(2);
-      }
+      const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
 
       totalCharges += charges;
       totalPayments += payments;
       totalAdjustments += adjustments;
-      totalBalance += parseFloat(normalizeInput(balanceInput.value)) || 0;
+      totalBalance += balance;
     });
+
+    // SECOND PASS: Smart calculation for TOTALS only (not individual rows)
+    // Condition 1: If we have total Charges, Payments, and Adjustments → Calculate total Balance
+    if (totalCharges > 0 && totalPayments > 0 && totalAdjustments > 0) {
+      totalBalance = totalCharges - totalPayments - totalAdjustments;
+    }
+    // Condition 2: If we have total Charges, Payments, and Balance → Calculate total Adjustments
+    else if (totalCharges > 0 && totalPayments > 0 && totalBalance > 0) {
+      totalAdjustments = totalCharges - totalPayments - totalBalance;
+    }
 
     const update = (id, val) => {
       const el = document.getElementById(id);
@@ -95,7 +146,7 @@ function copyToClipboard(text, event) {
         <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount" value="${rowData.charges}"></td>
         <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="Calculated" value="${rowData.balance}" readonly></td>
+        <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
       `;
       tbody.appendChild(tr);
     });
@@ -110,29 +161,29 @@ function copyToClipboard(text, event) {
       <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
       <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="Calculated" readonly></td>
+      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
     `;
     tbody.appendChild(tr);
     saveTableData();
   }
 
-function clearTable() {
-  if (!confirm("Are you sure you want to reset the calculator?\n\nAll entered data will be permanently lost!")) {
-    return;
+  function clearTable() {
+    if (!confirm("Are you sure you want to reset the calculator?\n\nAll entered data will be permanently lost!")) {
+      return;
+    }
+    
+    const tbody = document.getElementById("tableBody");
+    if (tbody) {
+      tbody.innerHTML = "";
+      addRow(); // Add just one row instead of five
+      calculateTotals();
+    }
+    localStorage.removeItem(STORAGE_KEY);
   }
-  
-  const tbody = document.getElementById("tableBody");
-  if (tbody) {
-    tbody.innerHTML = "";
-    for (let i = 0; i < 5; i++) addRow();
-    calculateTotals();
-  }
-  localStorage.removeItem(STORAGE_KEY);
-}
 
-function printPDF() {
-  window.print();
-}
+  function printPDF() {
+    window.print();
+  }
 
   function toggleDarkMode() {
     const isDark = document.body.classList.toggle("dark-mode");
@@ -152,15 +203,15 @@ function printPDF() {
     if (btn) btn.setAttribute('aria-pressed', String(isDark));
   }
 
- function initTheme() {
-  const saved = localStorage.getItem("theme");
-  if (saved === "dark") {
-    document.body.classList.add("dark-mode");
-    updateThemeToggleUI(true);
-  } else {
-    updateThemeToggleUI(false);
+  function initTheme() {
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark") {
+      document.body.classList.add("dark-mode");
+      updateThemeToggleUI(true);
+    } else {
+      updateThemeToggleUI(false);
+    }
   }
-}
 
   document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('click', (event) => {
@@ -176,41 +227,30 @@ function printPDF() {
     initTheme();
 
     const addRowBtn = document.getElementById("addRowBtn");
-    const clearTableBtn = document.getElementById("clearTableBtn");
+    const delRowBtn = document.getElementById("delRowBtn");
     const printPDFBtn = document.getElementById("printPDFBtn");
     const themeToggle = document.getElementById("themeToggle");
+    const clearTableBtn = document.getElementById("clearTableBtn");
     const tbody = document.getElementById("tableBody");
 
     if (addRowBtn) addRowBtn.addEventListener("click", addRow);
-    if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
+    if (delRowBtn) delRowBtn.addEventListener("click", deleteLastRow);
     if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
     if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
+    if (clearTableBtn) clearTableBtn.addEventListener("click", clearTable);
     
     if (tbody) {
       loadTableData();
       if (tbody.children.length === 0) {
-        for (let i = 0; i < 5; i++) addRow();
+        addRow(); // Start with just one row instead of five
       }
 
-      tbody.addEventListener("input", (e) => {
-        const row = e.target.closest('tr');
-        const charges = parseFloat((row.querySelector(".charges-input").value)) || 0;
-        const payments = parseFloat(normalizeInput(row.querySelector(".payments-input").value)) || 0;
-        const adjustments = parseFloat(normalizeInput(row.querySelector(".adjustments-input").value)) || 0;
-        const balanceInput = row.querySelector(".balance-input");
-        
-        if (e.target.classList.contains("balance-input")) {
-          balanceInput.dataset.manual = "true";
-        }
-        
-        if (charges > 0 && (payments > 0 || adjustments > 0) && balanceInput.dataset.manual !== "true") {
-          const calculatedBalance = charges - payments - adjustments;
-          balanceInput.value = calculatedBalance.toFixed(2);
-        }
-
+      // Calculate totals when any input changes
+      tbody.addEventListener("input", () => {
         calculateTotals();
         saveTableData();
       });
+      
       calculateTotals();
     }
   });
