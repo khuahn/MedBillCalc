@@ -1,6 +1,6 @@
 /*
- * mbc.js - Medical Bill Calculator with Manual Calculation
- * Version: 2.3 - Removed auto-lock, added calculate button, improved validation
+ * mbc.js - Medical Bill Calculator with Auto-Calculation
+ * Version: 2.4 - Added auto-calculation of missing values
  */
 
 (() => {
@@ -22,6 +22,51 @@
       setTimeout(() => feedback.remove(), 1000);
     }).catch(err => {
       console.error('Failed to copy: ', err);
+    });
+  }
+
+  function calculateMissingValues() {
+    const rows = document.querySelectorAll("#tableBody tr");
+    
+    rows.forEach((row) => {
+      const chargesInput = row.querySelector(".charges-input");
+      const paymentsInput = row.querySelector(".payments-input");
+      const adjustmentsInput = row.querySelector(".adjustments-input");
+      const balanceInput = row.querySelector(".balance-input");
+
+      const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
+      const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+      const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+      const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
+
+      // Calculate missing values if possible
+      if (charges > 0) {
+        // If charges is provided, we can calculate missing values
+        const filledValues = [payments, adjustments, balance].filter(val => val > 0).length;
+        
+        // If exactly two values are provided (plus charges), calculate the missing one
+        if (filledValues === 2) {
+          if (payments === 0) {
+            // Calculate payments: Charges - Adjustments - Balance
+            const calculatedPayments = charges - adjustments - balance;
+            if (calculatedPayments >= 0) {
+              paymentsInput.value = calculatedPayments.toFixed(2);
+            }
+          } else if (adjustments === 0) {
+            // Calculate adjustments: Charges - Payments - Balance
+            const calculatedAdjustments = charges - payments - balance;
+            if (calculatedAdjustments >= 0) {
+              adjustmentsInput.value = calculatedAdjustments.toFixed(2);
+            }
+          } else if (balance === 0) {
+            // Calculate balance: Charges - Payments - Adjustments
+            const calculatedBalance = charges - payments - adjustments;
+            if (calculatedBalance >= 0) {
+              balanceInput.value = calculatedBalance.toFixed(2);
+            }
+          }
+        }
+      }
     });
   }
 
@@ -181,6 +226,12 @@
     });
   }
 
+  function handleCalculate() {
+    calculateMissingValues();
+    calculateTotals();
+    saveTableData();
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('click', (event) => {
       if (event.target.id === 'totalCharges' || 
@@ -202,7 +253,7 @@
     const clearTableBtn = document.getElementById("clearTableBtn");
     const tbody = document.getElementById("tableBody");
 
-    if (calculateBtn) calculateBtn.addEventListener("click", calculateTotals);
+    if (calculateBtn) calculateBtn.addEventListener("click", handleCalculate);
     if (addRowBtn) addRowBtn.addEventListener("click", addRow);
     if (delRowBtn) delRowBtn.addEventListener("click", deleteLastRow);
     if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
@@ -215,7 +266,7 @@
         addRow();
       }
 
-      // Validate inputs and calculate totals when any input changes
+      // Validate inputs when any input changes
       tbody.addEventListener("input", () => {
         validateInputs();
         saveTableData();
