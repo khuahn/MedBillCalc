@@ -736,3 +736,34 @@ body {
         min-height: 44px;
     }
 }
+/* Locked row styling */
+tr.locked-row {
+  background-color: #f0f9eb !important;
+}
+
+body.dark-mode tr.locked-row {
+  background-color: #1e3a2a !important;
+}
+
+.locked-input {
+  background-color: #e8f5e8 !important;
+  color: #2e7d32 !important;
+  font-weight: bold !important;
+  cursor: not-allowed !important;
+}
+
+body.dark-mode .locked-input {
+  background-color: #2d4a3a !important;
+  color: #4caf50 !important;
+}
+
+.lock-status {
+  color: #4caf50;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.lock-icon {
+  color: #4caf50;
+  margin-right: 4px;
+}
