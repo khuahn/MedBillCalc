@@ -322,70 +322,191 @@ body.dark-mode footer {
     color: #aaa;
 }
 
-/* Print Styles */
+/* ==================== */
+/* PRINT STYLES */
+/* ==================== */
+
 @media print {
-    body, body.dark-mode, body.dark-mode .container {
-        background-color: #fff;
-        color: #000;
-        box-shadow: none;
-    }
+  /* Reset everything to print-friendly light mode */
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  body, body.dark-mode {
+    background-color: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.4;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .container {
+    max-width: 100% !important;
+    padding: 0.5in !important;
+    margin: 0 !important;
+    background: white !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+  }
+  
+  /* Table styles */
+  .table-with-total, table {
+    width: 100% !important;
+    border: 1px solid #ccc !important;
+    border-collapse: collapse !important;
+    page-break-inside: avoid;
+  }
+  
+  th, td {
+    border: 1px solid #ccc !important;
+    padding: 6px 4px !important;
+    background: white !important;
+    color: black !important;
+    font-size: 10pt !important;
+  }
+  
+  th {
+    background: #f0f0f0 !important;
+    font-weight: bold !important;
+    color: black !important;
+  }
+  
+  /* Input fields - make them look like regular text */
+  input[type="number"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
+    appearance: none !important;
+    border: none !important;
+    background: transparent !important;
+    color: black !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    font-size: 10pt !important;
+    font-weight: normal !important;
+    text-align: center !important;
+    outline: none !important;
+  }
+  
+  /* Remove all input styling for print */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+  
+  /* Summary and totals */
+  tfoot td {
+    background: #f8f8f8 !important;
+    font-weight: bold !important;
+    color: black !important;
+  }
+  
+  .total-incurred-row td {
+    background: #e8e8e8 !important;
+    color: black !important;
+    font-weight: bold !important;
+    font-size: 11pt !important;
+  }
+  
+  #incurredTotal {
+    color: black !important;
+    font-weight: bold !important;
+  }
+  
+  /* Hide non-essential elements */
+  .controls-container, 
+  footer, 
+  h1, 
+  .button-group, 
+  #themeToggle,
+  .remove-row-btn,
+  .copied-feedback {
+    display: none !important;
+  }
+  
+  /* Page breaks */
+  table {
+    page-break-inside: avoid;
+  }
+  
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  
+  /* Ensure good contrast */
+  .table-with-total {
+    border: 1px solid #000 !important;
+  }
+  
+  /* Remove any animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Links */
+  a {
+    text-decoration: underline !important;
+    color: #0000EE !important;
+  }
+  
+  a:after {
+    content: " (" attr(href) ") ";
+    font-size: 90%;
+  }
+  
+  /* Don't show URLs for these */
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+}
 
-    .table-with-total, table, th, td {
-        border: 1px solid #ccc;
-    }
+/* Additional print-specific optimizations */
+@media print and (max-width: 768px) {
+  .container {
+    padding: 0.25in !important;
+  }
+  
+  th, td {
+    padding: 4px 2px !important;
+    font-size: 9pt !important;
+  }
+  
+  input[type="number"] {
+    font-size: 9pt !important;
+  }
+}
 
-    th {
-        background-color: #f0f0f0;
-        color: #000;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
+/* Ensure dark mode doesn't affect print */
+body.dark-mode {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
 
-    td {
-        background-color: #fff;
-        color: #000;
-    }
-
-    tfoot td {
-        background-color: #f8f8f8;
-        font-weight: bold;
-        border: none;
-    }
-
-    .total-incurred-row td {
-        background-color: #f8f8f8;
-        color: #000;
-        font-weight: bold;
-    }
-    
-    #incurredTotal {
-        color: #000;
-    }
-
-    .controls-container, footer, h1, .button-group, #themeToggle {
-        display: none;
-    }
-
-    input[type="number"] {
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
-        border: none;
-        background: transparent;
-        color: #000;
-        padding: 0;
-        margin: 0;
-        text-align: center;
-        font-weight: normal;
-    }
-
-    .container {
-        max-width: 720px;
-        margin: 40px auto;
-        padding: 40px 30px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    }
+/* Force light colors for print preview */
+@media print {
+  @page {
+    margin: 0.5in;
+    size: portrait;
+  }
+  
+  /* Remove URL from printed pages */
+  .container:after {
+    content: "Medical Bill Calculator - medbillcalc.pages.dev";
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-size: 8pt;
+    color: #666;
+  }
 }
 
 /* ==================== */
