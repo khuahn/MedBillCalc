@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.3 - Removed locking, improved printing, icon-only buttons
+ * Version: 2.6 - Improved printing for medical billing documents
  */
 
 :root {
@@ -321,22 +321,22 @@ body.dark-mode footer {
     color: #aaa;
 }
 
-/* Print Styles - Always Light Mode Look */
+/* Print Styles - Professional Medical Billing Appearance */
 @media print {
-  /* Reset everything to light mode appearance */
+  /* Reset everything to grayscale */
   * {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+    color: #000 !important;
     background: transparent !important;
-    color: black !important;
     box-shadow: none !important;
     text-shadow: none !important;
   }
   
-  /* Force light mode appearance */
+  /* Force light mode appearance for printing */
   body, body.dark-mode {
     background: white !important;
-    color: black !important;
+    color: #000 !important;
     font-size: 12pt;
     line-height: 1.4;
     padding: 0 !important;
@@ -344,15 +344,15 @@ body.dark-mode footer {
     width: 100% !important;
   }
   
-  /* Consistent container styling for print */
+  /* Container styling */
   .container, body.dark-mode .container {
     max-width: 100% !important;
-    padding: 0.5in !important;
+    padding: 0.25in !important;
     margin: 0 auto !important;
     background: white !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    border-radius: 8px !important;
-    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
     width: auto !important;
     box-sizing: border-box !important;
   }
@@ -364,77 +364,72 @@ body.dark-mode footer {
     padding: 0 !important;
   }
   
-  /* Table styling - light mode only */
+  /* Table styling - professional medical billing appearance */
   .table-with-total {
     background: white !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
     margin-bottom: 16px !important;
     border: 1px solid #ddd !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    page-break-inside: avoid;
   }
   
   table {
     width: 100% !important;
-    border-collapse: separate !important;
+    border-collapse: collapse !important;
     border-spacing: 0 !important;
   }
   
   th {
-    background: #00796b !important;
-    color: white !important;
+    background: #f0f0f0 !important;
+    color: #000 !important;
     font-weight: bold !important;
     border: 1px solid #ddd !important;
-  }
-  
-  tr:first-child th:first-child {
-    border-top-left-radius: 8px !important;
-  }
-  
-  tr:first-child th:last-child {
-    border-top-right-radius: 8px !important;
+    padding: 8px 4px !important;
   }
   
   td {
-    background: #e0f2f1 !important;
-    color: black !important;
+    background: white !important;
+    color: #000 !important;
     border: 1px solid #ddd !important;
+    padding: 8px 4px !important;
   }
   
+  /* Show all table rows in print */
+  tr {
+    page-break-inside: avoid;
+  }
+  
+  /* Summary rows styling */
   tfoot td {
-    background: #e0f2f1 !important;
-    color: black !important;
+    background: #f8f8f8 !important;
+    color: #000 !important;
     font-weight: bold !important;
+    border-top: 2px solid #000 !important;
   }
   
   .total-incurred-row td {
-    background: #e0f2f1 !important;
-    color: black !important;
+    background: #f0f0f0 !important;
+    color: #000 !important;
     font-weight: bold !important;
     font-size: 1.1rem !important;
-    padding: 12px !important;
-  }
-  
-  .total-incurred-row td:first-child {
-    border-bottom-left-radius: 8px !important;
-  }
-  
-  .total-incurred-row td:last-child {
-    border-bottom-right-radius: 8px !important;
+    padding: 10px 4px !important;
+    border-top: 2px solid #000 !important;
   }
   
   #incurredTotal {
-    color: black !important;
+    color: #000 !important;
     font-weight: bold !important;
   }
   
-  /* Hide input borders and show values as plain text */
+  /* Input values as plain text */
   input[type="number"] {
     background: transparent !important;
     border: none !important;
-    color: black !important;
+    color: #000 !important;
     -webkit-appearance: none !important;
     -moz-appearance: textfield !important;
     appearance: none !important;
@@ -446,35 +441,40 @@ body.dark-mode footer {
     outline: none !important;
     box-shadow: none !important;
     width: 100% !important;
+    display: block !important;
   }
   
-  /* Hide empty rows in print */
-  tr:not(:has(input[value])) {
-    display: none !important;
+  /* Show all input values in print, even empty ones */
+  input[type="number"]:not([value]) {
+    display: block !important;
+    color: #ccc !important;
   }
-
-  tr input[type="number"]:not([value]):not(:focus),
-  tr input[type="number"][value=""] {
-    display: none !important;
-  }
-
+  
   /* Hide non-essential elements */
   .controls-container, 
   footer, 
-  h1, 
   .button-group, 
   #themeToggle,
   .copied-feedback {
     display: none !important;
   }
-
+  
+  /* Show title in print */
+  h1 {
+    display: block !important;
+    text-align: center !important;
+    font-size: 18pt !important;
+    margin: 0 0 16px 0 !important;
+    color: #000 !important;
+  }
+  
   /* Remove any animations */
   * {
     animation: none !important;
     transition: none !important;
   }
-
-  /* Page margins - ensure consistency */
+  
+  /* Page margins */
   @page {
     margin: 0.5in;
     size: auto;
