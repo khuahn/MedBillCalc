@@ -756,14 +756,3 @@ body.dark-mode .locked-input {
   background-color: #2d4a3a !important;
   color: #4caf50 !important;
 }
-
-.lock-status {
-  color: #4caf50;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-.lock-icon {
-  color: #4caf50;
-  margin-right: 4px;
-}
