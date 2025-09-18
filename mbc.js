@@ -1,42 +1,6 @@
 /*
- * mbc.js - Medical Bill Calculator Core Functionality
+ * mbc.js - Medical Bill Calculator with Row Locking
  */
-
-// PWA Service Worker Registration
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => {
-        console.log('SW registered: ', registration);
-      })
-      .catch(registrationError => {
-        console.log('SW registration failed: ', registrationError);
-      });
-  });
-}
-
-// Optional: Prompt user to install PWA
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  
-  // You can show your own install button here if wanted
-  console.log('PWA install prompt available');
-});
-
-// Function to manually trigger install
-function installPWA() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted PWA install');
-      }
-      deferredPrompt = null;
-    });
-  }
-}
 
 (() => {
   "use strict";
@@ -60,10 +24,126 @@ function installPWA() {
     });
   }
 
+  function calculateMissingValue(row) {
+    const chargesInput = row.querySelector(".charges-input");
+    const paymentsInput = row.querySelector(".payments-input");
+    const adjustmentsInput = row.querySelector(".adjustments-input");
+    const balanceInput = row.querySelector(".balance-input");
+
+    const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
+    const payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+    const adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+    const balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
+
+    let calculatedValue = 0;
+    let fieldToSet = null;
+
+    // Determine which field is missing and calculate it
+    if (charges > 0) {
+      if (payments === 0 && adjustments > 0 && balance > 0) {
+        // Calculate Payments: Charges - Adjustments - Balance
+        calculatedValue = charges - adjustments - balance;
+        fieldToSet = paymentsInput;
+      } else if (adjustments === 0 && payments > 0 && balance > 0) {
+        // Calculate Adjustments: Charges - Payments - Balance
+        calculatedValue = charges - payments - balance;
+        fieldToSet = adjustmentsInput;
+      } else if (balance === 0 && payments > 0 && adjustments > 0) {
+        // Calculate Balance: Charges - Payments - Adjustments
+        calculatedValue = charges - payments - adjustments;
+        fieldToSet = balanceInput;
+      }
+    }
+
+    return { calculatedValue, fieldToSet };
+  }
+
+  function lockRow(row) {
+    const { calculatedValue, fieldToSet } = calculateMissingValue(row);
+    
+    // If there's a missing value, calculate and set it
+    if (fieldToSet && !isNaN(calculatedValue)) {
+      fieldToSet.value = calculatedValue.toFixed(2);
+    }
+
+    // Lock all inputs in the row
+    const inputs = row.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.readOnly = true;
+      input.classList.add('locked-input');
+    });
+
+    // Add lock status indicator
+    const statusCell = row.querySelector('.row-status') || row.insertCell(-1);
+    statusCell.className = 'row-status';
+    statusCell.innerHTML = '<span class="lock-icon"><i class="fas fa-lock"></i></span><span class="lock-status">Locked</span>';
+    
+    // Add locked class to row
+    row.classList.add('locked-row');
+  }
+
+  function unlockRow(row) {
+    // Unlock all inputs in the row
+    const inputs = row.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.readOnly = false;
+      input.classList.remove('locked-input');
+    });
+
+    // Remove lock status indicator
+    const statusCell = row.querySelector('.row-status');
+    if (statusCell) {
+      statusCell.innerHTML = '';
+    }
+    
+    // Remove locked class from row
+    row.classList.remove('locked-row');
+  }
+
+  function addRow() {
+    const tbody = document.getElementById("tableBody");
+    if (!tbody) return;
+
+    // Lock the current row if it has data
+    const rows = tbody.querySelectorAll('tr');
+    if (rows.length > 0) {
+      const lastRow = rows[rows.length - 1];
+      const hasData = Array.from(lastRow.querySelectorAll('input')).some(input => {
+        return parseFloat(normalizeInput(input.value)) > 0;
+      });
+      
+      if (hasData && !lastRow.classList.contains('locked-row')) {
+        lockRow(lastRow);
+      }
+    }
+
+    // Add new row
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
+      <td class="row-status"></td>
+    `;
+    tbody.appendChild(tr);
+    saveTableData();
+  }
+
   function deleteLastRow() {
     const rows = document.querySelectorAll("#tableBody tr");
     if (rows.length > 1) {
-      rows[rows.length - 1].remove();
+      const rowToRemove = rows[rows.length - 1];
+      
+      // Unlock the previous row before removing current one
+      if (rows.length > 1) {
+        const previousRow = rows[rows.length - 2];
+        if (previousRow.classList.contains('locked-row')) {
+          unlockRow(previousRow);
+        }
+      }
+      
+      rowToRemove.remove();
       calculateTotals();
       saveTableData();
     } else {
@@ -78,7 +158,6 @@ function installPWA() {
       totalAdjustments = 0,
       totalBalance = 0;
 
-    // First pass: sum up all manually entered values
     rows.forEach((row) => {
       const chargesInput = row.querySelector(".charges-input");
       const paymentsInput = row.querySelector(".payments-input");
@@ -95,16 +174,6 @@ function installPWA() {
       totalAdjustments += adjustments;
       totalBalance += balance;
     });
-
-    // SECOND PASS: Smart calculation for TOTALS only (not individual rows)
-    // Condition 1: If we have total Charges, Payments, and Adjustments → Calculate total Balance
-    if (totalCharges > 0 && totalPayments > 0 && totalAdjustments > 0) {
-      totalBalance = totalCharges - totalPayments - totalAdjustments;
-    }
-    // Condition 2: If we have total Charges, Payments, and Balance → Calculate total Adjustments
-    else if (totalCharges > 0 && totalPayments > 0 && totalBalance > 0) {
-      totalAdjustments = totalCharges - totalPayments - totalBalance;
-    }
 
     const update = (id, val) => {
       const el = document.getElementById(id);
@@ -126,7 +195,8 @@ function installPWA() {
       const payments = row.querySelector(".payments-input").value;
       const adjustments = row.querySelector(".adjustments-input").value;
       const balance = row.querySelector(".balance-input").value;
-      data.push({ charges, payments, adjustments, balance });
+      const isLocked = row.classList.contains('locked-row');
+      data.push({ charges, payments, adjustments, balance, isLocked });
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
@@ -147,24 +217,15 @@ function installPWA() {
         <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
         <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
+        <td class="row-status"></td>
       `;
+      
+      if (rowData.isLocked) {
+        lockRow(tr);
+      }
+      
       tbody.appendChild(tr);
     });
-  }
-
-  function addRow() {
-    const tbody = document.getElementById("tableBody");
-    if (!tbody) return;
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
-    `;
-    tbody.appendChild(tr);
-    saveTableData();
   }
 
   function clearTable() {
