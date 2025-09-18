@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.1 - Fixed print styles for dark mode
+ * Version: 2.2 - Fixed print margins for dark mode
  */
 
 :root {
@@ -378,6 +378,14 @@ body.dark-mode footer {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
     border-radius: 8px !important;
     border: 1px solid #ddd !important;
+    width: auto !important;
+  }
+  
+  /* Ensure consistent box model for printing */
+  html, body, body.dark-mode {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   
   /* Table styling - grayscale only */
@@ -388,6 +396,7 @@ body.dark-mode footer {
     overflow: hidden !important;
     margin-bottom: 16px !important;
     border: 1px solid #ddd !important;
+    width: 100% !important;
   }
   
   table {
@@ -459,6 +468,7 @@ body.dark-mode footer {
     text-align: center !important;
     outline: none !important;
     box-shadow: none !important;
+    width: 100% !important;
   }
   
   /* Locked rows styling for print - FIXED */
