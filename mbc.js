@@ -1,6 +1,6 @@
 /*
- * mbc.js - Medical Bill Calculator with Enhanced Feedback System
- * Version: 2.6 - Improved feedback positioning and button action notifications
+ * mbc.js - Medical Bill Calculator with Improved Feedback
+ * Version: 2.7 - Fixed feedback positioning and timing
  */
 
 (() => {
@@ -12,26 +12,28 @@
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
-  function showFeedback(message, targetElement) {
+  function showFeedback(message) {
+    // Remove any existing feedback first
+    const existingFeedback = document.querySelector('.copied-feedback');
+    if (existingFeedback) {
+      existingFeedback.remove();
+    }
+    
     const feedback = document.createElement('div');
     feedback.className = 'copied-feedback';
     feedback.textContent = message;
     document.body.appendChild(feedback);
     
-    // Position the feedback above the target element
-    if (targetElement) {
-      const rect = targetElement.getBoundingClientRect();
-      feedback.style.position = 'absolute';
-      feedback.style.top = (rect.top - 40) + 'px';
-      feedback.style.left = (rect.left + rect.width/2 - 60) + 'px';
-    }
-    
-    setTimeout(() => feedback.remove(), 1000);
+    setTimeout(() => {
+      if (document.body.contains(feedback)) {
+        feedback.remove();
+      }
+    }, 1000);
   }
 
   function copyToClipboard(text, event) {
     navigator.clipboard.writeText(text).then(() => {
-      showFeedback('Copied!', event.target);
+      showFeedback('Copied!');
     }).catch(err => {
       console.error('Failed to copy: ', err);
     });
@@ -110,7 +112,7 @@
     });
   }
 
-  function addRow(showFeedback = true) {
+  function addRow() {
     const tbody = document.getElementById("tableBody");
     if (!tbody) return;
 
@@ -127,11 +129,8 @@
     // Save data
     saveTableData();
     
-    // Show feedback if requested
-    if (showFeedback) {
-      const addRowBtn = document.getElementById("addRowBtn");
-      showFeedback('Row added!', addRowBtn);
-    }
+    // Show feedback
+    showFeedback('Row added!');
   }
 
   function deleteLastRow() {
@@ -144,8 +143,7 @@
         saveTableData();
         
         // Show feedback after confirmation
-        const delRowBtn = document.getElementById("delRowBtn");
-        showFeedback('Row deleted!', delRowBtn);
+        showFeedback('Row deleted!');
       }
     } else {
       alert("You need to keep at least one row in the calculator.");
@@ -230,14 +228,13 @@
     const tbody = document.getElementById("tableBody");
     if (tbody) {
       tbody.innerHTML = "";
-      addRow(false);
+      addRow();
       calculateTotals();
     }
     localStorage.removeItem(STORAGE_KEY);
     
     // Show feedback after confirmation
-    const clearTableBtn = document.getElementById("clearTableBtn");
-    showFeedback('Calculator reset!', clearTableBtn);
+    showFeedback('Calculator reset!');
   }
 
   function printPDF() {
@@ -251,9 +248,8 @@
     updateThemeToggleUI(isDark);
     
     // Show feedback for theme change
-    const themeToggle = document.getElementById("themeToggle");
     const message = isDark ? 'Dark mode enabled!' : 'Light mode enabled!';
-    showFeedback(message, themeToggle);
+    showFeedback(message);
   }
 
   function updateThemeToggleUI(isDark) {
@@ -292,8 +288,7 @@
     saveTableData();
     
     // Show feedback for calculation
-    const calculateBtn = document.getElementById("calculateBtn");
-    showFeedback('Calculated!', calculateBtn);
+    showFeedback('Calculated!');
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -318,7 +313,7 @@
     const tbody = document.getElementById("tableBody");
 
     if (calculateBtn) calculateBtn.addEventListener("click", handleCalculate);
-    if (addRowBtn) addRowBtn.addEventListener("click", () => addRow(true));
+    if (addRowBtn) addRowBtn.addEventListener("click", addRow);
     if (delRowBtn) delRowBtn.addEventListener("click", deleteLastRow);
     if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
     if (themeToggle) themeToggle.addEventListener("click", toggleDarkMode);
@@ -327,7 +322,7 @@
     if (tbody) {
       loadTableData();
       if (tbody.children.length === 0) {
-        addRow(false);
+        addRow();
       }
 
       // Validate inputs when any input changes
