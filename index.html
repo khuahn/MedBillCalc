@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Add these to your head section -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#00796b">
-
-<!-- iOS meta tags -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="MedBillCalc">
-<link rel="apple-touch-icon" href="icon-192x192.png">
-
-<!-- Windows meta tags -->
-<meta name="msapplication-TileImage" content="icon-192x192.png">
-<meta name="msapplication-TileColor" content="#00796b">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Medical Bill Calculator</title>
   <link rel="stylesheet" href="mbc.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00796b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MedBillCalc">
+  <link rel="apple-touch-icon" href="icon-192x192.png">
+  <meta name="msapplication-TileImage" content="icon-192x192.png">
+  <meta name="msapplication-TileColor" content="#00796b">
+
+  <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="MedBillCalc">
   <meta property="og:description" content="Simple yet functional Medical Billing calculator">
   <meta property="og:url" content="https://medbillcalc.pages.dev/">
@@ -34,26 +32,25 @@
     <div class="table-with-total">
       <table id="billTable">
         <thead>
-         <!-- In your table header, add a lock indicator column -->
-<tr>
-  <th>Charges</th>
-  <th>Payments</th>
-  <th>Adjustments</th>
-  <th>Balance</th>
-</tr>
+          <tr>
+            <th>Charges</th>
+            <th>Payments</th>
+            <th>Adjustments</th>
+            <th>Balance</th>
+          </tr>
         </thead>
         <tbody id="tableBody">
           <!-- Rows will be added by JavaScript -->
         </tbody>
         <tfoot>
-          <!-- Original Summary Style -->
+          <!-- Summary Row -->
           <tr>
             <td><span id="totalCharges">0.00</span></td>
             <td><span id="totalPayments">0.00</span></td>
             <td><span id="totalAdjustments">0.00</span></td>
             <td><span id="totalBalance">0.00</span></td>
           </tr>
-          <!-- Integrated Total Incurred as part of the table -->
+          <!-- Total Incurred Row -->
           <tr class="total-incurred-row">
             <td colspan="4">
               Total Incurred : <span id="incurredTotal">0.00</span>
@@ -66,19 +63,23 @@
     <!-- Controls container -->
     <div class="controls-container">
       <div class="button-group">
+        <button id="calculateBtn" aria-label="Calculate totals">
+          <i class="fas fa-calculator" aria-hidden="true"></i>
+        </button>
         <button id="addRowBtn" aria-label="Add a new row">
-          <i class="fas fa-plus" aria-hidden="true"></i></button>
+          <i class="fas fa-plus" aria-hidden="true"></i>
+        </button>
         <button id="delRowBtn" class="danger-btn" aria-label="Delete last row">
-          <i class="fas fa-minus" aria-hidden="true"></i></button>
+          <i class="fas fa-minus" aria-hidden="true"></i>
+        </button>
         <button id="printPDFBtn" aria-label="Save as PDF">
-          <i class="fas fa-file-pdf" aria-hidden="true"></i> Save
+          <i class="fas fa-file-pdf" aria-hidden="true"></i>
         </button>
         <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
           <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
-          <span id="themeLabel">Theme</span>
         </button>
         <button id="clearTableBtn" class="danger-btn" aria-label="Reset calculator">
-          <i class="fas fa-trash-alt" aria-hidden="true"></i> Reset
+          <i class="fas fa-trash-alt" aria-hidden="true"></i>
         </button>
       </div>
     </div>
@@ -86,7 +87,7 @@
 
   <footer>
     <small>
-      Med Bill Calc v2.0 Stable • <a href="https://github.com/khuahn/" target="_blank">匠Jac</a> — All Rights Reserved ©2025<br/>
+      Med Bill Calc v2.3 • <a href="https://github.com/khuahn/" target="_blank">匠Jac</a> — All Rights Reserved ©2025<br/>
       <span>
         Powered by
         <a href="https://github.com/" target="_blank">GitHub</a> | <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a> | <a href="https://firebase.google.com/" target="_blank">Firebase</a>
