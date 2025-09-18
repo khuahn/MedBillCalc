@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.1
+ * Version: 2.1 - Fixed print styles for dark mode
  */
 
 :root {
@@ -461,12 +461,21 @@ body.dark-mode footer {
     box-shadow: none !important;
   }
   
-  /* Locked rows styling for print */
-  tr.locked-row {
+  /* Locked rows styling for print - FIXED */
+  tr.locked-row, 
+  body.dark-mode tr.locked-row {
     background: #f8f8f8 !important;
   }
   
-  .locked-input {
+  tr.locked-row td,
+  body.dark-mode tr.locked-row td {
+    background: #f8f8f8 !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+  }
+  
+  .locked-input,
+  body.dark-mode .locked-input {
     background: transparent !important;
     color: black !important;
     font-weight: bold !important;
