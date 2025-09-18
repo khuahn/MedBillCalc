@@ -1,42 +1,6 @@
 /*
- * mbc.js - Medical Bill Calculator Core Functionality
+ * mbc.js - Medical Bill Calculator with Auto-Lock Feature
  */
-
-// PWA Service Worker Registration
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => {
-        console.log('SW registered: ', registration);
-      })
-      .catch(registrationError => {
-        console.log('SW registration failed: ', registrationError);
-      });
-  });
-}
-
-// Optional: Prompt user to install PWA
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  
-  // You can show your own install button here if wanted
-  console.log('PWA install prompt available');
-});
-
-// Function to manually trigger install
-function installPWA() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted PWA install');
-      }
-      deferredPrompt = null;
-    });
-  }
-}
 
 (() => {
   "use strict";
@@ -60,10 +24,94 @@ function installPWA() {
     });
   }
 
+  function calculateAndLockRow(row) {
+    const chargesInput = row.querySelector(".charges-input");
+    const paymentsInput = row.querySelector(".payments-input");
+    const adjustmentsInput = row.querySelector(".adjustments-input");
+    const balanceInput = row.querySelector(".balance-input");
+
+    const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
+    let payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+    let adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+    let balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
+
+    // Calculate missing value if possible
+    if (charges > 0) {
+      if (payments === 0 && adjustments > 0 && balance > 0) {
+        // Calculate Payments: Charges - Adjustments - Balance
+        payments = charges - adjustments - balance;
+        paymentsInput.value = payments.toFixed(2);
+      } else if (adjustments === 0 && payments > 0 && balance > 0) {
+        // Calculate Adjustments: Charges - Payments - Balance
+        adjustments = charges - payments - balance;
+        adjustmentsInput.value = adjustments.toFixed(2);
+      } else if (balance === 0 && payments > 0 && adjustments > 0) {
+        // Calculate Balance: Charges - Payments - Adjustments
+        balance = charges - payments - adjustments;
+        balanceInput.value = balance.toFixed(2);
+      }
+    }
+
+    // Lock the row if we have at least charges and one other value
+    if (charges > 0 && (payments > 0 || adjustments > 0 || balance > 0)) {
+      const inputs = row.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.readOnly = true;
+        input.classList.add('locked-input');
+      });
+      row.classList.add('locked-row');
+    }
+
+    return { charges, payments, adjustments, balance };
+  }
+
+  function unlockRow(row) {
+    const inputs = row.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.readOnly = false;
+      input.classList.remove('locked-input');
+    });
+    row.classList.remove('locked-row');
+  }
+
+  function addRow() {
+    const tbody = document.getElementById("tableBody");
+    if (!tbody) return;
+
+    // Calculate, lock, and add current row values to totals
+    const rows = tbody.querySelectorAll('tr');
+    if (rows.length > 0) {
+      const currentRow = rows[rows.length - 1];
+      calculateAndLockRow(currentRow);
+    }
+
+    // Add new row
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
+    `;
+    tbody.appendChild(tr);
+    
+    // Recalculate totals and save
+    calculateTotals();
+    saveTableData();
+  }
+
   function deleteLastRow() {
     const rows = document.querySelectorAll("#tableBody tr");
     if (rows.length > 1) {
-      rows[rows.length - 1].remove();
+      const rowToRemove = rows[rows.length - 1];
+      
+      // Unlock the previous row before removing current one
+      const previousRow = rows[rows.length - 2];
+      if (previousRow.classList.contains('locked-row')) {
+        unlockRow(previousRow);
+      }
+      
+      rowToRemove.remove();
       calculateTotals();
       saveTableData();
     } else {
@@ -78,7 +126,6 @@ function installPWA() {
       totalAdjustments = 0,
       totalBalance = 0;
 
-    // First pass: sum up all manually entered values
     rows.forEach((row) => {
       const chargesInput = row.querySelector(".charges-input");
       const paymentsInput = row.querySelector(".payments-input");
@@ -95,16 +142,6 @@ function installPWA() {
       totalAdjustments += adjustments;
       totalBalance += balance;
     });
-
-    // SECOND PASS: Smart calculation for TOTALS only (not individual rows)
-    // Condition 1: If we have total Charges, Payments, and Adjustments → Calculate total Balance
-    if (totalCharges > 0 && totalPayments > 0 && totalAdjustments > 0) {
-      totalBalance = totalCharges - totalPayments - totalAdjustments;
-    }
-    // Condition 2: If we have total Charges, Payments, and Balance → Calculate total Adjustments
-    else if (totalCharges > 0 && totalPayments > 0 && totalBalance > 0) {
-      totalAdjustments = totalCharges - totalPayments - totalBalance;
-    }
 
     const update = (id, val) => {
       const el = document.getElementById(id);
@@ -126,7 +163,8 @@ function installPWA() {
       const payments = row.querySelector(".payments-input").value;
       const adjustments = row.querySelector(".adjustments-input").value;
       const balance = row.querySelector(".balance-input").value;
-      data.push({ charges, payments, adjustments, balance });
+      const isLocked = row.classList.contains('locked-row');
+      data.push({ charges, payments, adjustments, balance, isLocked });
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
@@ -148,23 +186,18 @@ function installPWA() {
         <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
         <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
       `;
+      
+      if (rowData.isLocked) {
+        const inputs = tr.querySelectorAll('input');
+        inputs.forEach(input => {
+          input.readOnly = true;
+          input.classList.add('locked-input');
+        });
+        tr.classList.add('locked-row');
+      }
+      
       tbody.appendChild(tr);
     });
-  }
-
-  function addRow() {
-    const tbody = document.getElementById("tableBody");
-    if (!tbody) return;
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
-    `;
-    tbody.appendChild(tr);
-    saveTableData();
   }
 
   function clearTable() {
