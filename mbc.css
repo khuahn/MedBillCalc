@@ -349,7 +349,7 @@ body.dark-mode footer {
     color: #aaa;
 }
 
-/* Print Styles - Grayscale Only */
+/* Print Styles - Grayscale Only - FIXED VERSION */
 @media print {
   /* Reset everything to grayscale */
   * {
@@ -361,16 +361,19 @@ body.dark-mode footer {
     text-shadow: none !important;
   }
   
-  body, body.dark-mode, body.dark-mode .container {
+  /* Fix for body margins in print */
+  body, body.dark-mode {
     background: white !important;
     color: black !important;
     font-size: 12pt;
     line-height: 1.4;
     padding: 0 !important;
     margin: 0 !important;
+    width: 100% !important;
   }
   
-  .container {
+  /* Consistent container styling for print */
+  .container, body.dark-mode .container {
     max-width: 100% !important;
     padding: 0.5in !important;
     margin: 0 auto !important;
@@ -379,6 +382,8 @@ body.dark-mode footer {
     border-radius: 8px !important;
     border: 1px solid #ddd !important;
     width: auto !important;
+    /* Ensure proper box model */
+    box-sizing: border-box !important;
   }
   
   /* Ensure consistent box model for printing */
@@ -397,6 +402,8 @@ body.dark-mode footer {
     margin-bottom: 16px !important;
     border: 1px solid #ddd !important;
     width: 100% !important;
+    /* Ensure proper box sizing */
+    box-sizing: border-box !important;
   }
   
   table {
@@ -519,9 +526,10 @@ body.dark-mode footer {
     transition: none !important;
   }
 
-  /* Page margins */
+  /* Page margins - ensure consistency */
   @page {
     margin: 0.5in;
+    size: auto;
   }
   
   /* Add website URL to print output */
@@ -532,6 +540,11 @@ body.dark-mode footer {
     right: 0;
     font-size: 8pt;
     color: #888 !important;
+  }
+  
+  /* Force consistent box-sizing for all elements */
+  *, *::before, *::after {
+    box-sizing: border-box !important;
   }
 }
 
