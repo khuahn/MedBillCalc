@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.9 - Split button layout with left and right groups
+ * Version: 2.9.1 - Consistent border radius
  */
 
 :root {
@@ -14,6 +14,7 @@
     --text-color-dark: #e0e0e0;
     --border-color: #ccc;
     --footer-color: #888;
+    --border-radius: 6px; /* Consistent border radius */
 }
 
 /* Base Styles */
@@ -32,7 +33,7 @@ body {
     margin: 40px auto;
     padding: 40px 30px;
     background: var(--container-bg);
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
@@ -46,7 +47,7 @@ h1 {
 /* Table Styles */
 .table-with-total {
     margin-bottom: 16px;
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     background-color: var(--table-bg);
@@ -72,11 +73,11 @@ th {
 }
 
 tr:first-child th:first-child {
-    border-top-left-radius: 8px;
+    border-top-left-radius: var(--border-radius);
 }
 
 tr:first-child th:last-child {
-    border-top-right-radius: 8px;
+    border-top-right-radius: var(--border-radius);
 }
 
 td {
@@ -101,11 +102,11 @@ tfoot td {
 }
 
 .total-incurred-row td:first-child {
-    border-bottom-left-radius: 8px;
+    border-bottom-left-radius: var(--border-radius);
 }
 
 .total-incurred-row td:last-child {
-    border-bottom-right-radius: 8px;
+    border-bottom-right-radius: var(--border-radius);
 }
 
 #incurredTotal {
@@ -123,7 +124,7 @@ input[type="number"] {
     box-sizing: border-box;
     font-size: 1rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     background-color: #fff;
     color: #333;
     max-width: 100%;
@@ -165,7 +166,7 @@ input[type="number"]::-webkit-inner-spin-button {
     color: white;
     border: none;
     padding: 8px 14px;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     font-size: 0.95rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -217,7 +218,7 @@ tfoot span:hover::after, #incurredTotal:hover::after {
     background: var(--primary-color);
     color: white;
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     font-size: 14px;
     font-weight: 600;
     pointer-events: none;
