@@ -181,7 +181,7 @@ input[type="number"]::placeholder {
     background-color: #c82333 !important;
 }
 
-/* Locked row styling */
+/* Locked row styling - Light mode */
 tr.locked-row {
     background-color: #f0f9eb !important;
 }
@@ -329,14 +329,15 @@ body.dark-mode #incurredTotal:hover::after {
     color: #ff6b6b;
 }
 
-/* Dark mode locked rows - remove green background */
-body.dark-mode .locked-input {
-    background-color: #2e2e2e !important;
-    color: #e0f2f1 !important;
+/* Dark mode locked rows - distinctive style without green */
+body.dark-mode tr.locked-row {
+    background-color: #1e3a2a !important;
 }
 
-body.dark-mode tr.locked-row {
-    background-color: #1a1a1a !important;
+body.dark-mode .locked-input {
+    background-color: #2d4a3a !important;
+    color: #a5d6a7 !important;
+    font-weight: bold !important;
 }
 
 body.dark-mode .copied-feedback {
@@ -348,108 +349,119 @@ body.dark-mode footer {
     color: #aaa;
 }
 
-/* Print Styles - Modern and Sleek */
+/* Print Styles - Always light mode appearance */
 @media print {
-  /* Force light mode for printing but keep modern styling */
-  body,
-  body.dark-mode,
-  body.dark-mode .container,
-  body.dark-mode .table-with-total {
-    background: white !important;
+  /* Reset everything to light mode appearance */
+  * {
+    background: transparent !important;
     color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
-
+  
+  body, body.dark-mode {
+    background-color: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.4;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
   .container {
+    max-width: 100% !important;
+    padding: 0.5in !important;
+    margin: 0 auto !important;
     background: white !important;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
     border-radius: 12px !important;
-    padding: 40px 30px !important;
-    margin: 40px auto !important;
-    max-width: 720px !important;
-    width: auto !important;
   }
-
-  /* Table styling - keep rounded corners and modern look */
+  
+  /* Table styling - light mode appearance */
   .table-with-total {
-    background: white !important;
+    background: #e0f2f1 !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
     border-radius: 12px !important;
     overflow: hidden !important;
+    margin-bottom: 16px !important;
   }
-
+  
   table {
     width: 100% !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
   }
-
+  
   th {
     background: #00796b !important;
     color: white !important;
-    border: none !important;
+    font-weight: 600 !important;
   }
-
+  
   tr:first-child th:first-child {
     border-top-left-radius: 8px !important;
   }
-
+  
   tr:first-child th:last-child {
     border-top-right-radius: 8px !important;
   }
-
+  
   td {
     background: #e0f2f1 !important;
-    color: black !important;
-    border: none !important;
+    color: #333 !important;
+    font-weight: 500 !important;
   }
-
+  
   tfoot td {
     background: #e0f2f1 !important;
-    color: black !important;
+    color: #333 !important;
     font-weight: bold !important;
   }
-
+  
   .total-incurred-row td {
     background: #e0f2f1 !important;
-    color: black !important;
+    color: #333 !important;
     font-weight: 800 !important;
     font-size: 1.1rem !important;
     padding: 12px !important;
   }
-
+  
   .total-incurred-row td:first-child {
     border-bottom-left-radius: 8px !important;
   }
-
+  
   .total-incurred-row td:last-child {
     border-bottom-right-radius: 8px !important;
   }
-
+  
   #incurredTotal {
     color: black !important;
     font-weight: 800 !important;
   }
-
-  /* Input fields - make them look like regular text but keep modern style */
+  
+  /* Input fields - make them look like regular text but keep styling */
   input[type="number"] {
-    background: transparent !important;
+    background: white !important;
     border: 1px solid #ccc !important;
-    color: black !important;
+    color: #333 !important;
     -webkit-appearance: none !important;
     -moz-appearance: textfield !important;
     appearance: none !important;
     border-radius: 6px !important;
     padding: 6px 8px !important;
   }
-
-  /* Locked rows styling for print - no green background */
-  tr.locked-row,
-  .locked-input {
-    background: #e0f2f1 !important;
-    color: black !important;
-    font-weight: normal !important;
+  
+  /* Locked rows styling for print - light mode appearance */
+  tr.locked-row {
+    background: #f0f9eb !important;
   }
-
+  
+  .locked-input {
+    background: #e8f5e8 !important;
+    color: #2e7d32 !important;
+    font-weight: bold !important;
+  }
+  
   /* Hide empty rows in print */
   tr:not(.locked-row) input[type="number"]:not([value]):not(:focus),
   tr:not(.locked-row) input[type="number"][value=""] {
@@ -472,11 +484,6 @@ body.dark-mode footer {
     display: none !important;
   }
 
-  /* Ensure good contrast */
-  .table-with-total {
-    border: none !important;
-  }
-
   /* Remove any animations */
   * {
     animation: none !important;
@@ -486,6 +493,16 @@ body.dark-mode footer {
   /* Page margins */
   @page {
     margin: 0.5in;
+  }
+  
+  /* Add website URL to print output */
+  .container:after {
+    content: "Medical Bill Calculator - medbillcalc.pages.dev";
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-size: 8pt;
+    color: #666;
   }
 }
 
