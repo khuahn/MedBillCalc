@@ -337,7 +337,7 @@ body.dark-mode .table-with-total,
 body.dark-mode td,
 body.dark-mode tfoot td,
 body.dark-mode .total-incurred-row td {
-    background-color: #1e1e1e;
+    background-color: #121212;
 }
 
 body.dark-mode tfoot td {
