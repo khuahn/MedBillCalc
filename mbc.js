@@ -1,6 +1,6 @@
 /*
- * mbc.js - Medical Bill Calculator with Improved Auto-Calculation
- * Version: 2.8 - Fixed single-click population for all fields
+ * mbc.js - Medical Bill Calculator with Keyboard Support
+ * Version: 2.9 - Added keyboard Enter key support
  */
 
 (() => {
@@ -296,6 +296,27 @@
     showFeedback('Calculated!');
   }
 
+  // Keyboard event handler
+  function handleKeyPress(event) {
+    // Check if Enter key is pressed (keyCode 13 or key 'Enter')
+    if (event.key === 'Enter' || event.keyCode === 13) {
+      // Prevent default form submission behavior
+      event.preventDefault();
+      
+      // Trigger calculation
+      handleCalculate();
+      
+      // Show visual feedback that Enter was recognized
+      const calculateBtn = document.getElementById("calculateBtn");
+      if (calculateBtn) {
+        calculateBtn.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          calculateBtn.style.transform = "";
+        }, 100);
+      }
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('click', (event) => {
       if (event.target.id === 'totalCharges' || 
@@ -306,6 +327,9 @@
         copyToClipboard(event.target.textContent, event);
       }
     });
+    
+    // Add keyboard event listener
+    document.addEventListener('keydown', handleKeyPress);
     
     initTheme();
 
