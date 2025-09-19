@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.9.3 - Improved margin consistency
+ * Version: 2.9.4 - Improved dark mode consistency
  */
 
 :root {
@@ -15,7 +15,7 @@
     --border-color: #ccc;
     --footer-color: #888;
     --border-radius: 6px;
-    --container-margin: 30px; /* Consistent margin */
+    --container-margin: 30px;
 }
 
 /* Base Styles */
@@ -41,7 +41,7 @@ body {
 h1 {
     font-size: 1.8rem;
     color: var(--primary-color);
-    margin: 0 0 20px 0; /* Reduced bottom margin */
+    margin: 0 0 20px 0;
     text-align: center;
 }
 
@@ -242,10 +242,10 @@ body.dark-mode .copied-feedback {
     }
 }
 
-/* Footer - Adjusted margins */
+/* Footer */
 footer {
     text-align: center;
-    margin-top: 30px; /* Reduced from 40px to match button spacing */
+    margin-top: 30px;
     font-size: 0.9rem;
     color: var(--footer-color);
 }
@@ -263,46 +263,46 @@ footer span {
     opacity: 0.8;
 }
 
-/* Dark Mode */
+/* Dark Mode - Improved consistency */
 body.dark-mode {
     background-color: #121212;
-    color: var(--text-color-dark);
+    color: #e0e0e0;
 }
 
 body.dark-mode .container {
-    background-color: #272727;
+    background-color: #1e1e1e;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode input[type="number"] {
-    background-color: #1e1e1e;
-    color: var(--text-color-dark);
+    background-color: #2a2a2a;
+    color: #e0e0e0;
     border-color: #444;
 }
 
 body.dark-mode th {
-    background-color: var(--primary-dark);
+    background-color: var(--primary-dark); /* Kept as #004d40 */
 }
 
 body.dark-mode .table-with-total,
 body.dark-mode td,
 body.dark-mode tfoot td,
 body.dark-mode .total-incurred-row td {
-    background-color: #1a1a1a;
+    background-color: #1e1e1e;
 }
 
 body.dark-mode .button-group button,
 body.dark-mode #themeToggle {
-    background-color: var(--primary-dark);
-    color: var(--text-color-dark);
+    background-color: var(--primary-dark); /* Kept as #004d40 */
+    color: #e0e0e0;
 }
 
 body.dark-mode tfoot td {
-    color: #fff;
+    color: #e0e0e0;
 }
 
 body.dark-mode .total-incurred-row td {
-    color: #e0f2f1;
+    color: #e0e0e0;
 }
 
 body.dark-mode tfoot span:hover, 
@@ -320,7 +320,7 @@ body.dark-mode #incurredTotal:hover::after {
 }
 
 body.dark-mode .copied-feedback {
-    background: var(--primary-dark);
+    background: var(--primary-dark); /* Kept as #004d40 */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
