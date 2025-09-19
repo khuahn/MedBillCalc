@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.9.4 - Improved dark mode consistency
+ * Version: 2.9.5 - Enhanced buttons with text labels
  */
 
 :root {
@@ -126,7 +126,7 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-/* Button Styles */
+/* Button Styles with Text Labels */
 .controls-container {
     display: flex;
     justify-content: space-between;
@@ -152,33 +152,82 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .button-group button,
 #themeToggle {
-    background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 8px 14px;
+    padding: 8px 12px;
     border-radius: var(--border-radius);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     min-width: 44px;
     height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 6px;
 }
 
 .button-group button:hover,
 #themeToggle:hover {
-    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button-group button .btn-text {
+    font-weight: 500;
+}
+
+/* Specific button styles */
+#calculateBtn {
+    background-color: #2196F3;
+}
+
+#calculateBtn:hover {
+    background-color: #1976D2;
+}
+
+#addRowBtn {
+    background-color: #4CAF50;
+}
+
+#addRowBtn:hover {
+    background-color: #388E3C;
+}
+
+#delRowBtn {
+    background-color: #F44336;
+}
+
+#delRowBtn:hover {
+    background-color: #D32F2F;
+}
+
+#printPDFBtn {
+    background-color: #9C27B0;
+}
+
+#printPDFBtn:hover {
+    background-color: #7B1FA2;
+}
+
+#themeToggle {
+    background-color: #FF9800;
+}
+
+#themeToggle:hover {
+    background-color: #F57C00;
+}
+
+#clearTableBtn {
+    background-color: #607D8B;
+}
+
+#clearTableBtn:hover {
+    background-color: #455A64;
 }
 
 .danger-btn {
-    background-color: #dc3545 !important;
     color: white !important;
-}
-
-.danger-btn:hover {
-    background-color: #c82333 !important;
 }
 
 /* Copy functionality */
@@ -270,7 +319,7 @@ body.dark-mode {
 }
 
 body.dark-mode .container {
-    background-color: #1a1a1a;
+    background-color: #1e1e1e;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
@@ -288,13 +337,7 @@ body.dark-mode .table-with-total,
 body.dark-mode td,
 body.dark-mode tfoot td,
 body.dark-mode .total-incurred-row td {
-    background-color: #111;
-}
-
-body.dark-mode .button-group button,
-body.dark-mode #themeToggle {
-    background-color: var(--primary-dark); /* Kept as #004d40 */
-    color: #e0e0e0;
+    background-color: #121212;
 }
 
 body.dark-mode tfoot td {
@@ -566,6 +609,11 @@ body.dark-mode footer {
     white-space: nowrap;
   }
   
+  /* Hide button text on mobile */
+  .button-group button .btn-text {
+    display: none;
+  }
+  
   /* Specific button adjustments */
   .button-group button i {
     font-size: 0.9rem;
@@ -678,52 +726,4 @@ body.dark-mode footer {
   input[type="number"] {
     min-height: 44px;
   }
-}
-/* Button Color Recommendations */
-.calculate-btn {
-    background-color: #2196F3 !important; /* Blue - suggests calculation/processing */
-}
-
-.calculate-btn:hover {
-    background-color: #1976D2 !important;
-}
-
-.add-btn {
-    background-color: #4CAF50 !important; /* Green - suggests positive action */
-}
-
-.add-btn:hover {
-    background-color: #388E3C !important;
-}
-
-.delete-btn {
-    background-color: #F44336 !important; /* Red - suggests removal/danger */
-}
-
-.delete-btn:hover {
-    background-color: #D32F2F !important;
-}
-
-.print-btn {
-    background-color: #9C27B0 !important; /* Purple - suggests document/output */
-}
-
-.print-btn:hover {
-    background-color: #7B1FA2 !important;
-}
-
-.theme-btn {
-    background-color: #FF9800 !important; /* Orange - suggests customization */
-}
-
-.theme-btn:hover {
-    background-color: #F57C00 !important;
-}
-
-.reset-btn {
-    background-color: #607D8B !important; /* Gray-blue - suggests reset/neutral */
-}
-
-.reset-btn:hover {
-    background-color: #455A64 !important;
 }
