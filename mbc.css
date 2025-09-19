@@ -275,7 +275,7 @@ body.dark-mode .container {
 }
 
 body.dark-mode input[type="number"] {
-    background-color: #2e2e2e;
+    background-color: #1e1e1e;
     color: var(--text-color-dark);
     border-color: #444;
 }
