@@ -679,3 +679,51 @@ body.dark-mode footer {
     min-height: 44px;
   }
 }
+/* Button Color Recommendations */
+.calculate-btn {
+    background-color: #2196F3 !important; /* Blue - suggests calculation/processing */
+}
+
+.calculate-btn:hover {
+    background-color: #1976D2 !important;
+}
+
+.add-btn {
+    background-color: #4CAF50 !important; /* Green - suggests positive action */
+}
+
+.add-btn:hover {
+    background-color: #388E3C !important;
+}
+
+.delete-btn {
+    background-color: #F44336 !important; /* Red - suggests removal/danger */
+}
+
+.delete-btn:hover {
+    background-color: #D32F2F !important;
+}
+
+.print-btn {
+    background-color: #9C27B0 !important; /* Purple - suggests document/output */
+}
+
+.print-btn:hover {
+    background-color: #7B1FA2 !important;
+}
+
+.theme-btn {
+    background-color: #FF9800 !important; /* Orange - suggests customization */
+}
+
+.theme-btn:hover {
+    background-color: #F57C00 !important;
+}
+
+.reset-btn {
+    background-color: #607D8B !important; /* Gray-blue - suggests reset/neutral */
+}
+
+.reset-btn:hover {
+    background-color: #455A64 !important;
+}
