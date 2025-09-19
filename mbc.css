@@ -270,7 +270,7 @@ body.dark-mode {
 }
 
 body.dark-mode .container {
-    background-color: #2a2a2a;
+    background-color: #1a1a1a;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
@@ -288,7 +288,7 @@ body.dark-mode .table-with-total,
 body.dark-mode td,
 body.dark-mode tfoot td,
 body.dark-mode .total-incurred-row td {
-    background-color: #1a1a1a;
+    background-color: #0e0e0e;
 }
 
 body.dark-mode .button-group button,
