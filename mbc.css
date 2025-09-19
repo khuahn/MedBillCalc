@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.2 - Fixed print margins for dark mode
+ * Version: 2.9.4 - Improved dark mode consistency
  */
 
 :root {
@@ -11,9 +11,11 @@
     --input-bg: #e0f2f1;
     --table-bg: #e0f2f1;
     --text-color: #333;
-    --text-color-dark: #e0f2f1;
+    --text-color-dark: #e0e0e0;
     --border-color: #ccc;
     --footer-color: #888;
+    --border-radius: 6px;
+    --container-margin: 30px;
 }
 
 /* Base Styles */
@@ -29,24 +31,24 @@ body {
 
 .container {
     max-width: 720px;
-    margin: 40px auto;
-    padding: 40px 30px;
+    margin: var(--container-margin) auto;
+    padding: 30px;
     background: var(--container-bg);
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
     font-size: 1.8rem;
     color: var(--primary-color);
-    margin: 0 0 24px 0;
+    margin: 0 0 20px 0;
     text-align: center;
 }
 
 /* Table Styles */
 .table-with-total {
     margin-bottom: 16px;
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     background-color: var(--table-bg);
@@ -54,7 +56,7 @@ h1 {
 
 table {
     width: 100%;
-    border-collapse: separate;
+    border-collapse: collapse;
     border-spacing: 0;
 }
 
@@ -63,32 +65,28 @@ th, td {
     text-align: center;
     vertical-align: middle;
     font-size: 0.95rem;
+    border: none;
 }
 
 th {
     background-color: var(--primary-color);
     color: #fff;
     font-weight: 600;
-}
-
-tr:first-child th:first-child {
-    border-top-left-radius: 8px;
-}
-
-tr:first-child th:last-child {
-    border-top-right-radius: 8px;
+    border: none;
 }
 
 td {
     background-color: var(--table-bg);
     color: var(--text-color);
     font-weight: 500;
+    border: none;
 }
 
 tfoot td {
     background-color: var(--table-bg);
     color: var(--text-color);
     font-weight: bold;
+    border: none;
 }
 
 /* Total Incurred Row */
@@ -98,14 +96,7 @@ tfoot td {
     font-weight: 800;
     font-size: 1.1rem;
     padding: 12px;
-}
-
-.total-incurred-row td:first-child {
-    border-bottom-left-radius: 8px;
-}
-
-.total-incurred-row td:last-child {
-    border-bottom-right-radius: 8px;
+    border: none;
 }
 
 #incurredTotal {
@@ -123,7 +114,7 @@ input[type="number"] {
     box-sizing: border-box;
     font-size: 1rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     background-color: #fff;
     color: #333;
     max-width: 100%;
@@ -135,24 +126,28 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-input[type="number"]::placeholder {
-    color: #888;
-    font-style: italic;
-    opacity: 0.7;
-}
-
 /* Button Styles */
 .controls-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .button-group {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    justify-content: center;
+}
+
+.left-buttons {
+    justify-content: flex-start;
+}
+
+.right-buttons {
+    justify-content: flex-end;
 }
 
 .button-group button,
@@ -161,10 +156,15 @@ input[type="number"]::placeholder {
     color: white;
     border: none;
     padding: 8px 14px;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     font-size: 0.95rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    min-width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-group button:hover,
@@ -179,18 +179,6 @@ input[type="number"]::placeholder {
 
 .danger-btn:hover {
     background-color: #c82333 !important;
-}
-
-/* Locked row styling - Light mode */
-tr.locked-row {
-    background-color: #f0f9eb !important;
-}
-
-.locked-input {
-    background-color: #e8f5e8 !important;
-    color: #2e7d32 !important;
-    font-weight: bold !important;
-    cursor: not-allowed !important;
 }
 
 /* Copy functionality */
@@ -214,25 +202,29 @@ tfoot span:hover::after, #incurredTotal:hover::after {
     color: #d32f2f;
 }
 
-/* Copied Feedback */
+/* Copied Feedback - Fixed Positioning */
 .copied-feedback {
     position: fixed;
     background: var(--primary-color);
     color: white;
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     font-size: 14px;
     font-weight: 600;
     pointer-events: none;
     z-index: 10000;
     animation: fadeOut 1s ease-in-out forwards;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0 auto;
     text-align: center;
     min-width: 120px;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 20px;
+}
+
+body.dark-mode .copied-feedback {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes fadeOut {
@@ -242,18 +234,18 @@ tfoot span:hover::after, #incurredTotal:hover::after {
     }
     70% { 
         opacity: 1;
-        transform: translateX(-50%) translateY(-10px);
+        transform: translateX(-50%) translateY(10px);
     }
     100% { 
         opacity: 0;
-        transform: translateX(-50%) translateY(-20px);
+        transform: translateX(-50%) translateY(20px);
     }
 }
 
 /* Footer */
 footer {
     text-align: center;
-    margin-top: 40px;
+    margin-top: 30px;
     font-size: 0.9rem;
     color: var(--footer-color);
 }
@@ -271,48 +263,46 @@ footer span {
     opacity: 0.8;
 }
 
-/* Dark Mode */
+/* Dark Mode - Improved consistency */
 body.dark-mode {
     background-color: #121212;
-    color: var(--text-color-dark);
+    color: #e0e0e0;
 }
 
 body.dark-mode .container {
-    background-color: #1e1e1e;
+    background-color: #1a1a1a;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode input[type="number"] {
-    background-color: #2e2e2e;
-    color: var(--text-color-dark);
+    background-color: #2a2a2a;
+    color: #e0e0e0;
     border-color: #444;
 }
 
-body.dark-mode input[type="number"]::placeholder {
-    color: #aaa;
-}
-
 body.dark-mode th {
-    background-color: var(--primary-dark);
+    background-color: var(--primary-dark); /* Kept as #004d40 */
 }
 
-body.dark-mode td {
-    background-color: #004d40;
+body.dark-mode .table-with-total,
+body.dark-mode td,
+body.dark-mode tfoot td,
+body.dark-mode .total-incurred-row td {
+    background-color: #111;
 }
 
 body.dark-mode .button-group button,
 body.dark-mode #themeToggle {
-    background-color: var(--primary-dark);
-    color: var(--text-color-dark);
+    background-color: var(--primary-dark); /* Kept as #004d40 */
+    color: #e0e0e0;
 }
 
 body.dark-mode tfoot td {
-    color: #fff;
+    color: #e0e0e0;
 }
 
 body.dark-mode .total-incurred-row td {
-    background-color: #004d40;
-    color: #e0f2f1;
+    color: #e0e0e0;
 }
 
 body.dark-mode tfoot span:hover, 
@@ -329,19 +319,8 @@ body.dark-mode #incurredTotal:hover::after {
     color: #ff6b6b;
 }
 
-/* Dark mode locked rows - distinctive style without green */
-body.dark-mode tr.locked-row {
-    background-color: #2a2a2a !important;
-}
-
-body.dark-mode .locked-input {
-    background-color: #3a3a3a !important;
-    color: #e0e0e0 !important;
-    font-weight: bold !important;
-}
-
 body.dark-mode .copied-feedback {
-    background: var(--primary-dark);
+    background: var(--primary-dark); /* Kept as #004d40 */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -349,22 +328,22 @@ body.dark-mode footer {
     color: #aaa;
 }
 
-/* Print Styles - Grayscale Only - FIXED VERSION */
+/* Print Styles - Professional Medical Billing Appearance */
 @media print {
   /* Reset everything to grayscale */
   * {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+    color: #000 !important;
     background: transparent !important;
-    color: black !important;
     box-shadow: none !important;
     text-shadow: none !important;
   }
   
-  /* Fix for body margins in print */
+  /* Force light mode appearance for printing */
   body, body.dark-mode {
     background: white !important;
-    color: black !important;
+    color: #000 !important;
     font-size: 12pt;
     line-height: 1.4;
     padding: 0 !important;
@@ -372,17 +351,16 @@ body.dark-mode footer {
     width: 100% !important;
   }
   
-  /* Consistent container styling for print */
+  /* Container styling */
   .container, body.dark-mode .container {
     max-width: 100% !important;
-    padding: 0.5in !important;
+    padding: 0.25in !important;
     margin: 0 auto !important;
     background: white !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    border-radius: 8px !important;
-    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
     width: auto !important;
-    /* Ensure proper box model */
     box-sizing: border-box !important;
   }
   
@@ -393,78 +371,72 @@ body.dark-mode footer {
     padding: 0 !important;
   }
   
-  /* Table styling - grayscale only */
+  /* Table styling - professional medical billing appearance */
   .table-with-total {
     background: white !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
     margin-bottom: 16px !important;
     border: 1px solid #ddd !important;
     width: 100% !important;
-    /* Ensure proper box sizing */
     box-sizing: border-box !important;
+    page-break-inside: avoid;
   }
   
   table {
     width: 100% !important;
-    border-collapse: separate !important;
+    border-collapse: collapse !important;
     border-spacing: 0 !important;
   }
   
   th {
     background: #f0f0f0 !important;
-    color: black !important;
+    color: #000 !important;
     font-weight: bold !important;
     border: 1px solid #ddd !important;
-  }
-  
-  tr:first-child th:first-child {
-    border-top-left-radius: 8px !important;
-  }
-  
-  tr:first-child th:last-child {
-    border-top-right-radius: 8px !important;
+    padding: 8px 4px !important;
   }
   
   td {
     background: white !important;
-    color: black !important;
+    color: #000 !important;
     border: 1px solid #ddd !important;
+    padding: 8px 4px !important;
   }
   
+  /* Show all table rows in print */
+  tr {
+    page-break-inside: avoid;
+  }
+  
+  /* Summary rows styling */
   tfoot td {
     background: #f8f8f8 !important;
-    color: black !important;
+    color: #000 !important;
     font-weight: bold !important;
+    border-top: 2px solid #000 !important;
   }
   
   .total-incurred-row td {
     background: #f0f0f0 !important;
-    color: black !important;
+    color: #000 !important;
     font-weight: bold !important;
     font-size: 1.1rem !important;
-    padding: 12px !important;
-  }
-  
-  .total-incurred-row td:first-child {
-    border-bottom-left-radius: 8px !important;
-  }
-  
-  .total-incurred-row td:last-child {
-    border-bottom-right-radius: 8px !important;
+    padding: 10px 4px !important;
+    border-top: 2px solid #000 !important;
   }
   
   #incurredTotal {
-    color: black !important;
+    color: #000 !important;
     font-weight: bold !important;
   }
   
-  /* Hide input borders and show values as plain text */
+  /* Input values as plain text */
   input[type="number"] {
     background: transparent !important;
     border: none !important;
-    color: black !important;
+    color: #000 !important;
     -webkit-appearance: none !important;
     -moz-appearance: textfield !important;
     appearance: none !important;
@@ -476,57 +448,40 @@ body.dark-mode footer {
     outline: none !important;
     box-shadow: none !important;
     width: 100% !important;
+    display: block !important;
   }
   
-  /* Locked rows styling for print - FIXED */
-  tr.locked-row, 
-  body.dark-mode tr.locked-row {
-    background: #f8f8f8 !important;
+  /* Show all input values in print, even empty ones */
+  input[type="number"]:not([value]) {
+    display: block !important;
+    color: #ccc !important;
   }
   
-  tr.locked-row td,
-  body.dark-mode tr.locked-row td {
-    background: #f8f8f8 !important;
-    color: black !important;
-    border: 1px solid #ddd !important;
-  }
-  
-  .locked-input,
-  body.dark-mode .locked-input {
-    background: transparent !important;
-    color: black !important;
-    font-weight: bold !important;
-  }
-  
-  /* Hide empty rows in print */
-  tr:not(.locked-row) input[type="number"]:not([value]):not(:focus),
-  tr:not(.locked-row) input[type="number"][value=""] {
-    display: none;
-  }
-  
-  tr:not(.locked-row):has(input[type="number"]:not([value]):not(:focus)),
-  tr:not(.locked-row):has(input[type="number"][value=""]) {
-    display: none !important;
-  }
-
   /* Hide non-essential elements */
   .controls-container, 
   footer, 
-  h1, 
   .button-group, 
   #themeToggle,
-  .remove-row-btn,
   .copied-feedback {
     display: none !important;
   }
-
+  
+  /* Show title in print */
+  h1 {
+    display: block !important;
+    text-align: center !important;
+    font-size: 18pt !important;
+    margin: 0 0 16px 0 !important;
+    color: #000 !important;
+  }
+  
   /* Remove any animations */
   * {
     animation: none !important;
     transition: none !important;
   }
-
-  /* Page margins - ensure consistency */
+  
+  /* Page margins */
   @page {
     margin: 0.5in;
     size: auto;
@@ -586,11 +541,18 @@ body.dark-mode footer {
     box-sizing: border-box;
   }
   
-  /* Keep buttons horizontal but wrap if needed */
+  /* Button group adjustments for mobile */
+  .controls-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
   .button-group {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 6px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .left-buttons, .right-buttons {
     justify-content: center;
   }
   
@@ -600,14 +562,13 @@ body.dark-mode footer {
     font-size: 0.9rem;
     min-width: auto;
     flex: 1;
-    min-width: 60px;
+    min-width: 44px;
     white-space: nowrap;
   }
   
   /* Specific button adjustments */
   .button-group button i {
     font-size: 0.9rem;
-    margin-right: 3px;
   }
   
   /* Summary row adjustments */
@@ -624,6 +585,11 @@ body.dark-mode footer {
   td {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  
+  /* Footer adjustments for mobile */
+  footer {
+    margin-top: 20px;
   }
 }
 
@@ -654,12 +620,11 @@ body.dark-mode footer {
   #themeToggle {
     padding: 8px 6px;
     font-size: 0.8rem;
-    min-width: 50px;
+    min-width: 40px;
   }
   
   .button-group button i {
     font-size: 0.8rem;
-    margin-right: 2px;
   }
   
   .total-incurred-row td {
@@ -682,31 +647,17 @@ body.dark-mode footer {
   #themeToggle {
     padding: 6px 4px;
     font-size: 0.75rem;
-    min-width: 45px;
+    min-width: 36px;
   }
   
   .button-group button i {
     font-size: 0.75rem;
-    margin-right: 1px;
-  }
-  
-  /* Hide button text on very small screens, show only icons */
-  .button-group button span {
-    display: none;
-  }
-  
-  .button-group button i {
-    margin-right: 0;
   }
 }
 
 /* Fix for iOS input zoom */
 @media (max-width: 768px) {
   input[type="number"] {
-    font-size: 16px !important;
-  }
-  
-  select, textarea {
     font-size: 16px !important;
   }
 }
@@ -727,4 +678,52 @@ body.dark-mode footer {
   input[type="number"] {
     min-height: 44px;
   }
+}
+/* Button Color Recommendations */
+.calculate-btn {
+    background-color: #2196F3 !important; /* Blue - suggests calculation/processing */
+}
+
+.calculate-btn:hover {
+    background-color: #1976D2 !important;
+}
+
+.add-btn {
+    background-color: #4CAF50 !important; /* Green - suggests positive action */
+}
+
+.add-btn:hover {
+    background-color: #388E3C !important;
+}
+
+.delete-btn {
+    background-color: #F44336 !important; /* Red - suggests removal/danger */
+}
+
+.delete-btn:hover {
+    background-color: #D32F2F !important;
+}
+
+.print-btn {
+    background-color: #9C27B0 !important; /* Purple - suggests document/output */
+}
+
+.print-btn:hover {
+    background-color: #7B1FA2 !important;
+}
+
+.theme-btn {
+    background-color: #FF9800 !important; /* Orange - suggests customization */
+}
+
+.theme-btn:hover {
+    background-color: #F57C00 !important;
+}
+
+.reset-btn {
+    background-color: #607D8B !important; /* Gray-blue - suggests reset/neutral */
+}
+
+.reset-btn:hover {
+    background-color: #455A64 !important;
 }
