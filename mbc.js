@@ -1,5 +1,6 @@
 /*
- * mbc.js - Medical Bill Calculator with Auto-Lock Feature
+ * mbc.js - Medical Bill Calculator with Improved Auto-Calculation
+ * Version: 2.8 - Fixed single-click population for all fields
  */
 
 (() => {
@@ -11,109 +12,144 @@
     return (s || "").normalize("NFKC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
   }
 
+  function showFeedback(message) {
+    // Remove any existing feedback first
+    const existingFeedback = document.querySelector('.copied-feedback');
+    if (existingFeedback) {
+      existingFeedback.remove();
+    }
+    
+    const feedback = document.createElement('div');
+    feedback.className = 'copied-feedback';
+    feedback.textContent = message;
+    document.body.appendChild(feedback);
+    
+    setTimeout(() => {
+      if (document.body.contains(feedback)) {
+        feedback.remove();
+      }
+    }, 1000);
+  }
+
   function copyToClipboard(text, event) {
     navigator.clipboard.writeText(text).then(() => {
-      const feedback = document.createElement('div');
-      feedback.className = 'copied-feedback';
-      feedback.textContent = 'Copied!';
-      document.body.appendChild(feedback);
-      
-      setTimeout(() => feedback.remove(), 1000);
+      showFeedback('Copied!');
     }).catch(err => {
       console.error('Failed to copy: ', err);
     });
   }
 
-  function calculateAndLockRow(row) {
-    const chargesInput = row.querySelector(".charges-input");
-    const paymentsInput = row.querySelector(".payments-input");
-    const adjustmentsInput = row.querySelector(".adjustments-input");
-    const balanceInput = row.querySelector(".balance-input");
+  function calculateMissingValues() {
+    const rows = document.querySelectorAll("#tableBody tr");
+    
+    rows.forEach((row) => {
+      const chargesInput = row.querySelector(".charges-input");
+      const paymentsInput = row.querySelector(".payments-input");
+      const adjustmentsInput = row.querySelector(".adjustments-input");
+      const balanceInput = row.querySelector(".balance-input");
 
-    const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
-    let payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
-    let adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
-    let balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
+      const charges = parseFloat(normalizeInput(chargesInput.value)) || 0;
+      let payments = parseFloat(normalizeInput(paymentsInput.value)) || 0;
+      let adjustments = parseFloat(normalizeInput(adjustmentsInput.value)) || 0;
+      let balance = parseFloat(normalizeInput(balanceInput.value)) || 0;
 
-    // Calculate missing value if possible
-    if (charges > 0) {
-      if (payments === 0 && adjustments > 0 && balance > 0) {
-        // Calculate Payments: Charges - Adjustments - Balance
-        payments = charges - adjustments - balance;
-        paymentsInput.value = payments.toFixed(2);
-      } else if (adjustments === 0 && payments > 0 && balance > 0) {
-        // Calculate Adjustments: Charges - Payments - Balance
-        adjustments = charges - payments - balance;
-        adjustmentsInput.value = adjustments.toFixed(2);
-      } else if (balance === 0 && payments > 0 && adjustments > 0) {
-        // Calculate Balance: Charges - Payments - Adjustments
-        balance = charges - payments - adjustments;
-        balanceInput.value = balance.toFixed(2);
+      // Check if fields are empty (not just zero)
+      const paymentsEmpty = paymentsInput.value === '';
+      const adjustmentsEmpty = adjustmentsInput.value === '';
+      const balanceEmpty = balanceInput.value === '';
+
+      // Hospital billing logic: if charges exist but no payments/adjustments, consider as balance
+      if (charges > 0) {
+        // If only charges are provided, set payments and adjustments to 0, balance to charges
+        if (paymentsEmpty && adjustmentsEmpty && balanceEmpty) {
+          payments = 0;
+          adjustments = 0;
+          balance = charges;
+          paymentsInput.value = payments.toFixed(2);
+          adjustmentsInput.value = adjustments.toFixed(2);
+          balanceInput.value = balance.toFixed(2);
+        }
+        // If charges and only one other value is provided, calculate the remaining two
+        else if ([!paymentsEmpty, !adjustmentsEmpty, !balanceEmpty].filter(Boolean).length === 1) {
+          if (!paymentsEmpty) {
+            // Charges and payments provided: set adjustments to 0, balance to charges - payments
+            adjustments = 0;
+            balance = charges - payments;
+            adjustmentsInput.value = adjustments.toFixed(2);
+            balanceInput.value = balance.toFixed(2);
+          } else if (!adjustmentsEmpty) {
+            // Charges and adjustments provided: set payments to 0, balance to charges - adjustments
+            payments = 0;
+            balance = charges - adjustments;
+            paymentsInput.value = payments.toFixed(2);
+            balanceInput.value = balance.toFixed(2);
+          } else if (!balanceEmpty) {
+            // Charges and balance provided: set payments and adjustments to 0
+            payments = 0;
+            adjustments = 0;
+            paymentsInput.value = payments.toFixed(2);
+            adjustmentsInput.value = adjustments.toFixed(2);
+          }
+        }
+        // If two values are provided, calculate the third
+        else if ([!paymentsEmpty, !adjustmentsEmpty, !balanceEmpty].filter(Boolean).length === 2) {
+          if (paymentsEmpty) {
+            // Calculate payments: Charges - Adjustments - Balance
+            payments = charges - adjustments - balance;
+            if (payments >= 0) {
+              paymentsInput.value = payments.toFixed(2);
+            }
+          } else if (adjustmentsEmpty) {
+            // Calculate adjustments: Charges - Payments - Balance
+            adjustments = charges - payments - balance;
+            if (adjustments >= 0) {
+              adjustmentsInput.value = adjustments.toFixed(2);
+            }
+          } else if (balanceEmpty) {
+            // Calculate balance: Charges - Payments - Adjustments
+            balance = charges - payments - adjustments;
+            if (balance >= 0) {
+              balanceInput.value = balance.toFixed(2);
+            }
+          }
+        }
       }
-    }
-
-    // Lock the row if we have at least charges and one other value
-    if (charges > 0 && (payments > 0 || adjustments > 0 || balance > 0)) {
-      const inputs = row.querySelectorAll('input');
-      inputs.forEach(input => {
-        input.readOnly = true;
-        input.classList.add('locked-input');
-      });
-      row.classList.add('locked-row');
-    }
-
-    return { charges, payments, adjustments, balance };
-  }
-
-  function unlockRow(row) {
-    const inputs = row.querySelectorAll('input');
-    inputs.forEach(input => {
-      input.readOnly = false;
-      input.classList.remove('locked-input');
     });
-    row.classList.remove('locked-row');
   }
 
   function addRow() {
     const tbody = document.getElementById("tableBody");
     if (!tbody) return;
 
-    // Calculate, lock, and add current row values to totals
-    const rows = tbody.querySelectorAll('tr');
-    if (rows.length > 0) {
-      const currentRow = rows[rows.length - 1];
-      calculateAndLockRow(currentRow);
-    }
-
     // Add new row
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount"></td>
-      <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount"></td>
+      <td><input type="number" step="any" class="charges-input"></td>
+      <td><input type="number" step="any" class="payments-input"></td>
+      <td><input type="number" step="any" class="adjustments-input"></td>
+      <td><input type="number" step="any" class="balance-input"></td>
     `;
     tbody.appendChild(tr);
     
-    // Recalculate totals and save
-    calculateTotals();
+    // Save data
     saveTableData();
+    
+    // Show feedback
+    showFeedback('Row added!');
   }
 
   function deleteLastRow() {
     const rows = document.querySelectorAll("#tableBody tr");
     if (rows.length > 1) {
-      const rowToRemove = rows[rows.length - 1];
-      
-      // Unlock the previous row before removing current one
-      const previousRow = rows[rows.length - 2];
-      if (previousRow.classList.contains('locked-row')) {
-        unlockRow(previousRow);
+      if (confirm("Are you sure you want to delete the last row?")) {
+        const rowToRemove = rows[rows.length - 1];
+        rowToRemove.remove();
+        calculateTotals();
+        saveTableData();
+        
+        // Show feedback after confirmation
+        showFeedback('Row deleted!');
       }
-      
-      rowToRemove.remove();
-      calculateTotals();
-      saveTableData();
     } else {
       alert("You need to keep at least one row in the calculator.");
     }
@@ -163,8 +199,7 @@
       const payments = row.querySelector(".payments-input").value;
       const adjustments = row.querySelector(".adjustments-input").value;
       const balance = row.querySelector(".balance-input").value;
-      const isLocked = row.classList.contains('locked-row');
-      data.push({ charges, payments, adjustments, balance, isLocked });
+      data.push({ charges, payments, adjustments, balance });
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
@@ -181,21 +216,11 @@
     data.forEach(rowData => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td><input type="number" step="any" class="charges-input" placeholder="Enter Amount" value="${rowData.charges}"></td>
-        <td><input type="number" step="any" class="payments-input" placeholder="Enter Amount" value="${rowData.payments}"></td>
-        <td><input type="number" step="any" class="adjustments-input" placeholder="Enter Amount" value="${rowData.adjustments}"></td>
-        <td><input type="number" step="any" class="balance-input" placeholder="Enter Amount" value="${rowData.balance}"></td>
+        <td><input type="number" step="any" class="charges-input" value="${rowData.charges}"></td>
+        <td><input type="number" step="any" class="payments-input" value="${rowData.payments}"></td>
+        <td><input type="number" step="any" class="adjustments-input" value="${rowData.adjustments}"></td>
+        <td><input type="number" step="any" class="balance-input" value="${rowData.balance}"></td>
       `;
-      
-      if (rowData.isLocked) {
-        const inputs = tr.querySelectorAll('input');
-        inputs.forEach(input => {
-          input.readOnly = true;
-          input.classList.add('locked-input');
-        });
-        tr.classList.add('locked-row');
-      }
-      
       tbody.appendChild(tr);
     });
   }
@@ -208,27 +233,33 @@
     const tbody = document.getElementById("tableBody");
     if (tbody) {
       tbody.innerHTML = "";
-      addRow(); // Add just one row instead of five
+      addRow();
       calculateTotals();
     }
     localStorage.removeItem(STORAGE_KEY);
+    
+    // Show feedback after confirmation
+    showFeedback('Calculator reset!');
   }
 
   function printPDF() {
     window.print();
+    // No feedback for print as requested
   }
 
   function toggleDarkMode() {
     const isDark = document.body.classList.toggle("dark-mode");
     localStorage.setItem("theme", isDark ? "dark" : "light");
     updateThemeToggleUI(isDark);
+    
+    // Show feedback for theme change
+    const message = isDark ? 'Dark mode enabled!' : 'Light mode enabled!';
+    showFeedback(message);
   }
 
   function updateThemeToggleUI(isDark) {
     const btn = document.getElementById('themeToggle');
     const icon = document.getElementById('themeIcon');
-    const label = document.getElementById('themeLabel');
-    if (label) label.textContent = isDark ? 'Light' : 'Dark';
     if (icon) {
       icon.classList.toggle('fa-moon', !isDark);
       icon.classList.toggle('fa-sun', isDark);
@@ -246,6 +277,25 @@
     }
   }
 
+  function validateInputs() {
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+      const value = parseFloat(input.value);
+      if (isNaN(value) || value < 0) {
+        input.value = '';
+      }
+    });
+  }
+
+  function handleCalculate() {
+    calculateMissingValues();
+    calculateTotals();
+    saveTableData();
+    
+    // Show feedback for calculation
+    showFeedback('Calculated!');
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('click', (event) => {
       if (event.target.id === 'totalCharges' || 
@@ -259,6 +309,7 @@
     
     initTheme();
 
+    const calculateBtn = document.getElementById("calculateBtn");
     const addRowBtn = document.getElementById("addRowBtn");
     const delRowBtn = document.getElementById("delRowBtn");
     const printPDFBtn = document.getElementById("printPDFBtn");
@@ -266,6 +317,7 @@
     const clearTableBtn = document.getElementById("clearTableBtn");
     const tbody = document.getElementById("tableBody");
 
+    if (calculateBtn) calculateBtn.addEventListener("click", handleCalculate);
     if (addRowBtn) addRowBtn.addEventListener("click", addRow);
     if (delRowBtn) delRowBtn.addEventListener("click", deleteLastRow);
     if (printPDFBtn) printPDFBtn.addEventListener("click", printPDF);
@@ -275,12 +327,12 @@
     if (tbody) {
       loadTableData();
       if (tbody.children.length === 0) {
-        addRow(); // Start with just one row instead of five
+        addRow();
       }
 
-      // Calculate totals when any input changes
+      // Validate inputs when any input changes
       tbody.addEventListener("input", () => {
-        calculateTotals();
+        validateInputs();
         saveTableData();
       });
       
