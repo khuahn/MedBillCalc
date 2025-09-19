@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Medical Bill Calculator</title>
-  <link rel="stylesheet" href="mbc.css?v=2">
+  <link rel="stylesheet" href="mbc.css?v=3">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- PWA Meta Tags -->
@@ -63,30 +63,38 @@
     <!-- Controls container with split button groups -->
     <div class="controls-container">
       <!-- Left-aligned buttons -->
- <div class="button-group left-buttons">
-    <button id="calculateBtn" class="calculate-btn" aria-label="Calculate totals">
-        <i class="fas fa-calculator" aria-hidden="true"></i>
-    </button>
-    <button id="addRowBtn" class="add-btn" aria-label="Add a new row">
-        <i class="fas fa-plus" aria-hidden="true"></i>
-    </button>
-    <button id="delRowBtn" class="delete-btn danger-btn" aria-label="Delete last row">
-        <i class="fas fa-minus" aria-hidden="true"></i>
-    </button>
-</div>
+      <div class="button-group left-buttons">
+        <button id="calculateBtn" aria-label="Calculate totals">
+          <i class="fas fa-calculator" aria-hidden="true"></i>
+          <span class="btn-text">Enter</span>
+        </button>
+        <button id="addRowBtn" aria-label="Add a new row">
+          <i class="fas fa-plus" aria-hidden="true"></i>
+          <span class="btn-text">Add Row</span>
+        </button>
+        <button id="delRowBtn" class="danger-btn" aria-label="Delete last row">
+          <i class="fas fa-minus" aria-hidden="true"></i>
+          <span class="btn-text">Delete</span>
+        </button>
+      </div>
       
       <!-- Right-aligned buttons -->
-     <div class="button-group right-buttons">
-    <button id="printPDFBtn" class="print-btn" aria-label="Save as PDF">
-        <i class="fas fa-file-pdf" aria-hidden="true"></i>
-    </button>
-    <button id="themeToggle" class="theme-btn" aria-label="Toggle color theme" aria-pressed="false">
-        <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
-    </button>
-    <button id="clearTableBtn" class="reset-btn danger-btn" aria-label="Reset calculator">
-        <i class="fas fa-trash-alt" aria-hidden="true"></i>
-    </button>
-</div></div></div>
+      <div class="button-group right-buttons">
+        <button id="printPDFBtn" aria-label="Save as PDF">
+          <i class="fas fa-file-pdf" aria-hidden="true"></i>
+          <span class="btn-text">Print</span>
+        </button>
+        <button id="themeToggle" aria-label="Toggle color theme" aria-pressed="false">
+          <i id="themeIcon" class="fas fa-moon" aria-hidden="true"></i>
+          <span class="btn-text">Theme</span>
+        </button>
+        <button id="clearTableBtn" class="danger-btn" aria-label="Reset calculator">
+          <i class="fas fa-trash-alt" aria-hidden="true"></i>
+          <span class="btn-text">Reset</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <small>
