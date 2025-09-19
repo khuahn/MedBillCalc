@@ -1,6 +1,6 @@
 /*
  * mbc.css - Medical Bill Calculator Main Styles
- * Version: 2.9.1 - Consistent border radius
+ * Version: 2.9.2 - Fixed table edges in dark mode
  */
 
 :root {
@@ -44,7 +44,7 @@ h1 {
     text-align: center;
 }
 
-/* Table Styles */
+/* Table Styles - Fixed edges */
 .table-with-total {
     margin-bottom: 16px;
     border-radius: var(--border-radius);
@@ -55,7 +55,7 @@ h1 {
 
 table {
     width: 100%;
-    border-collapse: separate;
+    border-collapse: collapse;
     border-spacing: 0;
 }
 
@@ -64,32 +64,28 @@ th, td {
     text-align: center;
     vertical-align: middle;
     font-size: 0.95rem;
+    border: none;
 }
 
 th {
     background-color: var(--primary-color);
     color: #fff;
     font-weight: 600;
-}
-
-tr:first-child th:first-child {
-    border-top-left-radius: var(--border-radius);
-}
-
-tr:first-child th:last-child {
-    border-top-right-radius: var(--border-radius);
+    border: none;
 }
 
 td {
     background-color: var(--table-bg);
     color: var(--text-color);
     font-weight: 500;
+    border: none;
 }
 
 tfoot td {
     background-color: var(--table-bg);
     color: var(--text-color);
     font-weight: bold;
+    border: none;
 }
 
 /* Total Incurred Row */
@@ -99,14 +95,7 @@ tfoot td {
     font-weight: 800;
     font-size: 1.1rem;
     padding: 12px;
-}
-
-.total-incurred-row td:first-child {
-    border-bottom-left-radius: var(--border-radius);
-}
-
-.total-incurred-row td:last-child {
-    border-bottom-right-radius: var(--border-radius);
+    border: none;
 }
 
 #incurredTotal {
@@ -273,7 +262,7 @@ footer span {
     opacity: 0.8;
 }
 
-/* Dark Mode */
+/* Dark Mode - Fixed table edges */
 body.dark-mode {
     background-color: #121212;
     color: var(--text-color-dark);
@@ -294,8 +283,12 @@ body.dark-mode th {
     background-color: var(--primary-dark);
 }
 
-body.dark-mode td {
-    background-color: #004d40;
+/* Fixed: Consistent table background in dark mode */
+body.dark-mode .table-with-total,
+body.dark-mode td,
+body.dark-mode tfoot td,
+body.dark-mode .total-incurred-row td {
+    background-color: #1a1a1a;
 }
 
 body.dark-mode .button-group button,
@@ -309,7 +302,6 @@ body.dark-mode tfoot td {
 }
 
 body.dark-mode .total-incurred-row td {
-    background-color: #004d40;
     color: #e0f2f1;
 }
 
