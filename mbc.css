@@ -288,7 +288,7 @@ body.dark-mode .table-with-total,
 body.dark-mode td,
 body.dark-mode tfoot td,
 body.dark-mode .total-incurred-row td {
-    background-color: #0e0e0e;
+    background-color: #111;
 }
 
 body.dark-mode .button-group button,
