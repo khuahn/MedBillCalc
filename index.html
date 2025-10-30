@@ -3,32 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Medical Bill Calculator</title>
-  <link rel="stylesheet" href="mbc.css?v=1">
+  <title>MBCalc</title>
+  <link rel="icon" href="icon-192x192.png" type="image/png">
+  <link rel="stylesheet" href="mbc.css?v=2.9.8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- PWA Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#00796b">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="MedBillCalc">
+  <meta name="apple-mobile-web-app-title" content="MBCalc">
   <link rel="apple-touch-icon" href="icon-192x192.png">
   <meta name="msapplication-TileImage" content="icon-192x192.png">
   <meta name="msapplication-TileColor" content="#00796b">
 
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="MedBillCalc">
+  <!-- Open Graph -->
+  <meta property="og:title" content="MBCalc">
   <meta property="og:description" content="Simple yet functional Medical Billing calculator">
-  <meta property="og:url" content="https://medbillcalc.pages.dev/">
+  <meta property="og:url" content="https://mbcalc.web.app/">
   <meta property="og:type" content="website">
 </head>
 <body>
 
   <div class="container">
-    <h1>Medical Bill Calculator</h1>
+    <h1><img src="icon-192x192.png" alt="MBCalc icon" class="h1-icon">MBCalc</h1>
     
-    <!-- Table with Integrated Total Incurred -->
     <div class="table-with-total">
       <table id="billTable">
         <thead>
@@ -40,29 +41,39 @@
           </tr>
         </thead>
         <tbody id="tableBody">
-          <!-- Rows will be added by JavaScript -->
+          <!-- Rows added by JS -->
         </tbody>
         <tfoot>
-          <!-- Summary Row -->
           <tr>
-            <td><span id="totalCharges">0.00</span></td>
-            <td><span id="totalPayments">0.00</span></td>
-            <td><span id="totalAdjustments">0.00</span></td>
-            <td><span id="totalBalance">0.00</span></td>
+            <td>
+              <span id="totalCharges">0.00</span>
+              <i class="fas fa-copy copy-icon" aria-hidden="true"></i>
+            </td>
+            <td>
+              <span id="totalPayments">0.00</span>
+              <i class="fas fa-copy copy-icon" aria-hidden="true"></i>
+            </td>
+            <td>
+              <span id="totalAdjustments">0.00</span>
+              <i class="fas fa-copy copy-icon" aria-hidden="true"></i>
+            </td>
+            <td>
+              <span id="totalBalance">0.00</span>
+              <i class="fas fa-copy copy-icon" aria-hidden="true"></i>
+            </td>
           </tr>
-          <!-- Total Incurred Row -->
           <tr class="total-incurred-row">
             <td colspan="4">
-              Total Incurred : <span id="incurredTotal">0.00</span>
+              Total Incurred: 
+              <span id="incurredTotal">0.00</span>
+              <i class="fas fa-copy copy-icon" aria-hidden="true"></i>
             </td>
           </tr>
         </tfoot>
       </table>
     </div>
 
-    <!-- Controls container with split button groups -->
     <div class="controls-container">
-      <!-- Left-aligned buttons -->
       <div class="button-group left-buttons">
         <button id="calculateBtn" aria-label="Calculate totals">
           <i class="fas fa-calculator" aria-hidden="true"></i>
@@ -78,7 +89,6 @@
         </button>
       </div>
       
-      <!-- Right-aligned buttons -->
       <div class="button-group right-buttons">
         <button id="printPDFBtn" aria-label="Save as PDF">
           <i class="fas fa-file-pdf" aria-hidden="true"></i>
@@ -98,7 +108,7 @@
 
   <footer>
     <small>
-      Med Bill Calc v2.3 • <a href="https://github.com/khuahn/" target="_blank">匠Jac</a> — All Rights Reserved ©2025<br/>
+      MBCalc v2.9.8 • <a href="https://github.com/khuahn/" target="_blank">匠Jac</a> — All Rights Reserved ©2025<br/>
       <span>
         Powered by
         <a href="https://github.com/" target="_blank">GitHub</a> | <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a> | <a href="https://firebase.google.com/" target="_blank">Firebase</a>
@@ -106,6 +116,21 @@
     </small>
   </footer>
 
-  <script src="mbc.js"></script>
+  <script src="mbc.js?v=2"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .catch(console.error);
+      });
+    }
+
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+    window.addEventListener('appinstalled', () => deferredPrompt = null);
+  </script>
 </body>
 </html>
