@@ -1,24 +1,43 @@
-const CACHE_NAME = 'medbillcalc-v2.0';
+const CACHE_NAME = 'mbcalc-v1'; // DEPLOY:VERSION
 const urlsToCache = [
   '/',
   '/index.html',
-  '/mbc.css',
   '/mbc.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+  '/mbc.css',
+  '/icon-192x192.png',
+  '/icon-512x512.png',
+  '/manifest.json',
+  '/note.html'
 ];
 
-// Install event
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
+    })
   );
+  self.skipWaiting(); // Force activate new SW immediately
 });
 
-// Fetch event
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
+  clients.claim(); // Take control of all clients immediately
+});
+
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });

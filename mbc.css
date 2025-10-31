@@ -307,7 +307,29 @@ body.dark-mode .copied-feedback {
   .container { padding: 15px; margin: 15px auto; }
   h1 { font-size: 1.4rem; }
   input[type="number"], .balance-value { font-size: 16px; padding: 8px 6px; }
-  .controls-container { flex-direction: column; }
-  .button-group { width: 100%; justify-content: center; }
-  .button-group button .btn-text { display: none; }
+  
+  .controls-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three columns, equal width */
+    gap: 8px; /* Space between buttons */
+    width: 100%;
+    justify-items: center; /* Center items in the grid cells */
+  }
+
+  .button-group {
+    display: contents; /* Allows buttons to be direct grid items */
+  }
+
+  .button-group button, 
+  #themeToggle {
+    width: 100%; /* Take full width of grid cell */
+    height: auto; /* Allow height to adjust based on content */
+    min-height: 44px; /* Ensure a minimum touch target size */
+    padding: 10px 5px; /* Adjust padding for better text fit */
+    font-size: 0.85rem; /* Slightly smaller font for mobile */
+  }
+
+  .button-group button .btn-text { 
+    display: inline; /* Show button text */
+  }
 }

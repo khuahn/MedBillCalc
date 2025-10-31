@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MBCalc</title>
-  <link rel="icon" href="icon-192x192.png" type="image/png">
-  <link rel="stylesheet" href="mbc.css?v=2.9.8">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>MB Calculator</title>
+  <link rel="stylesheet" href="mbc.css?v=1"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?v=1">
 
   <!-- PWA Meta Tags -->
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json"> 
   <meta name="theme-color" content="#00796b">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="MBCalc">
-  <link rel="apple-touch-icon" href="icon-192x192.png">
-  <meta name="msapplication-TileImage" content="icon-192x192.png">
+  <link rel="apple-touch-icon" href="icon-192x192.png?v=1">
+  <meta name="msapplication-TileImage" content="icon-192x192.png?v=1">
   <meta name="msapplication-TileColor" content="#00796b">
 
   <!-- Open Graph -->
@@ -24,11 +23,12 @@
   <meta property="og:description" content="Simple yet functional Medical Billing calculator">
   <meta property="og:url" content="https://mbcalc.web.app/">
   <meta property="og:type" content="website">
+  <link rel="icon" href="icon-192x192.png" type="image/png">
 </head>
 <body>
 
   <div class="container">
-    <h1><img src="icon-192x192.png" alt="MBCalc icon" class="h1-icon">MBCalc</h1>
+    <h1><img src="icon-192x192.png?v=1" alt="MBCalc icon" class="h1-icon">MBCalc</h1>
     
     <div class="table-with-total">
       <table id="billTable">
@@ -108,7 +108,7 @@
 
   <footer>
     <small>
-      MBCalc v2.9.8 • <a href="https://github.com/khuahn/" target="_blank">匠Jac</a> — All Rights Reserved ©2025<br/>
+      MBCalc v2.9.8 • <a href="https://github.com/khuahn/" target="_blank">匠Jac</a> — All Rights Reserved 2025<br/>
       <span>
         Powered by
         <a href="https://github.com/" target="_blank">GitHub</a> | <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a> | <a href="https://firebase.google.com/" target="_blank">Firebase</a>
@@ -116,11 +116,10 @@
     </small>
   </footer>
 
-  <script src="mbc.js?v=2"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
+        navigator.serviceWorker.register('./sw.js?v=1')
           .catch(console.error);
       });
     }

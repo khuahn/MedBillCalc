@@ -1,0 +1,34 @@
+[debug] [2025-09-19T20:39:59.421Z] ----------------------------------------------------------------------
+[debug] [2025-09-19T20:39:59.424Z] Command:       /nix/store/ws50yvm6vzlzf7jzz6n7xh4szddrack1-nodejs-20.19.1/bin/node /nix/store/wma3rvxxva78rqvnpja82nx5b3mclpxg-firebase-tools-14.15.2/lib/node_modules/firebase-tools/lib/bin/firebase.js deploy --only hosting --project mbcalc
+[debug] [2025-09-19T20:39:59.425Z] CLI Version:   14.15.2
+[debug] [2025-09-19T20:39:59.425Z] Platform:      linux
+[debug] [2025-09-19T20:39:59.425Z] Node Version:  v20.19.1
+[debug] [2025-09-19T20:39:59.425Z] Time:          Fri Sep 19 2025 20:39:59 GMT+0000 (Coordinated Universal Time)
+[debug] [2025-09-19T20:39:59.425Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-19T20:39:59.947Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-09-19T20:39:59.948Z] > authorizing via signed-in user (khuahn@gmail.com)
+[debug] [2025-09-19T20:39:59.948Z] [iam] checking project mbcalc for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-09-19T20:39:59.950Z] Checked if tokens are valid: true, expires at: 1758317932774
+[debug] [2025-09-19T20:39:59.950Z] Checked if tokens are valid: true, expires at: 1758317932774
+[debug] [2025-09-19T20:39:59.952Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/mbcalc:testIamPermissions [none]
+[debug] [2025-09-19T20:39:59.952Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/mbcalc:testIamPermissions x-goog-quota-user=projects/mbcalc
+[debug] [2025-09-19T20:39:59.952Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/mbcalc:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-09-19T20:40:00.986Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/mbcalc:testIamPermissions 200
+[debug] [2025-09-19T20:40:00.986Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/mbcalc:testIamPermissions {}
+[debug] [2025-09-19T20:40:00.987Z] [iam] error while checking permissions, command may fail: Authorization failed. This account is missing the following required permissions on project mbcalc:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2025-09-19T20:40:00.988Z] Checked if tokens are valid: true, expires at: 1758317932774
+[debug] [2025-09-19T20:40:00.988Z] Checked if tokens are valid: true, expires at: 1758317932774
+[debug] [2025-09-19T20:40:00.989Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/mbcalc [none]
+[debug] [2025-09-19T20:40:01.382Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/mbcalc 403
+[debug] [2025-09-19T20:40:01.382Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/mbcalc {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2025-09-19T20:40:01.384Z] Request to https://firebase.googleapis.com/v1beta1/projects/mbcalc had HTTP Error: 403, The caller does not have permission
+[debug] [2025-09-19T20:40:01.385Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/mbcalc had HTTP Error: 403, The caller does not have permission
+    at responseToError (/nix/store/wma3rvxxva78rqvnpja82nx5b3mclpxg-firebase-tools-14.15.2/lib/node_modules/firebase-tools/lib/responseToError.js:52:12)
+    at RetryOperation._fn (/nix/store/wma3rvxxva78rqvnpja82nx5b3mclpxg-firebase-tools-14.15.2/lib/node_modules/firebase-tools/lib/apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project mbcalc. Please make sure the project exists and your account has permission to access it.

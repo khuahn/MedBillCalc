@@ -94,27 +94,45 @@
         balance: balanceText === '' ? '0.00' : balanceText
       });
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error('Failed to save data to localStorage:', error);
+      showFeedback('Error: Could not save data!');
+    }
   }
 
   function loadTableData() {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    let saved = null;
+    try {
+      saved = localStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+      console.error('Failed to load data from localStorage:', error);
+      showFeedback('Error: Could not load saved data!');
+      return;
+    }
     if (!saved) return;
-    const data = JSON.parse(saved);
-    const tbody = document.getElementById("tableBody");
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    data.forEach(d => {
-      const tr = document.createElement("tr");
-      const balanceValue = normalizeInput(d.balance);
-      tr.innerHTML = `
-        <td><input type="number" step="any" class="charges-input" value="${d.charges}"></td>
-        <td><input type="number" step="any" class="payments-input" value="${d.payments}"></td>
-        <td><input type="number" step="any" class="adjustments-input" value="${d.adjustments}"></td>
-        <td><span class="balance-value">${balanceValue === '' ? '0.00' : balanceValue}</span></td>
-      `;
-      tbody.appendChild(tr);
-    });
+    try {
+      const data = JSON.parse(saved);
+      const tbody = document.getElementById("tableBody");
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      data.forEach(d => {
+        const tr = document.createElement("tr");
+        const balanceValue = normalizeInput(d.balance);
+        tr.innerHTML = `
+          <td><input type="number" step="any" class="charges-input" value="${d.charges}"></td>
+          <td><input type="number" step="any" class="payments-input" value="${d.payments}"></td>
+          <td><input type="number" step="any" class="adjustments-input" value="${d.adjustments}"></td>
+          <td><span class="balance-value">${balanceValue === '' ? '0.00' : balanceValue}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (parseError) {
+      console.error('Failed to parse saved data:', parseError);
+      showFeedback('Error: Corrupted saved data!');
+      localStorage.removeItem(STORAGE_KEY);
+    }
   }
 
   function clearTable() {
@@ -125,7 +143,12 @@
       addRow();
       calculateTotals();
     }
-    localStorage.removeItem(STORAGE_KEY);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      console.error('Failed to remove data from localStorage:', error);
+      showFeedback('Error: Could not clear saved data!');
+    }
     showFeedback('Calculator reset!');
   }
 
@@ -135,7 +158,12 @@
 
   function toggleDarkMode() {
     const isDark = document.body.classList.toggle("dark-mode");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
+    try {
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    } catch (error) {
+      console.error('Failed to save theme to localStorage:', error);
+      showFeedback('Error: Could not save theme!');
+    }
     updateThemeToggleUI(isDark);
     showFeedback(isDark ? 'Dark mode enabled!' : 'Light mode enabled!');
   }
@@ -148,7 +176,15 @@
   }
 
   function initTheme() {
-    if (localStorage.getItem("theme") === "dark") {
+    let theme = null;
+    try {
+      theme = localStorage.getItem("theme");
+    } catch (error) {
+      console.error('Failed to load theme from localStorage:', error);
+      showFeedback('Error: Could not load saved theme!');
+      return;
+    }
+    if (theme === "dark") {
       document.body.classList.add("dark-mode");
       updateThemeToggleUI(true);
     } else {
