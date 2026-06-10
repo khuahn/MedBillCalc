@@ -1,4 +1,5 @@
-__http://mbcalc.web.app/__
+**http://mbcalc.web.app/**
+
 chore(release): bump to v2.1 with authentication and copy features
 
 - Enhanced authentication with persistent login & password validation
