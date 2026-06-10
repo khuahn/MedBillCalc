@@ -1,4 +1,3 @@
-**http://mbcalc.web.app/**
 
 chore(release): bump to v2.1 with authentication and copy features
 
@@ -7,7 +6,7 @@ chore(release): bump to v2.1 with authentication and copy features
 - Improved UX with hover hints and visual feedback
 - Updated version numbers across all files
   
-### What's New in MedBillCalc v2.1 ✨ 
+### What's New in MedBillCalc v2.1 ✨ http://mbcalc.web.app/
 Streamlined the entire app to make it faster and easier for you to use. This new version brings major improvements across the board, from how the calculations work to the overall look and feel.
 
 ### Key Highlights 🚀
